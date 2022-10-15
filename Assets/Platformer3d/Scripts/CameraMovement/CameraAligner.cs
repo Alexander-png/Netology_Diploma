@@ -65,6 +65,17 @@ namespace Platformer3d.CameraMovement
         //    return _shouldMove;
         //}
 
+        private void OnDrawGizmos()
+        {
+            if (_targetPoint == null)
+            {
+                return;
+            }
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_targetPoint.position, 1f);
+        }
+
         public void SetStrictMode(StrictModeTypes mode) => _strictMode = mode;
     }
 }
