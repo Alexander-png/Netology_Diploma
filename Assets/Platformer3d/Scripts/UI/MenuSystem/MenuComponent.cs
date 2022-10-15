@@ -94,12 +94,12 @@ namespace Platformer3d.UI.MenuSystem
 
         public void OnItemPointerEntered(string actionName)
         {
-
+            GameLogger.AddMessage("TODO: OnItemPointerEntered", GameLogger.LogType.Error);
         }
 
         public void OnPerform(InputValue value)
         {
-            
+            _commandBindings[_items[_selectionIndex].CommandId].Execute();
         }
 
 #if UNITY_EDITOR
