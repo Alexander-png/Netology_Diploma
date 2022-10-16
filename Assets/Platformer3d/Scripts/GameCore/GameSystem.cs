@@ -1,4 +1,5 @@
 using Platformer3d.CharacterSystem;
+using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.EditorExtentions;
 using Platformer3d.GameCore;
 using System;
@@ -14,7 +15,11 @@ namespace Platformer3d.Platformer3d.GameCore
 		[SerializeField]
 		private Player _playerCharacter;
 
-        private Vector3 _lastPlayerPosition;
+        private PlayerDataContainer _lastPlayerData;
+
+        private Vector3 _lastCheckpointPosition = new Vector3(-27f, 1.55f, 0f); // placeholder. Need to find nearest checkpoint to player
+
+        public event EventHandler OnPlayerDied;
 
         private void Awake()
         {
@@ -24,28 +29,39 @@ namespace Platformer3d.Platformer3d.GameCore
             }
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            _playerCharacter.OnDied += OnPlayerDied;
-            RememberPlayerPosition();
+            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
         }
 
-        private void RememberPlayerPosition()
+        private void OnEnable()
         {
-            _lastPlayerPosition = _playerCharacter.transform.position;
+            _playerCharacter.OnDied += OnPlayerDiedInternal;
+        }
+
+        public void OnCheckpointReached(Vector3 checkpointPosition)
+        {
+            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
+            _lastPlayerData.Position = checkpointPosition;
         }
 
         private void OnDisable()
         {
-            _playerCharacter.OnDied -= OnPlayerDied;
-
+            _playerCharacter.OnDied -= OnPlayerDiedInternal;
             StopAllCoroutines();
         }
 
-        private void OnPlayerDied(object sender, EventArgs e)
+        private void OnPlayerDiedInternal(object sender, EventArgs e)
         {
             _playerCharacter.gameObject.SetActive(false);
             StartCoroutine(PlayerRespawnCoroutine(_respawnTime));
+            OnPlayerDied?.Invoke(this, EventArgs.Empty);
+        }
+                
+        private void RespawnPlayer()
+        {
+            _playerCharacter.OnRespawn(_lastPlayerData);
+            _playerCharacter.gameObject.SetActive(true);
         }
 
         private IEnumerator PlayerRespawnCoroutine(float time)
@@ -56,13 +72,6 @@ namespace Platformer3d.Platformer3d.GameCore
                 time -= TimeSystem.Instance.ScaledGameDeltaTime;
             }
             RespawnPlayer();
-        }
-
-        private void RespawnPlayer()
-        {
-            _playerCharacter.transform.position = _lastPlayerPosition;
-            _playerCharacter.gameObject.SetActive(true);
-            RememberPlayerPosition();
         }
 
         [ContextMenu("Find player in scene")]

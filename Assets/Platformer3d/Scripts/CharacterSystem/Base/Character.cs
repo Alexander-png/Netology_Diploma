@@ -1,3 +1,4 @@
+using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
 using Platformer3d.Scriptable;
@@ -8,13 +9,10 @@ namespace Platformer3d.CharacterSystem.Base
     public abstract class Character : MonoBehaviour
     {
         [SerializeField]
-        private string _name;
-        [SerializeField]
-        private CharacterStats _stats;
+        private DefaultCharacterStats _stats;
 
-        public CharacterStats Stats => _stats;
-        public SideTypes Side => _stats.Side;
-        public string Name => _name;
+        public SideTypes Side { get; protected set; }
+        public string Name { get; protected set; }
 
         protected virtual void Awake() 
         {
@@ -22,7 +20,7 @@ namespace Platformer3d.CharacterSystem.Base
             {
                 GameLogger.AddMessage($"{nameof(Character)} ({gameObject.name}): no stats assigned.", GameLogger.LogType.Fatal);
             }
-            FillStatsFields();
+            SetDefaultParameters(_stats);
         }
 
         protected virtual void OnEnable() { }
@@ -31,9 +29,27 @@ namespace Platformer3d.CharacterSystem.Base
         protected virtual void Update() { }
         protected virtual void FixedUpdate() { }
 
-        protected virtual void FillStatsFields()
+        protected virtual void SetDefaultParameters(DefaultCharacterStats stats)
         {
-
+            Name = stats.Name;
+            Side = stats.Side;
         }
+
+        public virtual void OnRespawn(CharacterDataContainer data) => SetData(data);
+
+        public virtual void SetData(CharacterDataContainer data)
+        {
+            Name = data.Name;
+            Side = data.Side;
+            transform.position = data.Position;
+        }
+
+        public virtual CharacterDataContainer GetData() => 
+            new CharacterDataContainer()
+            {
+                Side = Side,
+                Name = Name,
+                Position = transform.position,
+            };
     }
 }

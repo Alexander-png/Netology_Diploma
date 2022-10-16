@@ -9,6 +9,7 @@ namespace Platformer3d.CharacterSystem.Base
 
 	public interface IDamagableCharacter
     {
+        public float CurrentHealth { get; }
 		public void OnGotDamage(float damage, float pushForce);
 		public void Heal(float value);
 
