@@ -1,8 +1,9 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Platformer3d.Scriptable
 {
-	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/MovementStats")]
+	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Movement stats")]
 	public class MovementStats : ScriptableObject
 	{
 		[SerializeField]
@@ -23,7 +24,8 @@ namespace Platformer3d.Scriptable
 		public int JumpCountInRow => _jumpCountInRow;
 		public float ClimbForce => _climbForce;
 		public float WallClimbRepulsion => _wallClimbRepulsion;
+		public float MaxJumpForce => _jumpForce.Max();
 
-		public float GetJumpForce(int jumpsLeft) => _jumpForce[_jumpForce.Length - jumpsLeft - 1];
+        public float GetJumpForce(int jumpsLeft) => _jumpForce[_jumpForce.Length - jumpsLeft - 1];
     }
 }

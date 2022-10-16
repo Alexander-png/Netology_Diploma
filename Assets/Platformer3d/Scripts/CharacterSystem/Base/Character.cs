@@ -12,6 +12,7 @@ namespace Platformer3d.CharacterSystem.Base
         [SerializeField]
         private CharacterStats _stats;
 
+        public CharacterStats Stats => _stats;
         public SideTypes Side => _stats.Side;
         public string Name => _name;
 
@@ -21,9 +22,18 @@ namespace Platformer3d.CharacterSystem.Base
             {
                 GameLogger.AddMessage($"{nameof(Character)} ({gameObject.name}): no stats assigned.", GameLogger.LogType.Fatal);
             }
+            FillStatsFields();
         }
+
+        protected virtual void OnEnable() { }
+        protected virtual void OnDisable() { }
         protected virtual void Start() { }
         protected virtual void Update() { }
         protected virtual void FixedUpdate() { }
+
+        protected virtual void FillStatsFields()
+        {
+
+        }
     }
 }

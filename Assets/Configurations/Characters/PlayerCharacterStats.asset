@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: PlayerCharacterStats
   m_EditorClassIdentifier: 
   _side: 0
+  _maxHealth: 6
+  _damageImmuneTime: 1
+  _immortal: 0
+  _interactable: 0

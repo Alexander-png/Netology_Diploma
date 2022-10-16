@@ -1,4 +1,4 @@
-using Platformer3d.Assistants;
+using Platformer3d.GameCore;
 using Platformer3d.CharacterSystem.Movement.Base;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,7 +30,7 @@ namespace Platformer3d.CharacterSystem.Movement
         {
             Vector2 velocity = Body.velocity;
 
-            velocity.x += Acceleration * _moveAxis * TimeSystem.Instance.ScaledFixedDeltaTime;
+            velocity.x += Acceleration * _moveAxis * TimeSystem.Instance.ScaledGameFixedDeltaTime;
             velocity.x = Mathf.Clamp(velocity.x, -MaxSpeed, MaxSpeed);
             Body.velocity = velocity;
         }
@@ -48,7 +48,7 @@ namespace Platformer3d.CharacterSystem.Movement
                     {
                         velocity.y = 0;
                     }
-                    velocity.y += JumpForce;
+                    velocity.y = Mathf.Clamp(velocity.y + MaxJumpForce, 0, JumpForce);
                 }
                 else if (OnWall)
                 {

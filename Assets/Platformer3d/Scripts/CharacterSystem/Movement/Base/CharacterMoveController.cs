@@ -1,4 +1,4 @@
-using Platformer3d.LevelEnvironment.Platforms;
+using Platformer3d.LevelEnvironment.Base;
 using Platformer3d.Scriptable;
 using UnityEngine;
 
@@ -21,6 +21,7 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         protected float Acceleration => _baseMovementStats.Acceleration;
         protected float MaxSpeed => _baseMovementStats.MaxSpeed;
         protected float JumpForce => _baseMovementStats.GetJumpForce(JumpsLeft);
+        protected float MaxJumpForce => _baseMovementStats.MaxJumpForce;
         protected float ClimbForce => _baseMovementStats.ClimbForce;
         protected float WallClimbRepulsion => _baseMovementStats.WallClimbRepulsion;
 
@@ -31,9 +32,12 @@ namespace Platformer3d.CharacterSystem.Movement.Base
             EditorExtentions.GameLogger.AddMessage("TODO: ApplyModifiers", EditorExtentions.GameLogger.LogType.Fatal);
         }
 
+        public virtual void SetVelocity(Vector3 velocity) =>
+            _body.velocity = velocity;
+
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent<BaseLevelSegment>(out _))
+            if (collision.gameObject.TryGetComponent(out BaseLevelElement _))
             {
                 var normal = collision.GetContact(0).normal;
 
@@ -49,7 +53,7 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent<BaseLevelSegment>(out _))
+            if (collision.gameObject.TryGetComponent(out BaseLevelElement _))
             {
                 InAir = true;
             }

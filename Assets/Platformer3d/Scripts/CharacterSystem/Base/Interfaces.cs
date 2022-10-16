@@ -1,4 +1,4 @@
-using UnityEngine;
+using System;
 
 namespace Platformer3d.CharacterSystem.Base
 {
@@ -6,4 +6,12 @@ namespace Platformer3d.CharacterSystem.Base
 	{
 	    
 	}
+
+	public interface IDamagableCharacter
+    {
+		public void OnGotDamage(float damage, float pushForce);
+		public void Heal(float value);
+
+		public event EventHandler OnDied;
+    }
 }
