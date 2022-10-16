@@ -1,9 +1,11 @@
+using Platformer3d.Assistants;
 using Platformer3d.CharacterSystem.Movement.Base;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Platformer3d.CharacterSystem.Movement
 {
-	public class PlayerMovement : CharacterMovement
+	public class PlayerMovement : CharacterMoveController
 	{
         private float _moveAxis;
         private bool _isJumpPerformed;
@@ -20,12 +22,44 @@ namespace Platformer3d.CharacterSystem.Movement
 
         private void FixedUpdate()
         {
-            MoveBody();
+            Move();
+            Jump();
         }
 
-        private void MoveBody()
+        private void Move()
         {
+            Vector2 velocity = Body.velocity;
 
+            velocity.x += Acceleration * _moveAxis * TimeSystem.Instance.ScaledFixedDeltaTime;
+            velocity.x = Mathf.Clamp(velocity.x, -MaxSpeed, MaxSpeed);
+            Body.velocity = velocity;
+        }
+
+        private void Jump()
+        {
+            if (CanJump && _isJumpPerformed)
+            {
+                Vector2 velocity = Body.velocity;
+                
+                if (OnGround || InAir)
+                {
+                    JumpsLeft -= 1;
+                    if (velocity.y < 0)
+                    {
+                        velocity.y = 0;
+                    }
+                    velocity.y += JumpForce;
+                }
+                else if (OnWall)
+                {
+                    JumpsLeft -= 1;
+                    velocity.x += WallClimbRepulsion * -Mathf.Sign(_moveAxis);
+                    velocity.y += ClimbForce;
+                }
+
+                _isJumpPerformed = false;
+                Body.velocity = velocity;
+            }
         }
     }
 }

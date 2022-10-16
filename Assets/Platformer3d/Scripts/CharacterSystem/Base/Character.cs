@@ -1,4 +1,6 @@
 using Platformer3d.CharacterSystem.Enums;
+using Platformer3d.EditorExtentions;
+using Platformer3d.Scriptable;
 using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.Base
@@ -6,14 +8,20 @@ namespace Platformer3d.CharacterSystem.Base
     public abstract class Character : MonoBehaviour
     {
         [SerializeField]
-        private SideTypes _side;
-        [SerializeField]
         private string _name;
+        [SerializeField]
+        private CharacterStats _stats;
 
-        public SideTypes Side => _side;
+        public SideTypes Side => _stats.Side;
         public string Name => _name;
 
-        protected virtual void Awake() { }
+        protected virtual void Awake() 
+        {
+            if (_stats == null)
+            {
+                GameLogger.AddMessage($"{nameof(Character)} ({gameObject.name}): no stats assigned.", GameLogger.LogType.Fatal);
+            }
+        }
         protected virtual void Start() { }
         protected virtual void Update() { }
         protected virtual void FixedUpdate() { }

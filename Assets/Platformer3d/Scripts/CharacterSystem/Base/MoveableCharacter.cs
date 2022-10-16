@@ -6,6 +6,8 @@ namespace Platformer3d.CharacterSystem.Base
 	public abstract class MoveableCharacter : Character
 	{
 		[SerializeField]
-		private CharacterMovement _movementController;
+		private CharacterMoveController _movementController;
+
+		public CharacterMoveController MovementController => _movementController;
 	}
 }

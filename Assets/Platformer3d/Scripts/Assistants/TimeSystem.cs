@@ -10,6 +10,7 @@ namespace Platformer3d.Assistants
 		public static TimeSystem Instance { get; private set; }
 
         public float ScaledDeltaTime => _timeScale * Time.deltaTime;
+        public float ScaledFixedDeltaTime => _timeScale * Time.fixedDeltaTime;
 
         private void Awake()
         {
