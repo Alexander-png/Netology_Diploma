@@ -10,7 +10,18 @@ namespace Platformer3d.CharacterSystem.Movement
         private float _moveAxis;
         private bool _isJumpPerformed;
 
-		private void OnRun(InputValue input)
+        private void OnDisable()
+        {
+            _moveAxis = 0;
+        }
+
+        private void FixedUpdate()
+        {
+            Move();
+            Jump();
+        }
+
+        private void OnRun(InputValue input)
         {
             _moveAxis = input.Get<float>();
         }
@@ -18,12 +29,6 @@ namespace Platformer3d.CharacterSystem.Movement
 		private void OnJump(InputValue input)
         {
             _isJumpPerformed = input.Get<float>() >= 0.01f;
-        }
-
-        private void FixedUpdate()
-        {
-            Move();
-            Jump();
         }
 
         private void Move()

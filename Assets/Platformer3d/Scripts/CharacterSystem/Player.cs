@@ -17,7 +17,7 @@ namespace Platformer3d.CharacterSystem
 
         public float CurrentHealth => _currentHealh;
 
-        public event EventHandler OnDied;
+        public event EventHandler Died;
 
         protected override void OnEnable()
         {
@@ -55,7 +55,7 @@ namespace Platformer3d.CharacterSystem
                 CurrentHealth = _currentHealh,
             };
 
-        public void OnGotDamage(float damage, float pushForce)
+        public void SetDamage(float damage, float pushForce)
         {
             if (_damageImmune)
             {
@@ -67,7 +67,7 @@ namespace Platformer3d.CharacterSystem
             _currentHealh = Mathf.Clamp(_currentHealh - damage, 0, _maxHealth);
             if (_currentHealh < 0.01f)
             {
-                OnDied?.Invoke(this, EventArgs.Empty);
+                Died?.Invoke(this, EventArgs.Empty);
             }
         }
 

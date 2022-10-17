@@ -19,7 +19,7 @@ namespace Platformer3d.Platformer3d.GameCore
 
         private Vector3 _lastCheckpointPosition = new Vector3(-27f, 1.55f, 0f); // placeholder. Need to find nearest checkpoint to player
 
-        public event EventHandler OnPlayerDied;
+        public event EventHandler PlayerRespawned;
 
         private void Awake()
         {
@@ -36,7 +36,7 @@ namespace Platformer3d.Platformer3d.GameCore
 
         private void OnEnable()
         {
-            _playerCharacter.OnDied += OnPlayerDiedInternal;
+            _playerCharacter.Died += OnPlayerDiedInternal;
         }
 
         public void OnCheckpointReached(Vector3 checkpointPosition)
@@ -47,7 +47,7 @@ namespace Platformer3d.Platformer3d.GameCore
 
         private void OnDisable()
         {
-            _playerCharacter.OnDied -= OnPlayerDiedInternal;
+            _playerCharacter.Died -= OnPlayerDiedInternal;
             StopAllCoroutines();
         }
 
@@ -55,13 +55,13 @@ namespace Platformer3d.Platformer3d.GameCore
         {
             _playerCharacter.gameObject.SetActive(false);
             StartCoroutine(PlayerRespawnCoroutine(_respawnTime));
-            OnPlayerDied?.Invoke(this, EventArgs.Empty);
         }
                 
         private void RespawnPlayer()
         {
             _playerCharacter.OnRespawn(_lastPlayerData);
             _playerCharacter.gameObject.SetActive(true);
+            PlayerRespawned?.Invoke(this, EventArgs.Empty);
         }
 
         private IEnumerator PlayerRespawnCoroutine(float time)

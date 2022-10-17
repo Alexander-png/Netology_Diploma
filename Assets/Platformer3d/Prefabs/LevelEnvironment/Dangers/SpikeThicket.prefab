@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3995938404475606213}
   - component: {fileID: 2700166498125540525}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Spikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stats: {fileID: 11400000, guid: a8936d60d33643945b71bdfe1d430d49, type: 2}
+  _damageEnabled: 1
 --- !u!1 &8622664126184721502
 GameObject:
   m_ObjectHideFlags: 0
