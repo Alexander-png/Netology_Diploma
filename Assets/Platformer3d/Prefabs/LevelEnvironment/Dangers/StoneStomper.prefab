@@ -467,7 +467,7 @@ Transform:
   - {fileID: 7357099001686182527}
   - {fileID: 7357099000385987883}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7357099000190291276
 MonoBehaviour:
@@ -750,7 +750,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _activatorPoint: {x: 0, y: 1, z: 0}
   _deactivatorPoint: {x: 0, y: -6, z: 0}
-  _activationThreshold: 0.2
+  _activationThreshold: 0.5
 --- !u!1 &7357099001272024064
 GameObject:
   m_ObjectHideFlags: 0
