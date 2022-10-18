@@ -1,6 +1,5 @@
 using Platformer3d.CharacterSystem.Movement.Base;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Platformer3d.Scriptable
@@ -24,9 +23,13 @@ namespace Platformer3d.Scriptable
 		[SerializeField]
 		private float _wallClimbRepulsion;
 		[SerializeField]
-		private float _dashDistance;
+		private float _dashForce;
+		[SerializeField]
+		private float _dashDuration;
+		[SerializeField]
+		private float _dashRechargeTime;
 
-        public MovementStatsInfo GetData() => new MovementStatsInfo()
+		public MovementStatsInfo GetData() => new MovementStatsInfo()
 		{
 			MaxSpeed = _maxSpeed,
 			Acceleration = _acceleration,
@@ -34,7 +37,9 @@ namespace Platformer3d.Scriptable
 			JumpCountInRow = _jumpCountInRow,
 			ClimbForce = _climbForce,
 			WallClimbRepulsion = _wallClimbRepulsion,
-			DashDistance = _dashDistance,
+			DashForce = _dashForce,
+			DashDuration = _dashDuration,
+			DashRechargeTime = _dashRechargeTime,
 		};
 	}
 }

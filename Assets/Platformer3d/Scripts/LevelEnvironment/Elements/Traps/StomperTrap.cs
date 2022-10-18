@@ -68,7 +68,6 @@ namespace Platformer3d.Interactables.Elements.Traps
                 float offset = _moveTrajectory.Evaluate(frameTime);
                 currentPosition.y = _startPosition.y + offset;
                 _holder.transform.position = currentPosition;
-                //frameTime += TimeSystem.Instance.ScaledGameDeltaTime;
                 frameTime += Time.deltaTime;
                 yield return null;
             }

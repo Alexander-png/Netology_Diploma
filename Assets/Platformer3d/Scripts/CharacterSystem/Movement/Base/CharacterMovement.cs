@@ -26,6 +26,9 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         protected float MaxJumpForce => _movementStats.MaxJumpForce;
         protected float ClimbForce => _movementStats.ClimbForce;
         protected float WallClimbRepulsion => _movementStats.WallClimbRepulsion;
+        protected float DashForce => _movementStats.DashForce;
+        protected float DashDuration => _movementStats.DashDuration;
+        protected float DashRechargeTime => _movementStats.DashRechargeTime;
 
 		public Rigidbody Body => _body;
 
@@ -33,6 +36,11 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         {
             _movementStats = _defaultMovementStats.GetData();
             ResetJumpCounter();
+        }
+
+        protected virtual void OnDisable()
+        {
+            ResetState();
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -62,13 +70,13 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         public virtual void SetVelocity(Vector3 velocity) =>
             _body.velocity = velocity;
 
-        public void AddStats(MovementStatsInfo stats)
+        public virtual void AddStats(MovementStatsInfo stats)
         {
             _movementStats += stats;
             ResetJumpCounter();
         }
 
-        public void RemoveStats(MovementStatsInfo stats)
+        public virtual void RemoveStats(MovementStatsInfo stats)
         {
             _movementStats -= stats;
             ResetJumpCounter();
@@ -77,6 +85,11 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         private void ResetJumpCounter()
         {
             JumpsLeft = _movementStats.JumpCountInRow;
+        }
+
+        protected virtual void ResetState()
+        {
+            ResetJumpCounter();
         }
     }
 }

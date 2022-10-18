@@ -1,6 +1,5 @@
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
-using Platformer3d.GameCore;
 using Platformer3d.Scriptable;
 using Platformer3d.SkillSystem;
 using System;
@@ -88,14 +87,6 @@ namespace Platformer3d.CharacterSystem
             _damageImmune = true;
             yield return new WaitForSeconds(time);
             _damageImmune = false;
-
-            //_damageImmune = true;
-            //while (time > 0)
-            //{
-            //    yield return null;
-            //    time -= TimeSystem.Instance.ScaledGameDeltaTime;
-            //}
-            //_damageImmune = false;
         }
     }
 }

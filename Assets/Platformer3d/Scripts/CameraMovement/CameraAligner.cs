@@ -40,7 +40,6 @@ namespace Platformer3d.CameraMovement
 			//{
 
 			//}
-			//transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * TimeSystem.Instance.ScaledGameDeltaTime);
 
 			transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * Time.deltaTime);
 		}

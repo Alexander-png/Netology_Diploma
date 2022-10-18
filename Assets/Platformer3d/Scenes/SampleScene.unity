@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28f913ce1c44944e856a8052848917b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilityId: skill_tripleJump
+  _abilityId: skill_dash
 --- !u!1001 &103056978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1007,7 +1007,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326075734}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.85, y: 15.83, z: 0}
+  m_LocalPosition: {x: -24.93, y: 12.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2424,7 +2424,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.85, y: 21.29, z: -23.64}
+  m_LocalPosition: {x: -24.59, y: 15.67, z: -15.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2459,7 +2459,6 @@ GameObject:
   - component: {fileID: 985544579}
   - component: {fileID: 985544578}
   - component: {fileID: 985544576}
-  - component: {fileID: 985544577}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -2497,19 +2496,6 @@ MonoBehaviour:
   _respawnTime: 1
   _playerCharacter: {fileID: 326075738}
   _playerMoventModificatorContainer: {fileID: 11400000, guid: 5b3768fc9aa6923449133df34fb8f04c, type: 2}
---- !u!114 &985544577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985544573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7d5cc30a06f9241864b206c5717a38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameTimeScale: 1
 --- !u!114 &985544578
 MonoBehaviour:
   m_ObjectHideFlags: 0

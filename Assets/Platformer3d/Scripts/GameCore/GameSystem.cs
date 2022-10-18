@@ -2,9 +2,7 @@ using Platformer3d.CharacterSystem;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.EditorExtentions;
-using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Skills.Containers;
-using Platformer3d.SkillSystem.Skills;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -76,11 +74,6 @@ namespace Platformer3d.Platformer3d.GameCore
 
         private IEnumerator PlayerRespawnCoroutine(float time)
         {
-            //while (time > 0)
-            //{
-            //    yield return null;
-            //    time -= TimeSystem.Instance.ScaledGameDeltaTime;
-            //}
             yield return new WaitForSeconds(time);
             RespawnPlayer();
         }

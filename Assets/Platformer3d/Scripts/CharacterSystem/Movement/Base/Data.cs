@@ -16,7 +16,9 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         public int JumpCountInRow;
         public float ClimbForce;
         public float WallClimbRepulsion;
-        public float DashDistance;
+        public float DashForce;
+        public float DashDuration;
+        public float DashRechargeTime;
 
         public float MaxJumpForce => Jumps.Max();
 
@@ -47,7 +49,9 @@ namespace Platformer3d.CharacterSystem.Movement.Base
             result.Jumps = new List<float>(first.Jumps);
             result.ClimbForce = first.ClimbForce + second.ClimbForce;
             result.WallClimbRepulsion = first.WallClimbRepulsion + second.WallClimbRepulsion;
-            result.DashDistance = first.DashDistance + second.DashDistance;
+            result.DashForce = first.DashForce + second.DashForce;
+            result.DashDuration = first.DashDuration + second.DashDuration;
+            result.DashRechargeTime = first.DashRechargeTime + second.DashRechargeTime;
             return result;
         }
 
@@ -68,7 +72,9 @@ namespace Platformer3d.CharacterSystem.Movement.Base
             result.Jumps = new List<float>(first.Jumps);
             result.ClimbForce = first.ClimbForce - second.ClimbForce;
             result.WallClimbRepulsion = first.WallClimbRepulsion - second.WallClimbRepulsion;
-            result.DashDistance = first.DashDistance - second.DashDistance;
+            result.DashForce = first.DashForce - second.DashForce;
+            result.DashDuration = first.DashDuration - second.DashDuration;
+            result.DashRechargeTime = first.DashRechargeTime - second.DashRechargeTime;
             return result;
         }
     }

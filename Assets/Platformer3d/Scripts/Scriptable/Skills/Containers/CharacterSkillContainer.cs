@@ -1,7 +1,6 @@
 using Platformer3d.Scriptable.Skills.Configurations;
 using Platformer3d.SkillSystem.Skills;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Platformer3d.Scriptable.Skills.Containers
@@ -17,14 +16,7 @@ namespace Platformer3d.Scriptable.Skills.Containers
 
         public override CharacterStatsSkill CreateSkill(string skillId)
         {
-            var skill = FindSkill(skillId);
-            var modifierDict = new Dictionary<SkillTypes, object>();
-
-            modifierDict[SkillTypes.MaxHealth] = skill.MaxHealth;
-            modifierDict[SkillTypes.MaxMana] = skill.MaxMana;
-            modifierDict[SkillTypes.DamageImmuneTime] = skill.DamageImmuneTime;
-
-            return new CharacterStatsSkill(skillId, modifierDict);
+            return new CharacterStatsSkill(skillId, FindSkill(skillId).GetSkills());
         }
     }
 }

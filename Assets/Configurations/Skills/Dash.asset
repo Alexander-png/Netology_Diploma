@@ -15,8 +15,9 @@ MonoBehaviour:
   _skillId: skill_dash
   _maxSpeed: 0
   _acceleration: 0
-  _jumpForces: []
   _jumpCountInRow: 0
   _climbForce: 0
   _wallClimbRepulsion: 0
-  _dashDistance: 10
+  _dashDistance: 25
+  _dashDuration: 0.3
+  _dashRechargeTime: 0.1

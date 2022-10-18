@@ -16,7 +16,8 @@ namespace Platformer3d.SkillSystem.Skills
         WallClimbRepulsion = 7,
 
         DashDistance = 8,
-        ChargedJump = 9,
+        DashDuration = 9,
+        DashRechargeTime = 10,
     }
 
     /// <summary>
@@ -59,8 +60,10 @@ namespace Platformer3d.SkillSystem.Skills
             MaxSpeed = Convert.ToSingle(_skills[SkillTypes.MaxSpeed]),
             JumpCountInRow = Convert.ToInt32(_skills[SkillTypes.JumpCountInRow]),
             ClimbForce = Convert.ToSingle(_skills[SkillTypes.ClimbForce]),
-            DashDistance = Convert.ToSingle(_skills[SkillTypes.DashDistance]),
             WallClimbRepulsion = Convert.ToSingle(_skills[SkillTypes.WallClimbRepulsion]),
+            DashForce = Convert.ToSingle(_skills[SkillTypes.DashDistance]),
+            DashDuration = Convert.ToSingle(_skills[SkillTypes.DashDuration]),
+            DashRechargeTime = Convert.ToSingle(_skills[SkillTypes.DashRechargeTime]),
         };
     }
 }
