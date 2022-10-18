@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Platformer3d.CharacterSystem.Movement
 {
-	public class PlayerMovement : CharacterMoveController
+	public class PlayerMovement : CharacterMovement
 	{
         private float _moveAxis;
         private bool _isJumpPerformed;
@@ -48,18 +48,18 @@ namespace Platformer3d.CharacterSystem.Movement
                 
                 if (OnGround || InAir)
                 {
-                    JumpsLeft -= 1;
                     if (velocity.y < 0)
                     {
                         velocity.y = 0;
                     }
-                    velocity.y = Mathf.Clamp(velocity.y + MaxJumpForce, 0, JumpForce);
+                    velocity.y = Mathf.Clamp(velocity.y + JumpForce, 0, MaxJumpForce);
+                    JumpsLeft -= 1;
                 }
                 else if (OnWall)
                 {
-                    JumpsLeft -= 1;
                     velocity.x += WallClimbRepulsion * -Mathf.Sign(_moveAxis);
                     velocity.y += ClimbForce;
+                    JumpsLeft -= 1;
                 }
 
                 _isJumpPerformed = false;

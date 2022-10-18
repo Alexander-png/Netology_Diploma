@@ -6,14 +6,14 @@ namespace Platformer3d.CharacterSystem.Input
 	public class PlayerInputHandler : MonoBehaviour
 	{
 		[SerializeField]
-		private CharacterMoveController _movementController;
+		private CharacterMovement _movementController;
 
-		protected CharacterMoveController MovementController => _movementController;
+		protected CharacterMovement MovementController => _movementController;
 
 		[ContextMenu("Find Movement controller")]
 		private void FindController()
 		{
-			_movementController = FindObjectOfType<CharacterMoveController>();
+			_movementController = FindObjectOfType<CharacterMovement>();
 		}
 	}
 }

@@ -14,6 +14,8 @@ namespace Platformer3d.Scriptable
 		[SerializeField]
 		private float _maxHealth;
 		[SerializeField]
+		private float _maxMana;
+		[SerializeField]
 		private float _damageImmuneTime;
 		[SerializeField]
 		private bool _immortal;
@@ -23,6 +25,7 @@ namespace Platformer3d.Scriptable
 		public string Name => _name;
 		public SideTypes Side => _side;
 		public float MaxHealth => _maxHealth;
+		public float MaxMana => _maxMana;
 		public float DamageImmuneTime => _damageImmuneTime;
 		public bool Immortal => _immortal;
 		public bool Interactable => _interactable;

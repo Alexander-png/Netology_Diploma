@@ -18,8 +18,8 @@ namespace Platformer3d.CameraMovement
 		private float _moveSpeed = 5f;
 		//[SerializeField, Range(0.1f, 3f)]
 		//private float _acceleration = 0.5f;
-		[SerializeField, Range(0.5f, 5f)]
-		private float _stayRange = 2;
+		//[SerializeField, Range(0.5f, 5f)]
+		//private float _stayRange = 2;
         [SerializeField]
 		private StrictModeTypes _strictMode = StrictModeTypes.NonStrict;
 

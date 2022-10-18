@@ -1,7 +1,10 @@
 using Platformer3d.CharacterSystem;
+using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.EditorExtentions;
 using Platformer3d.GameCore;
+using Platformer3d.Scriptable.Skills.Containers;
+using Platformer3d.SkillSystem.Skills;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -11,13 +14,14 @@ namespace Platformer3d.Platformer3d.GameCore
 	public class GameSystem : MonoBehaviour
 	{
         [SerializeField]
-        private float _respawnTime;
+        private float _respawnTime; // TODO: find better place
 		[SerializeField]
 		private Player _playerCharacter;
 
-        private PlayerDataContainer _lastPlayerData;
+        [SerializeField]
+        private MovementSkillContainer _playerMoventModificatorContainer;
 
-        private Vector3 _lastCheckpointPosition = new Vector3(-27f, 1.55f, 0f); // placeholder. Need to find nearest checkpoint to player
+        private PlayerDataContainer _lastPlayerData;
 
         public event EventHandler PlayerRespawned;
 
@@ -27,6 +31,12 @@ namespace Platformer3d.Platformer3d.GameCore
             {
                 GameLogger.AddMessage($"{nameof(GameSystem)}: no player character assigned!", GameLogger.LogType.Fatal);
             }
+        }
+
+        public void GiveAbilityToPlayer(string abilityId)
+        {
+            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMoventModificatorContainer.CreateSkill(abilityId));
+            GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
         private void Start()
@@ -74,10 +84,12 @@ namespace Platformer3d.Platformer3d.GameCore
             RespawnPlayer();
         }
 
+#if UNITY_EDITOR
         [ContextMenu("Find player in scene")]
 		private void FindPlayerOnScene()
         {
 			_playerCharacter = FindObjectOfType<Player>();
         }
-	}
+#endif
+    }
 }

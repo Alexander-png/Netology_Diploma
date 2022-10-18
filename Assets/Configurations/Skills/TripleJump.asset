@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d0c10d91004ea4380952b658d64ea4, type: 3}
-  m_Name: PlayerCharacterStats
+  m_Script: {fileID: 11500000, guid: 3229aea951f6e4d44b1c96e63be9673a, type: 3}
+  m_Name: TripleJump
   m_EditorClassIdentifier: 
-  _side: 0
-  _maxHealth: 6
-  _damageImmuneTime: 1
-  _immortal: 0
-  _interactable: 0
+  _skillId: skill_tripleJump
+  _maxSpeed: 0
+  _acceleration: 0
+  _jumpCountInRow: 1
+  _climbForce: 0
+  _wallClimbRepulsion: 0
+  _dashDistance: 0

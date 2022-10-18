@@ -1,8 +1,13 @@
+using Platformer3d.CharacterSystem.Movement.Base;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Platformer3d.Scriptable
 {
+	/// <summary>
+	/// Use this to create default movement stats
+	/// </summary>
 	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Movement stats")]
 	public class MovementStats : ScriptableObject
 	{
@@ -11,21 +16,25 @@ namespace Platformer3d.Scriptable
 		[SerializeField]
 		private float _acceleration;
 		[SerializeField]
-		private float[] _jumpForce;
+		private float[] _jumps;
 		[SerializeField]
 		private int _jumpCountInRow;
 		[SerializeField]
 		private float _climbForce;
 		[SerializeField]
 		private float _wallClimbRepulsion;
+		[SerializeField]
+		private float _dashDistance;
 
-		public float MaxSpeed => _maxSpeed;
-		public float Acceleration => _acceleration;
-		public int JumpCountInRow => _jumpCountInRow;
-		public float ClimbForce => _climbForce;
-		public float WallClimbRepulsion => _wallClimbRepulsion;
-		public float MaxJumpForce => _jumpForce.Max();
-
-        public float GetJumpForce(int jumpsLeft) => _jumpForce[_jumpForce.Length - jumpsLeft - 1];
-    }
+        public MovementStatsInfo GetData() => new MovementStatsInfo()
+		{
+			MaxSpeed = _maxSpeed,
+			Acceleration = _acceleration,
+			Jumps = new List<float>(_jumps), // need for jumps initialization
+			JumpCountInRow = _jumpCountInRow,
+			ClimbForce = _climbForce,
+			WallClimbRepulsion = _wallClimbRepulsion,
+			DashDistance = _dashDistance,
+		};
+	}
 }

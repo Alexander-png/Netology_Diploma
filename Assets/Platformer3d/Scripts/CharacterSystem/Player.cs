@@ -2,20 +2,26 @@ using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.GameCore;
 using Platformer3d.Scriptable;
+using Platformer3d.SkillSystem;
 using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Platformer3d.CharacterSystem
 {
-    public class Player : MoveableCharacter, IDamagableCharacter
+    public class Player : MoveableCharacter, IDamagableCharacter, ISkillObservable
     {
+        [SerializeField]
+        private SkillObserver _skillObserver;
+
         private bool _damageImmune = false;
         private float _damageImmuneTime;
         private float _currentHealh;
         private float _maxHealth;
 
         public float CurrentHealth => _currentHealh;
+
+        public SkillObserver SkillObserver => _skillObserver;
 
         public event EventHandler Died;
 

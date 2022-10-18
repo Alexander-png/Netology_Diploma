@@ -1,3 +1,4 @@
+using Platformer3d.SkillSystem;
 using System;
 
 namespace Platformer3d.CharacterSystem.Base
@@ -14,5 +15,10 @@ namespace Platformer3d.CharacterSystem.Base
 		public void Heal(float value);
 
 		public event EventHandler Died;
+    }
+
+	public interface ISkillObservable
+    {
+		public SkillObserver SkillObserver { get; }
     }
 }

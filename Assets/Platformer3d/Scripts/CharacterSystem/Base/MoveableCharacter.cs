@@ -7,9 +7,9 @@ namespace Platformer3d.CharacterSystem.Base
 	public abstract class MoveableCharacter : Character
 	{
 		[SerializeField]
-		private CharacterMoveController _movementController;
+		private CharacterMovement _movementController;
 
-		public CharacterMoveController MovementController => _movementController;
+		public CharacterMovement MovementController => _movementController;
 
         public override void OnRespawn(CharacterDataContainer data)
         {
