@@ -1,14 +1,14 @@
-using Platformer3d.LevelEnvironment.Triggers;
+using Platformer3d.Interactables.Triggers;
 using UnityEngine;
 
-namespace Platformer3d.LevelEnvironment.Elements.Traps
+namespace Platformer3d.Interactables.Elements.Traps
 {
 	public class StoneStomperHandler : TrapHandler
 	{
         [SerializeField]
         private StomperTrigger[] _stomperTriggers;
 
-        public override bool Enabled
+        public override bool TrapEnabled
         {
             get => _stomperTriggers.Length != 0 ? _stomperTriggers[0].TrapEnabled : false;
             set

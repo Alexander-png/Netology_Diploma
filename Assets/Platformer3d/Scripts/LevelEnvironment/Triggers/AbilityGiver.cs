@@ -4,8 +4,9 @@ using Platformer3d.Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
 
-namespace Platformer3d.LevelEnvironment.Triggers
+namespace Platformer3d.Interactables.Triggers
 {
+    [System.Obsolete]
 	public class AbilityGiver : MonoBehaviour
 	{
         [Inject]

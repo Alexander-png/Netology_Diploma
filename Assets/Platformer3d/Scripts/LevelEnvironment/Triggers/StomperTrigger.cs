@@ -1,7 +1,7 @@
-using Platformer3d.LevelEnvironment.Elements.Traps;
+using Platformer3d.Interactables.Elements.Traps;
 using UnityEngine;
 
-namespace Platformer3d.LevelEnvironment.Triggers
+namespace Platformer3d.Interactables.Triggers
 {
     public class StomperTrigger : MonoBehaviour
     {

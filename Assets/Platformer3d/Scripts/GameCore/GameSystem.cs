@@ -76,11 +76,12 @@ namespace Platformer3d.Platformer3d.GameCore
 
         private IEnumerator PlayerRespawnCoroutine(float time)
         {
-            while (time > 0)
-            {
-                yield return null;
-                time -= TimeSystem.Instance.ScaledGameDeltaTime;
-            }
+            //while (time > 0)
+            //{
+            //    yield return null;
+            //    time -= TimeSystem.Instance.ScaledGameDeltaTime;
+            //}
+            yield return new WaitForSeconds(time);
             RespawnPlayer();
         }
 

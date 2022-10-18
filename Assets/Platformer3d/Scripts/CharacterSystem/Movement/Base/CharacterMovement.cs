@@ -1,4 +1,4 @@
-using Platformer3d.LevelEnvironment.Elements.Base;
+using Platformer3d.Interactables.Elements.Base;
 using Platformer3d.Scriptable;
 using UnityEngine;
 

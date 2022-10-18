@@ -86,12 +86,16 @@ namespace Platformer3d.CharacterSystem
         private IEnumerator DamageImmuneCoroutine(float time)
         {
             _damageImmune = true;
-            while (time > 0)
-            {
-                yield return null;
-                time -= TimeSystem.Instance.ScaledGameDeltaTime;
-            }
+            yield return new WaitForSeconds(time);
             _damageImmune = false;
+
+            //_damageImmune = true;
+            //while (time > 0)
+            //{
+            //    yield return null;
+            //    time -= TimeSystem.Instance.ScaledGameDeltaTime;
+            //}
+            //_damageImmune = false;
         }
     }
 }

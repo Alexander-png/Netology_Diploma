@@ -1,4 +1,3 @@
-using Platformer3d.GameCore;
 using Platformer3d.EditorExtentions;
 using UnityEngine;
 
@@ -41,7 +40,9 @@ namespace Platformer3d.CameraMovement
 			//{
 
 			//}
-			transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * TimeSystem.Instance.ScaledGameDeltaTime);
+			//transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * TimeSystem.Instance.ScaledGameDeltaTime);
+
+			transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * Time.deltaTime);
 		}
 
         //private bool CheckShouldMove()

@@ -18,7 +18,7 @@ MonoBehaviour:
   - 7
   - 5
   - 4
-  _jumpCountInRow: 2
+  _jumpCountInRow: 3
   _climbForce: 5
   _wallClimbRepulsion: 3
   _dashDistance: 0
