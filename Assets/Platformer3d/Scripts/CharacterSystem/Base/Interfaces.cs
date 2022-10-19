@@ -1,5 +1,6 @@
 using Platformer3d.SkillSystem;
 using System;
+using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.Base
 {
@@ -11,7 +12,7 @@ namespace Platformer3d.CharacterSystem.Base
 	public interface IDamagableCharacter
     {
         public float CurrentHealth { get; }
-		public void SetDamage(float damage, float pushForce);
+		public void SetDamage(float damage, Vector3 pushVector);
 		public void Heal(float value);
 
 		public event EventHandler Died;

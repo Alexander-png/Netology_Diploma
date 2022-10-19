@@ -65,7 +65,7 @@ namespace Platformer3d.Interactables.Elements.Traps
             {
                 if (_touchingCharacters[i] != null)
                 {
-                    _touchingCharacters[i].SetDamage(_stats.Damage, _stats.PushForce);
+                    _touchingCharacters[i].SetDamage(_stats.Damage, transform.up * _stats.PushForce);
                 }
             }
         }

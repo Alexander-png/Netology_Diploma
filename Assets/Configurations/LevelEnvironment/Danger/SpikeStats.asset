@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SpikeStats
   m_EditorClassIdentifier: 
   _damage: 1.5
-  _pushForce: 3
+  _pushForce: 4
   _isFatalDamage: 0

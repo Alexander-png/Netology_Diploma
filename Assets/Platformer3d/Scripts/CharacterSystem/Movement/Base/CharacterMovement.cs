@@ -12,12 +12,13 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 		private Rigidbody _body;
 
         private MovementStatsInfo _movementStats;
+        private Vector3 _currentCollisionNormal;
+
+        protected int JumpsLeft { get; set; }
 
         public bool OnGround { get; protected set; }
         public bool OnWall { get; protected set; }
-        public bool InAir { get; private set; }
-
-        protected int JumpsLeft { get; set; }
+        public bool InAir => _currentCollisionNormal == Vector3.zero;
 
         protected bool CanJump => JumpsLeft > 0;
         protected float Acceleration => _movementStats.Acceleration;
@@ -35,6 +36,7 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         protected virtual void Awake()
         {
             _movementStats = _defaultMovementStats.GetData();
+            _currentCollisionNormal = Vector3.zero;
             ResetJumpCounter();
         }
 
@@ -47,16 +49,28 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         {
             if (collision.gameObject.TryGetComponent(out Platform plat))
             {
-                var normal = collision.GetContact(0).normal;
-
-                OnGround = normal.y == 1;
-                OnWall = plat.Climbable ? normal.x != 0 : false;
+                var newNormal = collision.GetContact(0).normal;
                 
-                if (OnGround || OnWall)
+                if (_currentCollisionNormal != Vector3.zero)
+                {
+                    if (newNormal.x != 0 && _currentCollisionNormal.y != 0)
+                    {
+                        OnWall = true;
+                        OnGround = false;
+                        _currentCollisionNormal = newNormal;
+                    }
+                }
+                else
+                {
+                    _currentCollisionNormal = newNormal;
+                    OnWall = plat.Climbable ? Mathf.Abs(_currentCollisionNormal.x) > 0.9 : false;
+                    OnGround = !OnWall;
+                }
+
+                if ((OnGround || OnWall) && plat.Climbable)
                 {
                     ResetJumpCounter();
                 }
-                InAir = false;
             }
         }
 
@@ -64,7 +78,7 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         {
             if (collision.gameObject.TryGetComponent(out Platform _))
             {
-                InAir = true;
+                _currentCollisionNormal = Vector3.zero;
             }
         }
 

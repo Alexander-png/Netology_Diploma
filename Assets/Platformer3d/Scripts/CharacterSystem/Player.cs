@@ -60,7 +60,7 @@ namespace Platformer3d.CharacterSystem
                 CurrentHealth = _currentHealh,
             };
 
-        public void SetDamage(float damage, float pushForce)
+        public void SetDamage(float damage, Vector3 pushVector)
         {
             if (_damageImmune)
             {
@@ -68,16 +68,13 @@ namespace Platformer3d.CharacterSystem
             }
 
             StartCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
-            MovementController.SetVelocity(CalculateHitPushBackSpeed(pushForce));
+            MovementController.SetVelocity(pushVector);
             _currentHealh = Mathf.Clamp(_currentHealh - damage, 0, _maxHealth);
             if (_currentHealh < 0.01f)
             {
                 Died?.Invoke(this, EventArgs.Empty);
             }
         }
-
-        private Vector3 CalculateHitPushBackSpeed(float pushForce) =>
-            (-MovementController.Body.velocity + Vector3.up).normalized * pushForce;
 
         public void Heal(float value) =>
             _currentHealh = Mathf.Clamp(_currentHealh + value, 0, _maxHealth);
