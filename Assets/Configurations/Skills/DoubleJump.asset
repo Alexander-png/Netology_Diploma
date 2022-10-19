@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3229aea951f6e4d44b1c96e63be9673a, type: 3}
-  m_Name: TripleJump
+  m_Name: DoubleJump
   m_EditorClassIdentifier: 
   _skillId: skill_tripleJump
   _maxSpeed: 0

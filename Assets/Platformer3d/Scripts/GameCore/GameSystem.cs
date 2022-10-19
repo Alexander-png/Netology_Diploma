@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Platformer3d.Platformer3d.GameCore
+namespace Platformer3d.GameCore
 {
 	public class GameSystem : MonoBehaviour
 	{

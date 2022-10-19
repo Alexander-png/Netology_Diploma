@@ -1,5 +1,5 @@
 using Platformer3d.CharacterSystem;
-using Platformer3d.Platformer3d.GameCore;
+using Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
 

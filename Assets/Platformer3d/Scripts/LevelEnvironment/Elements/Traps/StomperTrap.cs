@@ -1,5 +1,4 @@
-using Platformer3d.GameCore;
-using Platformer3d.Interactables.Elements.Base;
+using Platformer3d.LevelEnvironment.Elements.Common;
 using System.Collections;
 using UnityEngine;
 

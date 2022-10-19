@@ -1,4 +1,4 @@
-using Platformer3d.Interactables.Elements.Base;
+using Platformer3d.LevelEnvironment.Elements.Common;
 using Platformer3d.Scriptable;
 using UnityEngine;
 
@@ -45,12 +45,13 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent(out BaseLevelElement _))
+            if (collision.gameObject.TryGetComponent(out Platform plat))
             {
                 var normal = collision.GetContact(0).normal;
 
                 OnGround = normal.y == 1;
-                OnWall = normal.x != 0;
+                OnWall = plat.Climbable ? normal.x != 0 : false;
+                
                 if (OnGround || OnWall)
                 {
                     ResetJumpCounter();
@@ -61,7 +62,7 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent(out BaseLevelElement _))
+            if (collision.gameObject.TryGetComponent(out Platform _))
             {
                 InAir = true;
             }

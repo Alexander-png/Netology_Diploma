@@ -777,9 +777,9 @@ GameObject:
   - component: {fileID: 7357099001272024075}
   - component: {fileID: 7357099001272024076}
   - component: {fileID: 7357099001272024077}
-  - component: {fileID: 7357099001272024078}
+  - component: {fileID: 4251107870700423887}
   m_Layer: 0
-  m_Name: Ground (12)
+  m_Name: Ground (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -863,7 +863,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7357099001272024078
+--- !u!114 &4251107870700423887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -872,9 +872,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7357099001272024064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01269fb2c4d6c3445b6167e8825a163c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c613b77bd2faac42ae419fe93301e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 1
 --- !u!1 &7357099001585753292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,9 +1114,9 @@ GameObject:
   - component: {fileID: 7357099001686182523}
   - component: {fileID: 7357099001686182524}
   - component: {fileID: 7357099001686182525}
-  - component: {fileID: 7357099001686182526}
+  - component: {fileID: 5758461443355114712}
   m_Layer: 0
-  m_Name: Ground (13)
+  m_Name: Ground (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1199,7 +1200,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7357099001686182526
+--- !u!114 &5758461443355114712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1208,9 +1209,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7357099001686182512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01269fb2c4d6c3445b6167e8825a163c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c613b77bd2faac42ae419fe93301e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 1
 --- !u!1 &7357099001706385311
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,9 +1225,9 @@ GameObject:
   - component: {fileID: 7357099001706385306}
   - component: {fileID: 7357099001706385307}
   - component: {fileID: 7357099001706385308}
-  - component: {fileID: 7357099001706385309}
+  - component: {fileID: 4483021518666105690}
   m_Layer: 0
-  m_Name: Ground (10)
+  m_Name: Ground (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1309,7 +1311,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7357099001706385309
+--- !u!114 &4483021518666105690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1318,6 +1320,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7357099001706385311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01269fb2c4d6c3445b6167e8825a163c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c613b77bd2faac42ae419fe93301e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 1

@@ -1,12 +1,12 @@
 using Platformer3d.CharacterSystem.Base;
-using Platformer3d.Interactables.Elements.Base;
+using Platformer3d.LevelEnvironment.Elements.Common;
 using Platformer3d.Scriptable;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps
 {
-	public class DangerLevelElement : BaseLevelElement
+	public class DangerLevelElement : Platform
 	{
 		[SerializeField]
 		private DamageStats _stats;
