@@ -9,7 +9,6 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 	{
 		[SerializeField]
 		private GameObject _target;
-
 		[SerializeField]
 		private LeverSwitchAnimation _switchAnimator;
 
@@ -20,6 +19,16 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			get => _isSwitchedOn;
 			set
 			{
+				if (!CanPerform)
+                {
+					return;
+                }
+
+				if (_isSwitchedOn != value)
+                {
+					WasSwitched = true;
+				}
+
 				_isSwitchedOn = value;
 
 				if (_switchAnimator != null) _switchAnimator.Switch(value);

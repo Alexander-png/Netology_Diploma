@@ -6,14 +6,11 @@ namespace Platformer3d.LevelEnvironment.Triggers.Interactable
 {
 	public class SwitchTrigger : InteractionTrigger
     {
-        [SerializeField]
-        private bool _isOneoff;
 		[SerializeField]
 		private Switcher _targetSwitcher;
 
-        public bool WasSwitched { get; private set; }
-        public bool IsOneOff => _isOneoff;
-        public override bool CanPerform => !(WasSwitched && _isOneoff);
+        public override bool CanPerform => _targetSwitcher.CanPerform;
+        public override string ActionId => _targetSwitcher.ActionId;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -34,13 +31,7 @@ namespace Platformer3d.LevelEnvironment.Triggers.Interactable
             }
         }
 
-        public override void Perform()
-        {
-            if (CanPerform)
-            {
-                _targetSwitcher.IsSwitchedOn = !_targetSwitcher.IsSwitchedOn;
-                WasSwitched = true;
-            }
-        }
+        public override void Perform() =>
+            _targetSwitcher.IsSwitchedOn = !_targetSwitcher.IsSwitchedOn;
     }
 }
