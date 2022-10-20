@@ -1,5 +1,6 @@
 using Platformer3d.LevelEnvironment.Mechanisms.Animations;
 using Platformer3d.LevelEnvironment.Switchers;
+using System;
 using UnityEngine;
 
 namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
@@ -8,7 +9,8 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 	{
 		[SerializeField]
 		private GameObject _target;
-        [SerializeField]
+
+		[SerializeField]
 		private LeverSwitchAnimation _switchAnimator;
 
 		private ISwitcherTarget _switcher;
@@ -20,8 +22,18 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			{
 				_isSwitchedOn = value;
 
-				if (_switcher != null) _switcher.IsSwitchedOn = value;
 				if (_switchAnimator != null) _switchAnimator.Switch(value);
+				if (_switcher != null) 
+				{
+					if (!ShowTargetBeforeSwitch)
+                    {
+						_switcher.IsSwitchedOn = value; 
+                    }
+					else
+                    {
+						GameSystem.ShowAreaUntilActionEnd(_switcher.FocusPoint, new Action(() => _switcher.IsSwitchedOn = value), _switcher.SwitchTime);
+                    }
+				} 
 			}
 		}
 

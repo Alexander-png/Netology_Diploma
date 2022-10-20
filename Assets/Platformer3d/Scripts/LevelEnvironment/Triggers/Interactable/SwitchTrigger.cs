@@ -17,7 +17,7 @@ namespace Platformer3d.LevelEnvironment.Triggers.Interactable
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out SwitchTriggerInteracor interactor))
+            if (other.TryGetComponent(out SwitchTriggerInteractor interactor))
             {
                 interactor.CurrentTrigger = this;
             }
@@ -25,7 +25,7 @@ namespace Platformer3d.LevelEnvironment.Triggers.Interactable
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out SwitchTriggerInteracor interactor))
+            if (other.TryGetComponent(out SwitchTriggerInteractor interactor))
             {
                 if (interactor.CurrentTrigger == this)
                 {

@@ -18,8 +18,11 @@ namespace Platformer3d.CharacterSystem.Movement
 
         private void FixedUpdate()
         {
-            Move();
-            Jump();
+            if (MovementEnabled)
+            {
+                Move();
+                Jump();
+            }
         }
 
         private void OnRun(InputValue input)

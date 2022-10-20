@@ -10,5 +10,9 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Lockers
             get => throw new System.NotImplementedException(); 
             set => throw new System.NotImplementedException();
         }
+
+        public float SwitchTime => throw new System.NotImplementedException();
+
+        public Transform FocusPoint => throw new System.NotImplementedException();
     }
 }

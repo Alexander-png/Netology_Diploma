@@ -16,10 +16,6 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 
         protected int JumpsLeft { get; set; }
 
-        public bool OnGround { get; protected set; }
-        public bool OnWall { get; protected set; }
-        public bool InAir => _currentCollisionNormal == Vector3.zero;
-
         protected bool CanJump => JumpsLeft > 0;
         protected float Acceleration => _movementStats.Acceleration;
         protected float MaxSpeed => _movementStats.MaxSpeed;
@@ -31,7 +27,12 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         protected float DashDuration => _movementStats.DashDuration;
         protected float DashRechargeTime => _movementStats.DashRechargeTime;
 
-		public Rigidbody Body => _body;
+        public bool OnGround { get; protected set; }
+        public bool OnWall { get; protected set; }
+        public bool InAir => _currentCollisionNormal == Vector3.zero;
+        public bool MovementEnabled { get; set; }
+
+        public Rigidbody Body => _body;
 
         protected virtual void Awake()
         {

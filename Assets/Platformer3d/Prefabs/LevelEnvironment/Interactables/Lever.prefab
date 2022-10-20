@@ -271,7 +271,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1, z: 1}
+  m_Size: {x: 1.65, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4269320621939826988
 MonoBehaviour:
@@ -337,6 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isSwitchedOn: 0
+  _showTargetBeforeSwitch: 0
   _target: {fileID: 0}
   _switchAnimator: {fileID: 4269320622103695872}
 --- !u!114 &4269320622103695872
@@ -353,8 +354,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rodAxis: {fileID: 4269320620472968820}
   _animationSpeed: 90
-  _switchedOnAxisRotation: {x: 0, y: 0, z: -40}
-  _switchedOffAxisRotation: {x: 0, y: 0, z: 40}
+  _switchedOnAxisRotation: {x: 0, y: 0, z: 40}
+  _switchedOffAxisRotation: {x: 0, y: 0, z: -40}
 --- !u!1 &7593922348644195022
 GameObject:
   m_ObjectHideFlags: 0

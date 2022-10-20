@@ -27,6 +27,10 @@ namespace Platformer3d.Interactables.Elements.Traps
             set => TrapEnabled = value;
         }
 
+        public float SwitchTime => 0;
+
+        public Transform FocusPoint => transform;
+
 #if UNITY_EDITOR
         [ContextMenu("Find stomper triggers")]
         private void FindTriggers()

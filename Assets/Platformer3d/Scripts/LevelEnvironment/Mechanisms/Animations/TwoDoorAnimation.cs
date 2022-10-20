@@ -18,6 +18,9 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Animations
         [SerializeField]
         private Vector3 _closedDoorAxisRotation;
 
+        public float AnimationTime => 
+            Vector3.Distance(_closedDoorAxisRotation, _openDoorAxisRotation) / _animationSpeed;
+
         public void InitState(bool opened)
         {
             _leftDoorAxis.rotation = Quaternion.Euler(-GetTargetRotation(opened));

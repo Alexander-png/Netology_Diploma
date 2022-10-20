@@ -1,3 +1,4 @@
+using Platformer3d.CameraMovementSystem;
 using Platformer3d.CharacterSystem;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
@@ -15,6 +16,8 @@ namespace Platformer3d.GameCore
         private float _respawnTime; // TODO: find better place
 		[SerializeField]
 		private Player _playerCharacter;
+        [SerializeField]
+        private CameraAligner _cameraAligner;
 
         [SerializeField]
         private MovementSkillContainer _playerMoventModificatorContainer;
@@ -31,30 +34,21 @@ namespace Platformer3d.GameCore
             }
         }
 
-        public void GiveAbilityToPlayer(string abilityId)
-        {
-            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMoventModificatorContainer.CreateSkill(abilityId));
-            GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
-        }
-
         private void Start()
         {
             _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
+            _playerCharacter.HandlingEnabled = true;
         }
 
         private void OnEnable()
         {
+            _cameraAligner.ShowAreaExecuted += OnAreaShowed;
             _playerCharacter.Died += OnPlayerDiedInternal;
-        }
-
-        public void OnCheckpointReached(Vector3 checkpointPosition)
-        {
-            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
-            _lastPlayerData.Position = checkpointPosition;
         }
 
         private void OnDisable()
         {
+            _cameraAligner.ShowAreaExecuted -= OnAreaShowed;
             _playerCharacter.Died -= OnPlayerDiedInternal;
             StopAllCoroutines();
         }
@@ -78,11 +72,37 @@ namespace Platformer3d.GameCore
             RespawnPlayer();
         }
 
+        private void OnAreaShowed(object sender, EventArgs e)
+        {
+            SetPlayerHandlingEnabled(true);
+        }
+
+        public void GiveAbilityToPlayer(string abilityId)
+        {
+            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMoventModificatorContainer.CreateSkill(abilityId));
+            GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
+        }
+
+        public void OnCheckpointReached(Vector3 checkpointPosition)
+        {
+            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
+            _lastPlayerData.Position = checkpointPosition;
+        }
+
+        public void ShowAreaUntilActionEnd(Transform position, Action action, float switchTime)
+        {
+            SetPlayerHandlingEnabled(false);
+            _cameraAligner.ShowAreaUntilActionEnd(position, action, switchTime);
+        }   
+
+        public void SetPlayerHandlingEnabled(bool value) => _playerCharacter.HandlingEnabled = value;
+
 #if UNITY_EDITOR
-        [ContextMenu("Find player in scene")]
+        [ContextMenu("Fill fields")]
 		private void FindPlayerOnScene()
         {
 			_playerCharacter = FindObjectOfType<Player>();
+            _cameraAligner = FindObjectOfType<CameraAligner>();
         }
 #endif
     }

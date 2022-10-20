@@ -27,7 +27,11 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			set => Opened = value;
 		}
 
-		private void Start()
+        public float SwitchTime => _animation != null ? _animation.AnimationTime : 0f;
+
+        public Transform FocusPoint => CameraFocusPoint;
+
+        private void Start()
         {
 			if (_animation == null)
 			{

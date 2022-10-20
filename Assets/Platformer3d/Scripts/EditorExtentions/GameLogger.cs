@@ -1,10 +1,7 @@
 using UnityEngine;
-using UnityEditor;
-using System;
 
 namespace Platformer3d.EditorExtentions
 {
-#if UNITY_EDITOR
     public static class GameLogger
     {
         public enum LogType : byte
@@ -17,6 +14,7 @@ namespace Platformer3d.EditorExtentions
 
         public static void AddMessage(string message, LogType type = LogType.Message)
         {
+#if UNITY_EDITOR
             switch (type)
             {
                 case LogType.Message:
@@ -33,7 +31,7 @@ namespace Platformer3d.EditorExtentions
                     Debug.Break();
                     break;
             }
+#endif
         }
     }
-#endif
 }

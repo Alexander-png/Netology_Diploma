@@ -613,7 +613,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 120808012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.24, z: -15.62}
+  m_LocalPosition: {x: 0, y: 0, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1322,7 +1322,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326075734}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64.59, y: 1.5, z: 0}
+  m_LocalPosition: {x: 59.68, y: 16.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1374,6 +1374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stats: {fileID: 11400000, guid: 312cbfbfd7f445147a8d7fe562364ddc, type: 2}
   _movementController: {fileID: 326075742}
+  _interactor: {fileID: 326075747}
   _skillObserver: {fileID: 326075746}
 --- !u!23 &326075740
 MeshRenderer:
@@ -4352,7 +4353,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 67.13, y: 3.11, z: -15.91}
+  m_LocalPosition: {x: -26.2, y: 4.9, z: -15.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4372,8 +4373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetPoint: {fileID: 120808013}
-  _moveSpeed: 2.38
-  _strictMode: 0
+  _moveSpeed: 2.4
 --- !u!1 &985544573
 GameObject:
   m_ObjectHideFlags: 0
@@ -4423,6 +4423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _respawnTime: 1
   _playerCharacter: {fileID: 326075738}
+  _cameraAligner: {fileID: 963194229}
   _playerMoventModificatorContainer: {fileID: 11400000, guid: 5b3768fc9aa6923449133df34fb8f04c, type: 2}
 --- !u!114 &985544578
 MonoBehaviour:
@@ -9189,6 +9190,14 @@ PrefabInstance:
       propertyPath: _actionId
       value: action_interact
       objectReference: {fileID: 0}
+    - target: {fileID: 4269320621939826988, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
+      propertyPath: _isOneoff
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269320621939826988, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
+      propertyPath: _showTargetOnPerform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4269320622103695873, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -9240,6 +9249,10 @@ PrefabInstance:
     - target: {fileID: 4269320622103695875, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
       propertyPath: _isSwitchedOn
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269320622103695875, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
+      propertyPath: _showTargetBeforeSwitch
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4269320622103695878, guid: e0dc91b5cc560854bbcb5c75f1980e24, type: 3}
       propertyPath: m_Name
@@ -9433,6 +9446,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 180730102}
     m_Modifications:
+    - target: {fileID: 1520704787985003078, guid: 74e5f8c19a9e6c04581466801e7621c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.24
+      objectReference: {fileID: 0}
     - target: {fileID: 8932707874091395356, guid: 74e5f8c19a9e6c04581466801e7621c1, type: 3}
       propertyPath: m_Name
       value: Gate

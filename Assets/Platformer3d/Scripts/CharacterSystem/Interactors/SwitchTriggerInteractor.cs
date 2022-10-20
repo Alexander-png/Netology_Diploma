@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Platformer3d.CharacterSystem.Interactors
 {
-    public class SwitchTriggerInteracor : MonoBehaviour
+    public class SwitchTriggerInteractor : MonoBehaviour
     {
         [SerializeField]
         private float _interactionDelay;
@@ -33,9 +33,11 @@ namespace Platformer3d.CharacterSystem.Interactors
             }
         }
 
+        public bool InteractionEnabled { get; set; }
+
         private void OnInteract(InputValue value)
         {
-            if (CurrentTrigger != null && _canInteract)
+            if (CurrentTrigger != null && _canInteract && InteractionEnabled)
             {
                 CurrentTrigger.Perform();
             }
