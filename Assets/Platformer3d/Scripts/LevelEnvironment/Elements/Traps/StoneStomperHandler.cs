@@ -1,10 +1,10 @@
 using Platformer3d.Interactables.Triggers;
-using Platformer3d.LevelEnvironment.Triggers.Interactable;
+using Platformer3d.LevelEnvironment.Switchers;
 using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps
 {
-	public class StoneStomperHandler : TrapHandler, ISwitchTriggerTarget
+	public class StoneStomperHandler : TrapHandler, ISwitcherTarget
 	{
         [SerializeField]
         private StomperTrigger[] _stomperTriggers;

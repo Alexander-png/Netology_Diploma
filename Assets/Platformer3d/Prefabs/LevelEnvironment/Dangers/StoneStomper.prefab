@@ -443,7 +443,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7357099000190291277}
   - component: {fileID: 7357099000190291276}
-  - component: {fileID: 1027958117510754861}
   m_Layer: 0
   m_Name: StoneStomper
   m_TagString: Untagged
@@ -487,19 +486,6 @@ MonoBehaviour:
   - {fileID: 7357098999950464692}
   - {fileID: 7357098999977088069}
   - {fileID: 7357099000048416875}
---- !u!114 &1027958117510754861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7357099000190291278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 968468f5e650f20498ab6d80772ce464, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trap: {fileID: 7357099000190291276}
 --- !u!1 &7357099000268044764
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,6 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76527cd7c8179649b0e4d1bd2885c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 0
   _stats: {fileID: 11400000, guid: b103872ac07a86242accbd713b4d8d62, type: 2}
   _trapEnabled: 1
   _holder: {fileID: 7357099001585753290}
@@ -708,6 +695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76527cd7c8179649b0e4d1bd2885c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 0
   _stats: {fileID: 11400000, guid: b103872ac07a86242accbd713b4d8d62, type: 2}
   _trapEnabled: 1
   _holder: {fileID: 7357098999664081494}
@@ -1045,6 +1033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76527cd7c8179649b0e4d1bd2885c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _climbable: 0
   _stats: {fileID: 11400000, guid: b103872ac07a86242accbd713b4d8d62, type: 2}
   _trapEnabled: 1
   _holder: {fileID: 7357099000030841353}

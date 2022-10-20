@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2724c5ebc41b9914983bda85d1468e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isSwitchedOn: 1
+  _isSwitchedOn: 0
   _target: {fileID: 0}
   _switchAnimator: {fileID: 4269320622103695872}
 --- !u!114 &4269320622103695872
