@@ -1,9 +1,10 @@
 using Platformer3d.Interactables.Triggers;
+using Platformer3d.LevelEnvironment.Triggers.Interactable;
 using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps
 {
-	public class StoneStomperHandler : TrapHandler
+	public class StoneStomperHandler : TrapHandler, ISwitchTriggerTarget
 	{
         [SerializeField]
         private StomperTrigger[] _stomperTriggers;
@@ -18,6 +19,12 @@ namespace Platformer3d.Interactables.Elements.Traps
                     trigger.TrapEnabled = value;
                 }
             }
+        }
+
+        public bool IsSwitchedOn
+        {
+            get => TrapEnabled; 
+            set => TrapEnabled = value;
         }
 
 #if UNITY_EDITOR

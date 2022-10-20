@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Platformer3d.Interactables.Animators
+namespace Platformer3d.LevelEnvironment.Mechanisms.Animations
 {
     public class LeverSwitchAnimation : MonoBehaviour
     {

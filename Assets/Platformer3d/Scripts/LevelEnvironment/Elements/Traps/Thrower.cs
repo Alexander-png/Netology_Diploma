@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Platformer3d.LevelEnvironment.Elements.Traps
 {
+    // TODO: determine namespace for this
 	public class Thrower : Platform
 	{
 		[SerializeField]
@@ -18,7 +19,6 @@ namespace Platformer3d.LevelEnvironment.Elements.Traps
         }
 
         private Vector3 CalcThrowForce() => transform.up * _throwForce;
-
 
         private void OnDrawGizmos()
         {

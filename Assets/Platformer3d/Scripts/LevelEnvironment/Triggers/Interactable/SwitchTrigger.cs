@@ -1,5 +1,5 @@
 using Platformer3d.CharacterSystem.Interactors;
-using Platformer3d.Interactables.Switchers;
+using Platformer3d.LevelEnvironment.Mechanisms.Switchers;
 using UnityEngine;
 
 namespace Platformer3d.LevelEnvironment.Triggers.Interactable
