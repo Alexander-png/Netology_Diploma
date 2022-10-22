@@ -1,24 +1,28 @@
-using Platformer3d.LevelEnvironment.Triggers.Interactable;
+using Platformer3d.GameCore;
+using Platformer3d.Interaction;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 namespace Platformer3d.CharacterSystem.Interactors
 {
     public class SwitchTriggerInteractor : MonoBehaviour
     {
+        [Inject]
+        private GameSystem _gameSystem;
+
         [SerializeField]
         private float _interactionDelay;
-
+        
         private bool _canInteract;
-        private InteractionTrigger _currentTrigger;
 
         public InteractionTrigger CurrentTrigger
         {
-            get => _currentTrigger;
+            get => _gameSystem.CurrentTrigger;
             set
             {
-                _currentTrigger = value;
+                _gameSystem.SetTrigger(value);
                 if (value != null && value.CanPerform)
                 {
                     StopAllCoroutines();
@@ -33,20 +37,20 @@ namespace Platformer3d.CharacterSystem.Interactors
             }
         }
 
-        public bool InteractionEnabled { get; set; }
+        public bool HandlingEnabled { get; set; } = true;
 
         private void OnInteract(InputValue value)
         {
-            if (CurrentTrigger != null && _canInteract && InteractionEnabled)
+            if (_canInteract && HandlingEnabled)
             {
-                CurrentTrigger.Perform();
+                _gameSystem.PerformTrigger();
             }
         }
 
         private IEnumerator ShowTooltipDelay(float time)
         {
             yield return new WaitForSeconds(time);
-            EditorExtentions.GameLogger.AddMessage($"TODO: showing interaction tooltip, current interaction: {_currentTrigger.ActionId}", EditorExtentions.GameLogger.LogType.Warning);
+            EditorExtentions.GameLogger.AddMessage($"TODO: showing interaction tooltip, current interaction: {CurrentTrigger.ActionId}", EditorExtentions.GameLogger.LogType.Warning);
             _canInteract = true;
         }
     }

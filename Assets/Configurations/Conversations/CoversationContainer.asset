@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b84c558252a6441a7a37f8ea85c06b, type: 3}
+  m_Name: CoversationContainer
+  m_EditorClassIdentifier: 
+  _conversations:
+  - {fileID: 11400000, guid: 5330e1c7af32d6041a6353c4d3a82be7, type: 2}
+  - {fileID: 11400000, guid: e0bf247aad2ef2c4aa1d65a693688bfb, type: 2}
+  - {fileID: 11400000, guid: d8c1712b6dd4c374d98c54d0871e93ce, type: 2}
+  - {fileID: 11400000, guid: c9cf92d8a99977149952662565dbcfa2, type: 2}

@@ -4,7 +4,7 @@ using Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
 
-namespace Platformer3d.Interactables.Triggers
+namespace Platformer3d.LevelEnvironment.Triggers
 {
     [System.Obsolete]
 	public class AbilityGiver : MonoBehaviour
@@ -24,7 +24,7 @@ namespace Platformer3d.Interactables.Triggers
         {
             if (other.TryGetComponent(out Player _))
             {
-                _gameSystem.GiveAbilityToPlayer(_abilityId);
+                _gameSystem.GiveSkillToPlayer(_abilityId);
             }
         }
     }

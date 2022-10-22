@@ -1,6 +1,6 @@
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
-using Platformer3d.Scriptable;
+using Platformer3d.Scriptable.Characters;
 using Platformer3d.SkillSystem;
 using System;
 using System.Collections;

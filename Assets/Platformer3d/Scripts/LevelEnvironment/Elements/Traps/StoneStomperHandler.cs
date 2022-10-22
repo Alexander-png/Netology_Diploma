@@ -1,5 +1,5 @@
-using Platformer3d.Interactables.Triggers;
 using Platformer3d.LevelEnvironment.Switchers;
+using Platformer3d.LevelEnvironment.Triggers;
 using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps

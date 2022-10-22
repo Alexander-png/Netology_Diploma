@@ -3,7 +3,7 @@ using Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
 
-namespace Platformer3d.Interactables.Triggers
+namespace Platformer3d.LevelEnvironment.Triggers
 {
 	public class CheckPoint : MonoBehaviour
 	{

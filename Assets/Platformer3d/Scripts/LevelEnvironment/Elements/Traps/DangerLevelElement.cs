@@ -1,6 +1,6 @@
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.LevelEnvironment.Elements.Common;
-using Platformer3d.Scriptable;
+using Platformer3d.Scriptable.LevelElements;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace Platformer3d.Interactables.Elements.Traps
 	public class DangerLevelElement : Platform
 	{
 		[SerializeField]
-		private DamageStats _stats;
+		private LevelElementDamageStats _stats;
         [SerializeField]
         private bool _trapEnabled = true;
 

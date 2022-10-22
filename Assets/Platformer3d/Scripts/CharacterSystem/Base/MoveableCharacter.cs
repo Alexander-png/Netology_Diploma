@@ -23,7 +23,6 @@ namespace Platformer3d.CharacterSystem.Base
             {
                 _handlingEnabled = value;
                 _movementController.MovementEnabled = _handlingEnabled;
-                _interactor.InteractionEnabled = _handlingEnabled;
             }
         }
 

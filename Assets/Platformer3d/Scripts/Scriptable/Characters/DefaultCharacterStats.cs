@@ -1,7 +1,7 @@
 using Platformer3d.CharacterSystem.Enums;
 using UnityEngine;
 
-namespace Platformer3d.Scriptable
+namespace Platformer3d.Scriptable.Characters
 {
 	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Character stats")]
 	public class DefaultCharacterStats : ScriptableObject

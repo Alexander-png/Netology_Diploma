@@ -1,7 +1,7 @@
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
-using Platformer3d.Scriptable;
+using Platformer3d.Scriptable.Characters;
 using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.Base

@@ -2,7 +2,7 @@ using Platformer3d.CharacterSystem.Movement.Base;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Platformer3d.Scriptable
+namespace Platformer3d.Scriptable.Characters
 {
 	/// <summary>
 	/// Use this to create default movement stats

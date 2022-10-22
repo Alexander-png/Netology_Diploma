@@ -1,22 +1,21 @@
 using Platformer3d.GameCore;
+using Platformer3d.Interaction;
 using UnityEngine;
 using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 {
-	public abstract class Switcher : MonoBehaviour
+	public abstract class Switcher : MonoBehaviour, ISwitcher
 	{
 		[Inject]
 		private GameSystem _gameSystem;
 
 		[SerializeField]
 		private string _actionId;
-
 		[SerializeField]
 		protected bool _isSwitchedOn;
 		[SerializeField]
 		private bool _isOneOff;
-
 		[SerializeField]
 		private bool _showTargetBeforeSwitch;
 

@@ -20,7 +20,6 @@ namespace Platformer3d.SkillSystem
 
         private Skill FindSkill(string id) => _appliedSkills.Find(s => s.SkillId == id);
 
-
         public void AddSkill(Skill skill)
         {
             if (_distinctSkillsOnly)

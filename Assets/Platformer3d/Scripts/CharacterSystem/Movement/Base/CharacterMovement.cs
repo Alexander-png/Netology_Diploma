@@ -1,5 +1,5 @@
 using Platformer3d.LevelEnvironment.Elements.Common;
-using Platformer3d.Scriptable;
+using Platformer3d.Scriptable.Characters;
 using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.Movement.Base

@@ -2,7 +2,10 @@ using Platformer3d.CameraMovementSystem;
 using Platformer3d.CharacterSystem;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
+using Platformer3d.ConversationSystem;
 using Platformer3d.EditorExtentions;
+using Platformer3d.Interaction;
+using Platformer3d.Scriptable.Conversations.Containers;
 using Platformer3d.Scriptable.Skills.Containers;
 using System;
 using System.Collections;
@@ -19,8 +22,15 @@ namespace Platformer3d.GameCore
         [SerializeField]
         private CameraAligner _cameraAligner;
 
+        [SerializeField, Space(15)]
+        private ConversationHandler _conversationHandler;
+
         [SerializeField]
-        private MovementSkillContainer _playerMoventModificatorContainer;
+        private MovementSkillContainer _playerMovementSkillContainer;
+        [SerializeField]
+        private ConversationContainer _conversationContainer;
+
+        public InteractionTrigger CurrentTrigger { get; private set; }
 
         private PlayerDataContainer _lastPlayerData;
 
@@ -38,6 +48,7 @@ namespace Platformer3d.GameCore
         {
             _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
             _playerCharacter.HandlingEnabled = true;
+            _conversationHandler.Initialize(this);
         }
 
         private void OnEnable()
@@ -77,9 +88,11 @@ namespace Platformer3d.GameCore
             SetPlayerHandlingEnabled(true);
         }
 
-        public void GiveAbilityToPlayer(string abilityId)
+        public void SetPlayerHandlingEnabled(bool value) => _playerCharacter.HandlingEnabled = value;
+
+        public void GiveSkillToPlayer(string abilityId)
         {
-            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMoventModificatorContainer.CreateSkill(abilityId));
+            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMovementSkillContainer.CreateSkill(abilityId));
             GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
@@ -93,9 +106,37 @@ namespace Platformer3d.GameCore
         {
             SetPlayerHandlingEnabled(false);
             _cameraAligner.ShowAreaUntilActionEnd(position, action, switchTime);
-        }   
+        }
 
-        public void SetPlayerHandlingEnabled(bool value) => _playerCharacter.HandlingEnabled = value;
+        public void SetTrigger(InteractionTrigger trigger) => CurrentTrigger = trigger;
+
+        public void PerformTrigger()
+        {
+            if (_conversationHandler.InConversation)
+            {
+                _conversationHandler.ShowNextPhrase();
+            }
+            else
+            {
+                CurrentTrigger.Perform();
+            }
+        }
+
+        public void StartConversation(string conversationId)
+        {
+            GameLogger.AddMessage($"Started conversation with id {conversationId}");
+            _conversationHandler.StartConversation(_conversationContainer.GetPhrases(conversationId));
+        }
+
+        public void StartQuest(string questId)
+        {
+            GameLogger.AddMessage($"TODO: quest start, data: {questId}");
+        }
+
+        public void EndQuest(string questId)
+        {
+            GameLogger.AddMessage($"TODO: quest end, data: {questId}");
+        }
 
 #if UNITY_EDITOR
         [ContextMenu("Fill fields")]
@@ -103,6 +144,7 @@ namespace Platformer3d.GameCore
         {
 			_playerCharacter = FindObjectOfType<Player>();
             _cameraAligner = FindObjectOfType<CameraAligner>();
+            _conversationHandler = GetComponent<ConversationHandler>();
         }
 #endif
     }
