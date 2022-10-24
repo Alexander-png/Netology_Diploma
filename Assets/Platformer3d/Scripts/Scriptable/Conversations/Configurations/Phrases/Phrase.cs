@@ -6,8 +6,11 @@ namespace Platformer3d.Scriptable.Conversations.Configurations.Phrases
     {
 		Common = 0,
 		QuestStart = 1,
-		QuestEnd = 2,
-		SwitchConversation = 3,
+		CheckQuestCompleted = 2,
+		QuestEnd = 3,
+		SwitchConversation = 4,
+		RemoveItem = 5,
+		AddItem = 6,
 	}
 
     [Serializable]

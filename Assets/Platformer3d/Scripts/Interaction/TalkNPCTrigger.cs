@@ -6,7 +6,7 @@ namespace Platformer3d.Interaction
     public interface ITalkable : IPerformer
     {
         public void Talk();
-        public void SetConversation(string id);
+        public void SetConversation(string id, bool reload);
     }
 
     public class TalkNPCTrigger : InteractionTrigger

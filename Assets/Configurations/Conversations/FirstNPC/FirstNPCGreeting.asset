@@ -17,9 +17,9 @@ MonoBehaviour:
   - PhraseType: 0
     Data: Have you seen the golden ore anywhere?
   - PhraseType: 1
-    Data: quest_findGoldenOre$1
+    Data: quest_findGoldenOre$1$1
   - PhraseType: 0
     Data: I will be glad if you will bring it to me.
-  - PhraseType: 3
+  - PhraseType: 4
     Data: conversation_firstNPCNoGoldenOre
   _isLoop: 0

@@ -1,6 +1,8 @@
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
 using Platformer3d.Scriptable.Conversations.Configurations.Phrases;
+using Platformer3d.Scriptable.Conversations.Containers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +10,17 @@ namespace Platformer3d.ConversationSystem
 {
 	public class ConversationHandler : MonoBehaviour
 	{
+		[SerializeField]
+		private ConversationContainer _conversationContainer;
+
 		private const int NonInPhrase = -1;
 
 		private GameSystem _gameSystem;
 
 		private List<Phrase> _phrases;
 		private int _phraseIndex;
+
+		private Phrase CurrentPhrase => _phrases[_phraseIndex];
 
 		public bool InConversation => _phraseIndex != NonInPhrase;
 
@@ -23,10 +30,12 @@ namespace Platformer3d.ConversationSystem
 			_phraseIndex = NonInPhrase;
 		}
 
-		public void StartConversation(List<Phrase> phrases)
+		public void StartConversation(string id)
         {
-			_phrases = phrases;
+			EditorExtentions.GameLogger.AddMessage($"Started conversation with id {id}");
+			_phrases = _conversationContainer.GetPhrases(id);
 			_gameSystem.SetPlayerHandlingEnabled(false);
+			_phraseIndex = NonInPhrase;
 			ShowNextPhrase();
 		}
 
@@ -42,27 +51,57 @@ namespace Platformer3d.ConversationSystem
 				return;
             }
 
-            switch (_phrases[_phraseIndex].PhraseType)
+            switch (CurrentPhrase.PhraseType)
             {
                 case PhraseType.Common:
-					EditorExtentions.GameLogger.AddMessage($"TODO: UI, data: {_phrases[_phraseIndex].Data}");
+					EditorExtentions.GameLogger.AddMessage($"TODO: UI, data: {CurrentPhrase.Data}");
 					break;
                 case PhraseType.QuestStart:
-					_gameSystem.StartQuest(_phrases[_phraseIndex].Data);
+					_gameSystem.StartQuest(CurrentPhrase.Data);
 					ShowNextPhrase();
 					break;
                 case PhraseType.QuestEnd:
-					_gameSystem.EndQuest(_phrases[_phraseIndex].Data);
+					_gameSystem.EndQuest(CurrentPhrase.Data);
 					ShowNextPhrase();
 					break;
                 case PhraseType.SwitchConversation:
-					SwitchConversationOnTarget(_phrases[_phraseIndex].Data);
+					SwitchConversationOnTarget(CurrentPhrase.Data);
 					ShowNextPhrase();
 					break;
+				case PhraseType.RemoveItem:
+					{
+						string[] data = CurrentPhrase.Data.Split('$');
+						int count = Convert.ToInt32(data[1]);
+						_gameSystem.RemoveItemFromPlayer(data[0], count);
+						ShowNextPhrase();
+						break;
+					}
+				case PhraseType.AddItem:
+                    {
+						EditorExtentions.GameLogger.AddMessage("TODO: item fabric", EditorExtentions.GameLogger.LogType.Warning);
+						//string[] data = CurrentPhrase.Data.Split('$');
+						//int count = Convert.ToInt32(data[1]);
+						//_gameSystem.AddItemToPlayer(, count);
+						//ShowNextPhrase();
+						break;
+					}
+				case PhraseType.CheckQuestCompleted:
+					{
+						string[] data = CurrentPhrase.Data.Split('$');
+						if (_gameSystem.CheckQuestCompleted(_gameSystem.CurrentTrigger.InteractionTarget, data[0]))
+						{
+							SwitchConversationOnTarget(data[1], true);
+						}
+						else
+						{
+							ShowNextPhrase();
+						}
+						break;
+					}
             }
         }
 
-		private void SwitchConversationOnTarget(string conversationId)
-			=> (_gameSystem.CurrentTrigger.InteractionTarget as ITalkable).SetConversation(conversationId);
+		private void SwitchConversationOnTarget(string conversationId, bool reload = false)
+			=> (_gameSystem.CurrentTrigger.InteractionTarget as ITalkable).SetConversation(conversationId, reload);
     }
 }

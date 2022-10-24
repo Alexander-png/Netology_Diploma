@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3229aea951f6e4d44b1c96e63be9673a, type: 3}
-  m_Name: DoubleJump
+  m_Script: {fileID: 11500000, guid: 6e0371315fd52854bb579856403443dd, type: 3}
+  m_Name: BringGoldOre
   m_EditorClassIdentifier: 
-  _skillId: skill_doubleJump
-  _maxSpeed: 0
-  _acceleration: 0
-  _jumpCountInRow: 1
-  _climbForce: 0
-  _wallClimbRepulsion: 0
-  _dashDistance: 0
-  _dashDuration: 0
-  _dashRechargeTime: 0
+  _questId: quest_findGoldenOre
+  _questSteps:
+  - StepType: 0
+    Data: item_GoldenOre

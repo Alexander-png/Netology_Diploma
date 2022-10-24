@@ -1,11 +1,11 @@
 using Platformer3d.CameraMovementSystem;
-using Platformer3d.CharacterSystem;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.ConversationSystem;
 using Platformer3d.EditorExtentions;
 using Platformer3d.Interaction;
-using Platformer3d.Scriptable.Conversations.Containers;
+using Platformer3d.PlayerSystem;
+using Platformer3d.QuestSystem;
 using Platformer3d.Scriptable.Skills.Containers;
 using System;
 using System.Collections;
@@ -13,26 +13,28 @@ using UnityEngine;
 
 namespace Platformer3d.GameCore
 {
-	public class GameSystem : MonoBehaviour
-	{
+    public class GameSystem : MonoBehaviour
+    {
         [SerializeField]
         private float _respawnTime; // TODO: find better place
-		[SerializeField]
-		private Player _playerCharacter;
+        [SerializeField]
+        private Player _playerCharacter;
         [SerializeField]
         private CameraAligner _cameraAligner;
 
         [SerializeField, Space(15)]
         private ConversationHandler _conversationHandler;
+        [SerializeField]
+        private QuestHandler _questHandler;
 
         [SerializeField]
         private MovementSkillContainer _playerMovementSkillContainer;
-        [SerializeField]
-        private ConversationContainer _conversationContainer;
-
-        public InteractionTrigger CurrentTrigger { get; private set; }
 
         private PlayerDataContainer _lastPlayerData;
+
+        public InteractionTrigger CurrentTrigger { get; private set; }
+        public ConversationHandler ConversationHandler => _conversationHandler;
+        public QuestHandler QuestHandler => _questHandler;
 
         public event EventHandler PlayerRespawned;
 
@@ -64,12 +66,15 @@ namespace Platformer3d.GameCore
             StopAllCoroutines();
         }
 
+        public bool CheckQuestCompleted(IPerformer interactionTarget, string questId) =>
+            _questHandler.IsQuestCompleted(interactionTarget as IQuestGiver, questId);
+
         private void OnPlayerDiedInternal(object sender, EventArgs e)
         {
             _playerCharacter.gameObject.SetActive(false);
             StartCoroutine(PlayerRespawnCoroutine(_respawnTime));
         }
-                
+
         private void RespawnPlayer()
         {
             _playerCharacter.OnRespawn(_lastPlayerData);
@@ -122,21 +127,28 @@ namespace Platformer3d.GameCore
             }
         }
 
-        public void StartConversation(string conversationId)
+        public void StartQuest(string questId) =>
+            _questHandler.StartQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId);
+
+        public void EndQuest(string questId) =>
+            _questHandler.EndQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId);
+
+        public void OnCollectalbeCollected(IInventoryItem item)
         {
-            GameLogger.AddMessage($"Started conversation with id {conversationId}");
-            _conversationHandler.StartConversation(_conversationContainer.GetPhrases(conversationId));
+            _questHandler.OnItemAdded(item as IQuestTarget);
+            _playerCharacter.Inventory.AddItem(item);
         }
 
-        public void StartQuest(string questId)
+        public void AddItemToPlayer(IInventoryItem item)
         {
-            GameLogger.AddMessage($"TODO: quest start, data: {questId}");
+            _playerCharacter.Inventory.AddItem(item);
         }
 
-        public void EndQuest(string questId)
-        {
-            GameLogger.AddMessage($"TODO: quest end, data: {questId}");
-        }
+        public void RemoveItemFromPlayer(string itemId, int count = 1) =>
+            _playerCharacter.Inventory.RemoveItem(itemId, count);
+
+        public bool CheckItemInInventory(string itemId, int count = 1) => 
+            _playerCharacter.Inventory.ContainsItem(itemId, count);
 
 #if UNITY_EDITOR
         [ContextMenu("Fill fields")]

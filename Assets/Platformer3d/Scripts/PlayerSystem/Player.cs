@@ -6,10 +6,12 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Platformer3d.CharacterSystem
+namespace Platformer3d.PlayerSystem
 {
     public class Player : MoveableCharacter, IDamagableCharacter, ISkillObservable
     {
+        [SerializeField]
+        private Inventory _inventory;
         [SerializeField]
         private SkillObserver _skillObserver;
 
@@ -20,6 +22,7 @@ namespace Platformer3d.CharacterSystem
 
         public float CurrentHealth => _currentHealh;
 
+        public Inventory Inventory => _inventory;
         public SkillObserver SkillObserver => _skillObserver;
 
         public event EventHandler Died;

@@ -16,10 +16,12 @@ MonoBehaviour:
   _phrases:
   - PhraseType: 0
     Data: What is it? You found?
-  - PhraseType: 2
-    Data: quest_findGoldenOre$1
   - PhraseType: 0
-    Data: Oh, thank you. Now i can hang it on my wall.
+    Data: Oh, you cutie capsule, thank you. Now i can hang it on my wall.
+  - PhraseType: 5
+    Data: item_GoldenOre$1
   - PhraseType: 3
+    Data: quest_findGoldenOre$1$1
+  - PhraseType: 4
     Data: conversation_FirstNPCAfterFoundGold
   _isLoop: 0

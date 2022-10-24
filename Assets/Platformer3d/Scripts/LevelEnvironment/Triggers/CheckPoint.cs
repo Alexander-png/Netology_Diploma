@@ -1,5 +1,5 @@
-using Platformer3d.CharacterSystem;
 using Platformer3d.GameCore;
+using Platformer3d.PlayerSystem;
 using UnityEngine;
 using Zenject;
 
@@ -12,7 +12,7 @@ namespace Platformer3d.LevelEnvironment.Triggers
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.TryGetComponent(out Player player))
+            if (other.gameObject.TryGetComponent(out Player _))
             {
                 _gameSystem.OnCheckpointReached(transform.position);
             }
