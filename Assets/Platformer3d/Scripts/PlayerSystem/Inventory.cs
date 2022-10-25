@@ -12,6 +12,8 @@ namespace Platformer3d.PlayerSystem
     {
         private List<IInventoryItem> _items;
 
+        public IEnumerable<IInventoryItem> Items => new List<IInventoryItem>(_items);
+
         private void Awake()
         {
             _items = new List<IInventoryItem>();
@@ -21,7 +23,7 @@ namespace Platformer3d.PlayerSystem
             _items.Add(toAdd);
 
         public bool RemoveItem(IInventoryItem toRemove, int count = 1) =>
-            RemoveItem(toRemove.ItemId);
+            RemoveItem(toRemove.ItemId, count);
 
         public bool RemoveItem(string itemToRemoveId, int count = 1)
         {

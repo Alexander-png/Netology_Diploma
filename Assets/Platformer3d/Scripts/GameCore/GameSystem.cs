@@ -127,8 +127,10 @@ namespace Platformer3d.GameCore
             }
         }
 
-        public void StartQuest(string questId) =>
-            _questHandler.StartQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId);
+        public void StartQuest(string questId)
+        {
+            _questHandler.StartQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId, _playerCharacter.Inventory.Items);
+        }
 
         public void EndQuest(string questId) =>
             _questHandler.EndQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId);

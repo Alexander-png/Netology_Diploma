@@ -1,3 +1,4 @@
+using Platformer3d.PlayerSystem;
 using Platformer3d.Scriptable.Quests.Containers;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,10 +19,15 @@ namespace Platformer3d.QuestSystem
             _currentQuests = new List<ItemQuest>();
         }
 
-        public void StartQuest(IQuestGiver questGiver, string questId)
+        public void StartQuest(IQuestGiver questGiver, string questId, IEnumerable<IInventoryItem> itemsInInventory)
         {
             EditorExtentions.GameLogger.AddMessage($"TODO: quest start, data: {questId}");
-            _currentQuests.Add(_questContainer.BuildQuest(questGiver, questId));
+            var newQuest = _questContainer.BuildQuest(questGiver, questId);
+            _currentQuests.Add(newQuest);
+            foreach (var item in itemsInInventory)
+            {
+                newQuest.OnItemAdded(item.ItemId);
+            }
         }
 
         public void OnItemAdded(IQuestTarget itemId)
