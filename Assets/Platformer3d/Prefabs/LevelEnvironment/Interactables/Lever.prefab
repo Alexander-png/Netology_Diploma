@@ -285,9 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0118f55f886ebe140b08a0b9601caa11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionId: 
-  _isOneoff: 0
-  _targetSwitcher: {fileID: 4269320622103695875}
+  _targetSwitcher: {fileID: 4269320622103695878}
 --- !u!1 &4269320622103695878
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +334,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2724c5ebc41b9914983bda85d1468e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _actionId: 
   _isSwitchedOn: 0
+  _isOneOff: 0
   _showTargetBeforeSwitch: 0
   _target: {fileID: 0}
   _switchAnimator: {fileID: 4269320622103695872}

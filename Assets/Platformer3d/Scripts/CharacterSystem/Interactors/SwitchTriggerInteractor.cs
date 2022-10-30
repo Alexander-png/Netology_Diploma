@@ -11,9 +11,6 @@ namespace Platformer3d.CharacterSystem.Interactors
     {
         [Inject]
         private GameSystem _gameSystem;
-
-        [SerializeField]
-        private float _interactionDelay;
         
         private bool _canInteract;
 
@@ -22,11 +19,11 @@ namespace Platformer3d.CharacterSystem.Interactors
             get => _gameSystem.CurrentTrigger;
             set
             {
-                _gameSystem.SetTrigger(value);
+                _gameSystem.SetCurrentTrigger(value);
                 if (value != null && value.CanPerform)
                 {
                     StopAllCoroutines();
-                    StartCoroutine(ShowTooltipDelay(_interactionDelay));
+                    StartCoroutine(ShowTooltipDelay(value.InteractionDelay));
                 }
 
                 if (value == null)

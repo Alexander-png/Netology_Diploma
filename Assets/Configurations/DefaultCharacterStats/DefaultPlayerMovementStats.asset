@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8357ef3112e4a4186f051ffb00c4f8, type: 3}
   m_Name: DefaultPlayerMovementStats
   m_EditorClassIdentifier: 
-  _maxSpeed: 7
+  _maxSpeed: 8
   _acceleration: 20
   _jumps:
   - 7
@@ -21,6 +21,6 @@ MonoBehaviour:
   _jumpCountInRow: 2
   _climbForce: 5
   _wallClimbRepulsion: 3
-  _dashForce: 0
-  _dashDuration: 0
-  _dashRechargeTime: 0
+  _dashForce: 25
+  _dashDuration: 0.3
+  _dashRechargeTime: 0.1

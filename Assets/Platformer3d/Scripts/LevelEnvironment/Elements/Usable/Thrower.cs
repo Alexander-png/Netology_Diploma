@@ -2,9 +2,8 @@ using Platformer3d.CharacterSystem.Movement.Base;
 using Platformer3d.LevelEnvironment.Elements.Common;
 using UnityEngine;
 
-namespace Platformer3d.LevelEnvironment.Elements.Traps
+namespace Platformer3d.LevelEnvironment.Elements.Usable
 {
-    // TODO: determine namespace for this
 	public class Thrower : Platform
 	{
 		[SerializeField]

@@ -113,7 +113,7 @@ namespace Platformer3d.GameCore
             _cameraAligner.ShowAreaUntilActionEnd(position, action, switchTime);
         }
 
-        public void SetTrigger(InteractionTrigger trigger) => CurrentTrigger = trigger;
+        public void SetCurrentTrigger(InteractionTrigger trigger) => CurrentTrigger = trigger;
 
         public void PerformTrigger()
         {
