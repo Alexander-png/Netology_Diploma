@@ -107,11 +107,14 @@ namespace Platformer3d.GameCore
             _lastPlayerData.Position = checkpointPosition;
         }
 
-        public void ShowAreaUntilActionEnd(Transform position, Action action, float switchTime)
+        public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
             SetPlayerHandlingEnabled(false);
-            _cameraAligner.ShowAreaUntilActionEnd(position, action, switchTime);
+            _cameraAligner.SetFocusPositionUntilActionEnd(position, action, waitTime);
         }
+
+        public Transform GetCameraFocusPosition() =>
+            _cameraAligner.FocusPoint;
 
         public void SetCurrentTrigger(InteractionTrigger trigger) => CurrentTrigger = trigger;
 
@@ -151,6 +154,8 @@ namespace Platformer3d.GameCore
 
         public bool CheckItemInInventory(string itemId, int count = 1) => 
             _playerCharacter.Inventory.ContainsItem(itemId, count);
+
+        public Player GetPlayer() => _playerCharacter;
 
 #if UNITY_EDITOR
         [ContextMenu("Fill fields")]

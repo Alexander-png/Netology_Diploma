@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps
 {
-    public class StomperTrap : DangerLevelElement
+    public class StomperTrap : HazardLevelElement
     {
         [SerializeField]
         private BaseLevelElement _holder;

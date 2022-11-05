@@ -13,6 +13,8 @@ namespace Platformer3d.CameraMovementSystem
 		[Space, SerializeField, Range(0.5f, 10f)]
 		private float _moveSpeed = 5f;
 
+		public Transform FocusPoint => _targetPoint;
+
 		public event EventHandler ShowAreaExecuted;
 
         private void OnDisable()
@@ -35,7 +37,12 @@ namespace Platformer3d.CameraMovementSystem
 			transform.position = Vector3.Lerp(transform.position, _targetPoint.position, _moveSpeed * Time.deltaTime);
 		}
 
-		public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
+		public void SetTargetPosition(Transform position)
+		{
+			_targetPoint = position;
+		}
+
+		public void SetFocusPositionUntilActionEnd(Transform position, Action action, float waitTime)
         {
 			if (position == null)
             {
@@ -46,10 +53,11 @@ namespace Platformer3d.CameraMovementSystem
 			StartCoroutine(ShowAreaCoroutine(position, action, waitTime));
         }
 
-		private IEnumerator ShowAreaCoroutine(Transform position, Action action, float waitTime)
+		private IEnumerator ShowAreaCoroutine(Transform TargetPosition, Action action, float waitTime)
         {
 			Transform previousTarget = _targetPoint;
-			_targetPoint = position;
+			SetTargetPosition(TargetPosition);
+			
 			while (!ArrivedToTarget())
             {
 				yield return null;
@@ -58,7 +66,7 @@ namespace Platformer3d.CameraMovementSystem
 
 			action();
 			yield return new WaitForSeconds(waitTime);
-			_targetPoint = previousTarget;
+			SetTargetPosition(previousTarget);
 			ShowAreaExecuted?.Invoke(this, EventArgs.Empty);
 		}
 

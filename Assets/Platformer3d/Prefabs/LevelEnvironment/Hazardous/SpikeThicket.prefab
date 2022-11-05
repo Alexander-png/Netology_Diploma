@@ -185,10 +185,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8622664127730325694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea5bbe9f93cc4f45a6e7b9f1c2391ad, type: 3}
+  m_Script: {fileID: 11500000, guid: ff90acc516272884e894810b1a890358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _climbable: 1
+  _climbable: 0
   _stats: {fileID: 11400000, guid: a8936d60d33643945b71bdfe1d430d49, type: 2}
   _trapEnabled: 1
 --- !u!65 &6813238164850989744

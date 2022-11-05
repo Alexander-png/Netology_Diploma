@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Platformer3d.Interactables.Elements.Traps
 {
-	public class DangerLevelElement : Platform
+	public class HazardLevelElement : Platform
 	{
 		[SerializeField]
 		private LevelElementDamageStats _stats;
