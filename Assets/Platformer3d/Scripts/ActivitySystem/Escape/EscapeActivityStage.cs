@@ -22,6 +22,11 @@ namespace Platformer3d.ActivitySystem.Escape
         {
             if (other.gameObject.TryGetComponent(out Player player))
             {
+                if (_observer == null)
+                {
+                    EditorExtentions.GameLogger.AddMessage($"Stage with name {gameObject.name} is not initialized.", EditorExtentions.GameLogger.LogType.Error);
+                    return;
+                }
                 _observer.OnStagePassedByPlayer(this);
             }
         }

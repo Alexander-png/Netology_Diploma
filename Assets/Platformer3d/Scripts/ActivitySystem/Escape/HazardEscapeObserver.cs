@@ -4,12 +4,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: change player death conditions in this activity
+
 namespace Platformer3d.ActivitySystem.Escape
 {
     public class HazardEscapeObserver : ActivityObserver
 	{
 		[SerializeField]
 		private HazardLevelElement _hazard;
+        [SerializeField]
+        private Transform _hazardCameraFocusPoint;
+
         [SerializeField]
         private List<EscapeActivityStage> _stages;
 
@@ -18,7 +23,7 @@ namespace Platformer3d.ActivitySystem.Escape
         private Vector3 _hazardInitialPosition;
 
         private bool CanStart => !_inAction || !(IsOneOff && _activityEnded);
-        private bool IsLastStage => _stages != null ? _pointIndex > _stages.Count - 1 : false;
+        private bool IsLastStage => _stages != null ? _pointIndex >= _stages.Count - 1 : false;
 
         private void Start()
         {
@@ -40,6 +45,21 @@ namespace Platformer3d.ActivitySystem.Escape
             if (_inAction)
             {
                 MoveHazardObject();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.TryGetComponent(out Player _))
+            {
+                if (!_inAction && CanStart)
+                {
+                    GameSystem.ShowAreaUntilActionEnd(_hazardCameraFocusPoint, new Action(() =>
+                    {
+                        StartActivity();
+                        GameSystem.PerformAutoSave(_player.transform.position);
+                    }), 0.5f);
+                }
             }
         }
 
@@ -72,14 +92,6 @@ namespace Platformer3d.ActivitySystem.Escape
             _hazard.transform.position = pos;
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.TryGetComponent(out Player _))
-            {
-                StartActivity();
-            }
-        }
-
         protected override void StartActivity()
         {
             if (!CanStart)
@@ -87,19 +99,15 @@ namespace Platformer3d.ActivitySystem.Escape
                 return;
             }
             _inAction = true;
+            _hazard.TrapEnabled = true;
             _activityEnded = false;
             _pointIndex = 0;
-
-
         }
-
-        // todo: reset lever on player respawn
-        // todo: cut scene before escape
-        // todo: adapt to player speed
 
         protected override void EndActivity()
         {
             _pointIndex = -1;
+            _hazard.TrapEnabled = false;
             _inAction = false;
             _activityEnded = true;
         }
@@ -110,9 +118,8 @@ namespace Platformer3d.ActivitySystem.Escape
             {
                 return;
             }
-            _pointIndex = -1;
-            _inAction = false;
-            _activityEnded = false;
+
+            _pointIndex = _inAction ? 0 : -1;
             _hazard.transform.position = _hazardInitialPosition;
         }
 

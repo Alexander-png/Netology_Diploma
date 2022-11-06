@@ -46,6 +46,10 @@ namespace Platformer3d.GameCore
             }
         }
 
+        // TODO: remember all interctables states or save perform
+        // TODO: exit dialog if player exited trigger while in dialog
+        // TODO: improve player moving, there are some bugs
+
         private void Start()
         {
             _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
@@ -101,14 +105,15 @@ namespace Platformer3d.GameCore
             GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
-        public void OnCheckpointReached(Vector3 checkpointPosition)
+        public void PerformAutoSave(Vector3 checkpointPosition)
         {
             _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
-            _lastPlayerData.Position = checkpointPosition;
+            _lastPlayerData.Position = _playerCharacter.transform.position;
         }
 
         public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
+            _playerCharacter.MovementController.SetVelocity(Vector3.zero);
             SetPlayerHandlingEnabled(false);
             _cameraAligner.SetFocusPositionUntilActionEnd(position, action, waitTime);
         }
@@ -130,10 +135,8 @@ namespace Platformer3d.GameCore
             }
         }
 
-        public void StartQuest(string questId)
-        {
+        public void StartQuest(string questId) =>
             _questHandler.StartQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId, _playerCharacter.Inventory.Items);
-        }
 
         public void EndQuest(string questId) =>
             _questHandler.EndQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId);
@@ -144,10 +147,8 @@ namespace Platformer3d.GameCore
             _playerCharacter.Inventory.AddItem(item);
         }
 
-        public void AddItemToPlayer(IInventoryItem item)
-        {
+        public void AddItemToPlayer(IInventoryItem item) =>
             _playerCharacter.Inventory.AddItem(item);
-        }
 
         public void RemoveItemFromPlayer(string itemId, int count = 1) =>
             _playerCharacter.Inventory.RemoveItem(itemId, count);
