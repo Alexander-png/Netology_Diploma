@@ -5,30 +5,26 @@ using Platformer3d.Scriptable.Conversations.Containers;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Platformer3d.ConversationSystem
 {
 	public class ConversationHandler : MonoBehaviour
 	{
+		private const int NonInPhrase = -1;
+
+		[Inject]
+		private GameSystem _gameSystem;
+
 		[SerializeField]
 		private ConversationContainer _conversationContainer;
 
-		private const int NonInPhrase = -1;
-
-		private GameSystem _gameSystem;
-
 		private List<Phrase> _phrases;
-		private int _phraseIndex;
+		private int _phraseIndex = NonInPhrase;
 
 		private Phrase CurrentPhrase => _phrases[_phraseIndex];
 
 		public bool InConversation => _phraseIndex != NonInPhrase;
-
-		public void Initialize(GameSystem system)
-        {
-			_gameSystem = system;
-			_phraseIndex = NonInPhrase;
-		}
 
 		public void StartConversation(string id)
         {

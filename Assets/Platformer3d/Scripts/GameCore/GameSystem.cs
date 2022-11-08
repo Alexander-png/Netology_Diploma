@@ -1,6 +1,5 @@
 using Platformer3d.CameraMovementSystem;
 using Platformer3d.CharacterSystem.Base;
-using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.ConversationSystem;
 using Platformer3d.EditorExtentions;
 using Platformer3d.Interaction;
@@ -8,15 +7,12 @@ using Platformer3d.PlayerSystem;
 using Platformer3d.QuestSystem;
 using Platformer3d.Scriptable.Skills.Containers;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Platformer3d.GameCore
 {
     public class GameSystem : MonoBehaviour
     {
-        [SerializeField]
-        private float _respawnTime; // TODO: find better place
         [SerializeField]
         private Player _playerCharacter;
         [SerializeField]
@@ -26,15 +22,16 @@ namespace Platformer3d.GameCore
         private ConversationHandler _conversationHandler;
         [SerializeField]
         private QuestHandler _questHandler;
-
         [SerializeField]
-        private MovementSkillContainer _playerMovementSkillContainer;
+        private TimelineSystem _timelineSystem;
 
-        private PlayerDataContainer _lastPlayerData;
+        [SerializeField, Space(15)]
+        private MovementSkillContainer _playerMovementSkillContainer;
 
         public InteractionTrigger CurrentTrigger { get; private set; }
         public ConversationHandler ConversationHandler => _conversationHandler;
         public QuestHandler QuestHandler => _questHandler;
+        public TimelineSystem TimelineSystem => _timelineSystem;
 
         public event EventHandler PlayerRespawned;
 
@@ -46,56 +43,35 @@ namespace Platformer3d.GameCore
             }
         }
 
-        // TODO: remember all interctables states or save perform
+        // TODO: remember all interactables states or save perform
         // TODO: exit dialog if player exited trigger while in dialog
         // TODO: improve player moving, there are some bugs
+        // TODO: kill player anyway if he got fatal damage
 
         private void Start()
         {
-            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
             _playerCharacter.HandlingEnabled = true;
-            _conversationHandler.Initialize(this);
         }
 
         private void OnEnable()
         {
             _cameraAligner.ShowAreaExecuted += OnAreaShowed;
-            _playerCharacter.Died += OnPlayerDiedInternal;
         }
 
         private void OnDisable()
         {
             _cameraAligner.ShowAreaExecuted -= OnAreaShowed;
-            _playerCharacter.Died -= OnPlayerDiedInternal;
             StopAllCoroutines();
         }
 
         public bool CheckQuestCompleted(IPerformer interactionTarget, string questId) =>
             _questHandler.IsQuestCompleted(interactionTarget as IQuestGiver, questId);
 
-        private void OnPlayerDiedInternal(object sender, EventArgs e)
-        {
-            _playerCharacter.gameObject.SetActive(false);
-            StartCoroutine(PlayerRespawnCoroutine(_respawnTime));
-        }
-
-        private void RespawnPlayer()
-        {
-            _playerCharacter.OnRespawn(_lastPlayerData);
-            _playerCharacter.gameObject.SetActive(true);
+        public void OnPlayerRespawned() =>
             PlayerRespawned?.Invoke(this, EventArgs.Empty);
-        }
 
-        private IEnumerator PlayerRespawnCoroutine(float time)
-        {
-            yield return new WaitForSeconds(time);
-            RespawnPlayer();
-        }
-
-        private void OnAreaShowed(object sender, EventArgs e)
-        {
+        private void OnAreaShowed(object sender, EventArgs e) =>
             SetPlayerHandlingEnabled(true);
-        }
 
         public void SetPlayerHandlingEnabled(bool value) => _playerCharacter.HandlingEnabled = value;
 
@@ -105,11 +81,8 @@ namespace Platformer3d.GameCore
             GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
-        public void PerformAutoSave(Vector3 checkpointPosition)
-        {
-            _lastPlayerData = _playerCharacter.GetData() as PlayerDataContainer;
-            _lastPlayerData.Position = _playerCharacter.transform.position;
-        }
+        public void PerformAutoSave(Vector3 checkpointPosition) =>
+            _timelineSystem.PerformAutoSave(checkpointPosition);
 
         public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
@@ -165,6 +138,7 @@ namespace Platformer3d.GameCore
 			_playerCharacter = FindObjectOfType<Player>();
             _cameraAligner = FindObjectOfType<CameraAligner>();
             _conversationHandler = GetComponent<ConversationHandler>();
+            _timelineSystem = GetComponent<TimelineSystem>();
         }
 #endif
     }
