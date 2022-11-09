@@ -9,22 +9,22 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 		[SerializeField]
 		private TwoDoorAnimation _animation;
 
-		private bool _opened;
+		private bool _isOpened;
 
-        public override bool Opened
+        public override bool IsOpened
 		{
-			get => _opened; 
+			get => _isOpened; 
 			set
 			{
-				_opened = value;
+				_isOpened = value;
 				if (_animation != null) _animation.SetOpened(value);
 			}
 		}
 
         public bool IsSwitchedOn 
 		{
-			get => Opened; 
-			set => Opened = value;
+			get => IsOpened; 
+			set => IsOpened = value;
 		}
 
         public float SwitchTime => _animation != null ? _animation.AnimationTime : 0f;
@@ -33,6 +33,8 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 
         private void Start()
         {
+			GameSystem.RegisterSaveableObject(this);
+
 			if (_animation == null)
 			{
 				EditorExtentions.GameLogger.AddMessage($"{gameObject.name}: animation not specified.", EditorExtentions.GameLogger.LogType.Warning);
@@ -40,5 +42,22 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			}
 			_animation.InitState(_openedByDefault);
 		}
-    }
+
+		public override object GetData() => new GateData()
+		{
+			Name = gameObject.name,
+			IsOpened = IsOpened
+		};
+
+        public override void SetData(object data)
+		{
+			GateData dataToSet = data as GateData;
+
+			if (!ValidateData(dataToSet))
+			{
+				return;
+			}
+			_animation.InitState(dataToSet.IsOpened);
+		}
+	}
 }

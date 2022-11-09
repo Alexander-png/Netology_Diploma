@@ -1,15 +1,21 @@
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
+using Platformer3d.CharacterSystem.Enums;
+using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Characters;
 using Platformer3d.SkillSystem;
 using System;
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 namespace Platformer3d.PlayerSystem
 {
-    public class Player : MoveableCharacter, IDamagableCharacter, ISkillObservable
+    public class Player : MoveableCharacter, IDamagableCharacter, ISkillObservable, ISaveable
     {
+        [Inject]
+        private GameSystem _gameSystem;
+
         [SerializeField]
         private Inventory _inventory;
         [SerializeField]
@@ -26,6 +32,18 @@ namespace Platformer3d.PlayerSystem
         public SkillObserver SkillObserver => _skillObserver;
 
         public event EventHandler Died;
+
+        private class PlayerData : SaveData
+        {
+            public SideTypes Side;
+            public Vector3 Position;
+            public float CurrentHealth;
+        }
+
+        protected override void Start()
+        {
+            _gameSystem.RegisterSaveableObject(this);
+        }
 
         protected override void OnEnable()
         {
@@ -47,14 +65,14 @@ namespace Platformer3d.PlayerSystem
             _damageImmuneTime = stats.DamageImmuneTime;
         }
 
-        public override void SetData(CharacterDataContainer data)
+        public override void SetDataFromContainer(CharacterDataContainer data)
         {
-            base.SetData(data);
+            base.SetDataFromContainer(data);
             PlayerDataContainer playerData = data as PlayerDataContainer;
             _currentHealh = playerData.CurrentHealth;
         }
 
-        public override CharacterDataContainer GetData() =>
+        public override CharacterDataContainer GetDataAsContainer() =>
             new PlayerDataContainer()
             {
                 Side = Side,
@@ -87,6 +105,42 @@ namespace Platformer3d.PlayerSystem
             _damageImmune = true;
             yield return new WaitForSeconds(time);
             _damageImmune = false;
+        }
+
+        private bool ValidateData(PlayerData data)
+        {
+            if (data == null)
+            {
+                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                return false;
+            }
+            if (data.Name != gameObject.name)
+            {
+                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                return false;
+            }
+            return true;
+        }
+
+        public object GetData() => new PlayerData()
+        {
+            Name = gameObject.name,
+            Side = Side,
+            Position = transform.position,
+            CurrentHealth = CurrentHealth
+        };
+
+        public void SetData(object data)
+        {
+            PlayerData dataToSet = data as PlayerData;
+            if (!ValidateData(dataToSet))
+            {
+                return;
+            }
+
+            Side = dataToSet.Side;
+            transform.position = dataToSet.Position;
+            _currentHealh = dataToSet.CurrentHealth;
         }
     }
 }

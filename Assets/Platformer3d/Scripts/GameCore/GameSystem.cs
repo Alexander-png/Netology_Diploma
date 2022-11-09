@@ -23,7 +23,7 @@ namespace Platformer3d.GameCore
         [SerializeField]
         private QuestHandler _questHandler;
         [SerializeField]
-        private TimelineSystem _timelineSystem;
+        private SaveSystem _saveSystem;
 
         [SerializeField, Space(15)]
         private MovementSkillContainer _playerMovementSkillContainer;
@@ -31,7 +31,7 @@ namespace Platformer3d.GameCore
         public InteractionTrigger CurrentTrigger { get; private set; }
         public ConversationHandler ConversationHandler => _conversationHandler;
         public QuestHandler QuestHandler => _questHandler;
-        public TimelineSystem TimelineSystem => _timelineSystem;
+        public SaveSystem TimelineSystem => _saveSystem;
 
         public event EventHandler PlayerRespawned;
 
@@ -43,10 +43,10 @@ namespace Platformer3d.GameCore
             }
         }
 
-        // TODO: remember all interactables states or save perform
         // TODO: exit dialog if player exited trigger while in dialog
         // TODO: improve player moving, there are some bugs
         // TODO: kill player anyway if he got fatal damage
+        // TODO: non movement skills
 
         private void Start()
         {
@@ -63,6 +63,9 @@ namespace Platformer3d.GameCore
             _cameraAligner.ShowAreaExecuted -= OnAreaShowed;
             StopAllCoroutines();
         }
+
+        public void RegisterSaveableObject(ISaveable saveableObject) =>
+            _saveSystem.RegisterSaveableObject(saveableObject);
 
         public bool CheckQuestCompleted(IPerformer interactionTarget, string questId) =>
             _questHandler.IsQuestCompleted(interactionTarget as IQuestGiver, questId);
@@ -82,7 +85,7 @@ namespace Platformer3d.GameCore
         }
 
         public void PerformAutoSave(Vector3 checkpointPosition) =>
-            _timelineSystem.PerformAutoSave(checkpointPosition);
+            _saveSystem.PerformAutoSave(checkpointPosition);
 
         public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
@@ -138,7 +141,7 @@ namespace Platformer3d.GameCore
 			_playerCharacter = FindObjectOfType<Player>();
             _cameraAligner = FindObjectOfType<CameraAligner>();
             _conversationHandler = GetComponent<ConversationHandler>();
-            _timelineSystem = GetComponent<TimelineSystem>();
+            _saveSystem = GetComponent<SaveSystem>();
         }
 #endif
     }

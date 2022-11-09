@@ -46,8 +46,9 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			}
 		}
 
-		private void Start()
+        protected override void Start()
         {
+			base.Start();
 			if (_target == null)
             {
                 EditorExtentions.GameLogger.AddMessage($"{gameObject.name}: target not specified.", EditorExtentions.GameLogger.LogType.Warning);
@@ -70,5 +71,14 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			}
 			_switchAnimator.InitState(IsSwitchedOn);
         }
-	}
+
+        protected override void Reset(SwitcherData data)
+        {
+            base.Reset(data);
+			if (_switchAnimator != null)
+            {
+				_switchAnimator.InitState(IsSwitchedOn);
+			}
+		}
+    }
 }

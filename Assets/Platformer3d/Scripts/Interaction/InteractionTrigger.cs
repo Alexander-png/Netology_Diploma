@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Platformer3d.Interaction
 {
     public interface IPerformer
-    { 
+    {
 
     }
 

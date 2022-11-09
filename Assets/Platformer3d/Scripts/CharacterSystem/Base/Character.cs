@@ -35,21 +35,20 @@ namespace Platformer3d.CharacterSystem.Base
             Side = stats.Side;
         }
 
-        public virtual void OnRespawn(CharacterDataContainer data) => SetData(data);
+        public virtual void OnRespawn() { }
 
-        public virtual void SetData(CharacterDataContainer data)
+        public virtual void SetDataFromContainer(CharacterDataContainer data)
         {
             Name = data.Name;
             Side = data.Side;
             transform.position = data.Position;
         }
 
-        public virtual CharacterDataContainer GetData() => 
-            new CharacterDataContainer()
-            {
-                Side = Side,
-                Name = Name,
-                Position = transform.position,
-            };
+        public virtual CharacterDataContainer GetDataAsContainer() => new CharacterDataContainer()
+        {
+            Side = Side,
+            Name = Name,
+            Position = transform.position,
+        };
     }
 }
