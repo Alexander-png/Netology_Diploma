@@ -47,10 +47,11 @@ namespace Platformer3d.GameCore
         // TODO: improve player moving, there are some bugs
         // TODO: kill player anyway if he got fatal damage
         // TODO: non movement skills
+        // TODO: move inputs into base class of movement
 
         private void Start()
         {
-            _playerCharacter.HandlingEnabled = true;
+            SetPlayerHandlingEnabled(true);
         }
 
         private void OnEnable()

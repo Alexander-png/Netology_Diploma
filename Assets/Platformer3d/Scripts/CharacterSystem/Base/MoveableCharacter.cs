@@ -1,5 +1,3 @@
-using Platformer3d.CharacterSystem.DataContainers;
-using Platformer3d.CharacterSystem.Interactors;
 using Platformer3d.CharacterSystem.Movement.Base;
 using UnityEngine;
 
@@ -9,8 +7,6 @@ namespace Platformer3d.CharacterSystem.Base
 	{
 		[SerializeField]
 		private CharacterMovement _movementController;
-        [SerializeField]
-        private SwitchTriggerInteractor _interactor;
 
         private bool _handlingEnabled;
 

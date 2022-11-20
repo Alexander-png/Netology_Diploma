@@ -1,20 +1,47 @@
 using Platformer3d.CharacterSystem.Movement.Base;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Platformer3d.CharacterSystem.Movement
 {
-	public class PlayerMovement : CharacterMovement
+	public class EnemyMovement : CharacterMovement
 	{
         private float _moveInput;
-        private bool _isJumpPerformed;
+        private float _jumpInput;
+        private float _dashInput;
 
         private bool _dashCharged = true;
         private bool _isDashPerformed;
         private bool _inDash;
-        
         private float _dashDirection;
+
+        private bool _isJumpPerformed;
+
+        public float MoveInput 
+        {
+            get => _moveInput; 
+            set => _moveInput = value; 
+        }
+
+        public float JumpInput
+        {
+            get => _jumpInput;
+            set
+            {
+                _jumpInput = value;
+                _isJumpPerformed = JumpInput >= 0.01f;
+            }
+        }
+
+        public float DashInput
+        {
+            get => _dashInput;
+            set
+            {
+                _dashInput = value;
+                _isDashPerformed = _dashInput >= 0.01f && CheckCanDash();
+            }
+        }
 
         private void FixedUpdate()
         {
@@ -23,21 +50,6 @@ namespace Platformer3d.CharacterSystem.Movement
                 Move();
                 Jump();
             }
-        }
-
-        private void OnRun(InputValue input)
-        {
-            _moveInput = input.Get<float>();
-        }
-
-        private void OnDash(InputValue input)
-        {
-            _isDashPerformed = input.Get<float>() >= 0.01f && CheckCanDash();
-        }
-
-		private void OnJump(InputValue input)
-        {
-            _isJumpPerformed = input.Get<float>() >= 0.01f;
         }
 
         protected override void ResetState()
@@ -62,7 +74,7 @@ namespace Platformer3d.CharacterSystem.Movement
             Vector2 velocity = Body.velocity;
             if (!_isDashPerformed && !_inDash)
             {
-                velocity.x += Acceleration * _moveInput * Time.deltaTime;
+                velocity.x += Acceleration * MoveInput * Time.deltaTime;
                 velocity.x = Mathf.Clamp(velocity.x, -MaxSpeed, MaxSpeed);
             }
             else
@@ -70,7 +82,7 @@ namespace Platformer3d.CharacterSystem.Movement
                 if (_isDashPerformed && !_inDash && _dashCharged)
                 {
                     StartCoroutine(DashMove(DashDuration));
-                    _dashDirection = Mathf.Sign(_moveInput);
+                    _dashDirection = Mathf.Sign(MoveInput);
                     _isDashPerformed = false;
                 }
                 if (_inDash)
@@ -86,7 +98,7 @@ namespace Platformer3d.CharacterSystem.Movement
             if (CanJump && _isJumpPerformed)
             {
                 Vector2 velocity = Body.velocity;
-                
+
                 if (OnGround || InAir)
                 {
                     if (velocity.y < 0)
@@ -98,7 +110,7 @@ namespace Platformer3d.CharacterSystem.Movement
                 }
                 else if (OnWall)
                 {
-                    velocity.x += WallClimbRepulsion * -Mathf.Sign(_moveInput);
+                    velocity.x += WallClimbRepulsion * -Mathf.Sign(MoveInput);
                     velocity.y += ClimbForce;
                     JumpsLeft -= 1;
                 }

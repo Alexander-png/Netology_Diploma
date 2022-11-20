@@ -9,11 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d0c10d91004ea4380952b658d64ea4, type: 3}
-  m_Name: DefaultPlayerCharacterStats
+  m_Script: {fileID: 11500000, guid: 8e8357ef3112e4a4186f051ffb00c4f8, type: 3}
+  m_Name: DarkBeetleMovementStats
   m_EditorClassIdentifier: 
-  _side: 0
-  _maxHealth: 6
-  _damageImmuneTime: 1
-  _immortal: 0
-  _interactable: 0
+  _maxSpeed: 8
+  _acceleration: 20
+  _jumps:
+  - 7
+  _jumpCountInRow: 1
+  _climbForce: 0
+  _wallClimbRepulsion: 0
+  _dashForce: 25
+  _dashDuration: 0.3
+  _dashRechargeTime: 0.1
