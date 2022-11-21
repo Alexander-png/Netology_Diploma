@@ -3,14 +3,15 @@ using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.Movement;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
+using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
 
 namespace Platformer3d.CharacterSystem.AI.Enemies
 {
-	public class Enemy : MoveableCharacter
-	{
+	public class Enemy : MoveableCharacter, IDamagableCharacter
+    {
 		[Inject]
 		private GameSystem _gameSystem;
 
@@ -18,10 +19,13 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         private BoxCollider _agressionTrigger;
         [SerializeField]
         private Transform _visual;
+
         [SerializeField, Space(15)]
         private Transform _patrolArea;
         [SerializeField]
         private float _idleTime;
+        [SerializeField]
+        private float _attackRadius;
 
         private EnemyMovement _movement;
         private Player _player;
@@ -30,6 +34,10 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         private bool _inIdle;
 
         private bool _attackingPlayer = false;
+
+        public event EventHandler Died;
+
+        public float CurrentHealth => throw new NotImplementedException();
 
         protected override void Start()
         {
@@ -48,6 +56,16 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
                     _currentPoint = point;
                     break;
                 }
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.transform.TryGetComponent(out MoveableCharacter _))
+            {
+                Vector3 newVelocity = (-MovementController.Velocity + transform.up).normalized;
+                newVelocity *= MovementController.MaxJumpForce;
+                MovementController.Velocity = newVelocity;
             }
         }
 
@@ -90,7 +108,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             if (_inIdle)
             {
                 _movement.MoveInput = 0f;
-                _movement.SetVelocity(Vector3.zero);
+                _movement.Velocity = Vector3.zero;
                 return;
             }
 
@@ -116,12 +134,24 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         private void PursuitPlayer()
         {
-
+            // TODO: pursuit behaviour
+            // TODO: kill enemy ability
+            // TODO: reset on player died
         }
 
         private void AttackPlayer()
         {
 
+        }
+
+        public void SetDamage(float damage, Vector3 pushVector)
+        {
+            
+        }
+
+        public void Heal(float value)
+        {
+            
         }
 
         private IEnumerator IdleCoroutine(float idleTime)
@@ -134,7 +164,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Color c = Color.red;
+            Color c = Color.gray;
             c.a = 0.3f;
             Gizmos.color = c;
 

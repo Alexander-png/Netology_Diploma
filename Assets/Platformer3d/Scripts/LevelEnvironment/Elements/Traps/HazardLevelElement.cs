@@ -9,7 +9,7 @@ namespace Platformer3d.Interactables.Elements.Traps
 	public class HazardLevelElement : Platform
 	{
 		[SerializeField]
-		private LevelElementDamageStats _stats;
+		private DamageStats _stats;
         [SerializeField]
         private bool _trapEnabled = true;
 

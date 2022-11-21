@@ -71,7 +71,7 @@ namespace Platformer3d.CharacterSystem.Movement
 
         private void Move()
         {
-            Vector2 velocity = Body.velocity;
+            Vector2 velocity = Velocity;
             if (!_isDashPerformed && !_inDash)
             {
                 velocity.x += Acceleration * MoveInput * Time.deltaTime;
@@ -90,14 +90,14 @@ namespace Platformer3d.CharacterSystem.Movement
                     velocity.x = DashForce * Mathf.Sign(_dashDirection);
                 }
             }
-            Body.velocity = velocity;
+            Velocity = velocity;
         }
 
         private void Jump()
         {
             if (CanJump && _isJumpPerformed)
             {
-                Vector2 velocity = Body.velocity;
+                Vector2 velocity = Velocity;
 
                 if (OnGround || InAir)
                 {
@@ -116,7 +116,7 @@ namespace Platformer3d.CharacterSystem.Movement
                 }
 
                 _isJumpPerformed = false;
-                Body.velocity = velocity;
+                Velocity = velocity;
             }
         }
 

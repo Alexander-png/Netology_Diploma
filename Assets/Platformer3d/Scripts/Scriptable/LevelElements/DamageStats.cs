@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Platformer3d.Scriptable.LevelElements
 {
-	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Level element damage stats")]
-	public class LevelElementDamageStats : ScriptableObject
+	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Damage stats")]
+	public class DamageStats : ScriptableObject
 	{
 		[SerializeField]
 		private float _damage;

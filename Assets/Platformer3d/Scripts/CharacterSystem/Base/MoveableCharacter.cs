@@ -24,7 +24,7 @@ namespace Platformer3d.CharacterSystem.Base
 
         public override void OnRespawn()
         {
-            _movementController.SetVelocity(Vector3.zero);
+            _movementController.Velocity = Vector3.zero;
         }
     }
 }

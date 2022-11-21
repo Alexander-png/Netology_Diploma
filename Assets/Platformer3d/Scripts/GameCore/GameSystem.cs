@@ -90,7 +90,7 @@ namespace Platformer3d.GameCore
 
         public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
-            _playerCharacter.MovementController.SetVelocity(Vector3.zero);
+            _playerCharacter.MovementController.Velocity = Vector3.zero;
             SetPlayerHandlingEnabled(false);
             _cameraAligner.SetFocusPositionUntilActionEnd(position, action, waitTime);
         }

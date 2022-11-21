@@ -89,7 +89,7 @@ namespace Platformer3d.PlayerSystem
             }
 
             StartCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
-            MovementController.SetVelocity(pushVector);
+            MovementController.Velocity = pushVector;
             _currentHealh = Mathf.Clamp(_currentHealh - damage, 0, _maxHealth);
             if (_currentHealh < 0.01f)
             {

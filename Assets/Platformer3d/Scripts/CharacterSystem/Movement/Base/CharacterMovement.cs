@@ -16,23 +16,21 @@ namespace Platformer3d.CharacterSystem.Movement.Base
 
         protected int JumpsLeft { get; set; }
 
-        protected bool CanJump => JumpsLeft > 0;
-        protected float Acceleration => _movementStats.Acceleration;
-        protected float MaxSpeed => _movementStats.MaxSpeed;
-        protected float JumpForce => _movementStats.GetJumpForce(JumpsLeft);
-        protected float MaxJumpForce => _movementStats.MaxJumpForce;
-        protected float ClimbForce => _movementStats.ClimbForce;
-        protected float WallClimbRepulsion => _movementStats.WallClimbRepulsion;
-        protected float DashForce => _movementStats.DashForce;
-        protected float DashDuration => _movementStats.DashDuration;
-        protected float DashRechargeTime => _movementStats.DashRechargeTime;
+        public bool CanJump => JumpsLeft > 0;
+        public float Acceleration => _movementStats.Acceleration;
+        public float MaxSpeed => _movementStats.MaxSpeed;
+        public float JumpForce => _movementStats.GetJumpForce(JumpsLeft);
+        public float MaxJumpForce => _movementStats.MaxJumpForce;
+        public float ClimbForce => _movementStats.ClimbForce;
+        public float WallClimbRepulsion => _movementStats.WallClimbRepulsion;
+        public float DashForce => _movementStats.DashForce;
+        public float DashDuration => _movementStats.DashDuration;
+        public float DashRechargeTime => _movementStats.DashRechargeTime;
 
         public bool OnGround { get; protected set; }
         public bool OnWall { get; protected set; }
         public bool InAir => _currentCollisionNormal == Vector3.zero;
         public bool MovementEnabled { get; set; }
-
-        public Rigidbody Body => _body;
 
         protected virtual void Awake()
         {
@@ -83,8 +81,11 @@ namespace Platformer3d.CharacterSystem.Movement.Base
             }
         }
 
-        public virtual void SetVelocity(Vector3 velocity) =>
-            _body.velocity = velocity;
+        public virtual Vector3 Velocity
+        {
+            get => _body.velocity;
+            set => _body.velocity = value;
+        }
 
         public virtual void AddStats(MovementStatsInfo stats)
         {

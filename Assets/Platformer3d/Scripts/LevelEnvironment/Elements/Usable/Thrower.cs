@@ -13,7 +13,7 @@ namespace Platformer3d.LevelEnvironment.Elements.Usable
         {
             if (other.TryGetComponent(out CharacterMovement movement))
             {
-                movement.SetVelocity(CalcThrowForce());
+                movement.Velocity = CalcThrowForce();
             }
         }
 
