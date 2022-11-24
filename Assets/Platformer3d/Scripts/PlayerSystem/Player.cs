@@ -1,6 +1,5 @@
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
-using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Characters;
 using Platformer3d.SkillSystem;
@@ -23,22 +22,15 @@ namespace Platformer3d.PlayerSystem
 
         private bool _damageImmune = false;
         private float _damageImmuneTime;
-        private float _currentHealh;
+        private float _currentHealth;
         private float _maxHealth;
 
-        public float CurrentHealth => _currentHealh;
+        public float CurrentHealth => _currentHealth;
 
         public Inventory Inventory => _inventory;
         public SkillObserver SkillObserver => _skillObserver;
 
         public event EventHandler Died;
-
-        private class PlayerData : SaveData
-        {
-            public SideTypes Side;
-            public Vector3 Position;
-            public float CurrentHealth;
-        }
 
         protected override void Start()
         {
@@ -61,7 +53,7 @@ namespace Platformer3d.PlayerSystem
         {
             base.SetDefaultParameters(stats);
             _maxHealth = stats.MaxHealth;
-            _currentHealh = _maxHealth;
+            _currentHealth = _maxHealth;
             _damageImmuneTime = stats.DamageImmuneTime;
         }
 
@@ -69,7 +61,7 @@ namespace Platformer3d.PlayerSystem
         {
             base.SetDataFromContainer(data);
             PlayerDataContainer playerData = data as PlayerDataContainer;
-            _currentHealh = playerData.CurrentHealth;
+            _currentHealth = playerData.CurrentHealth;
         }
 
         public override CharacterDataContainer GetDataAsContainer() =>
@@ -78,7 +70,7 @@ namespace Platformer3d.PlayerSystem
                 Side = Side,
                 Name = Name,
                 Position = transform.position,
-                CurrentHealth = _currentHealh,
+                CurrentHealth = _currentHealth,
             };
 
         public void SetDamage(float damage, Vector3 pushVector)
@@ -90,15 +82,15 @@ namespace Platformer3d.PlayerSystem
 
             StartCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
             MovementController.Velocity = pushVector;
-            _currentHealh = Mathf.Clamp(_currentHealh - damage, 0, _maxHealth);
-            if (_currentHealh < 0.01f)
+            _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+            if (_currentHealth < 0.01f)
             {
                 Died?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public void Heal(float value) =>
-            _currentHealh = Mathf.Clamp(_currentHealh + value, 0, _maxHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth + value, 0, _maxHealth);
 
         private IEnumerator DamageImmuneCoroutine(float time)
         {
@@ -107,22 +99,7 @@ namespace Platformer3d.PlayerSystem
             _damageImmune = false;
         }
 
-        private bool ValidateData(PlayerData data)
-        {
-            if (data == null)
-            {
-                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
-                return false;
-            }
-            if (data.Name != gameObject.name)
-            {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
-                return false;
-            }
-            return true;
-        }
-
-        public object GetData() => new PlayerData()
+        public object GetData() => new CharacterData()
         {
             Name = gameObject.name,
             Side = Side,
@@ -132,7 +109,7 @@ namespace Platformer3d.PlayerSystem
 
         public void SetData(object data)
         {
-            PlayerData dataToSet = data as PlayerData;
+            CharacterData dataToSet = data as CharacterData;
             if (!ValidateData(dataToSet))
             {
                 return;
@@ -140,7 +117,7 @@ namespace Platformer3d.PlayerSystem
 
             Side = dataToSet.Side;
             transform.position = dataToSet.Position;
-            _currentHealh = dataToSet.CurrentHealth;
+            _currentHealth = dataToSet.CurrentHealth;
         }
     }
 }

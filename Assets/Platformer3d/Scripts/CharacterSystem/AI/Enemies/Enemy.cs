@@ -3,6 +3,7 @@ using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.Movement;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
+using Platformer3d.Scriptable.Characters;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,7 +11,7 @@ using Zenject;
 
 namespace Platformer3d.CharacterSystem.AI.Enemies
 {
-	public class Enemy : MoveableCharacter, IDamagableCharacter
+	public class Enemy : MoveableCharacter, IDamagableCharacter, ISaveable
     {
 		[Inject]
 		private GameSystem _gameSystem;
@@ -20,27 +21,43 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         [SerializeField]
         private Transform _visual;
 
+        // TODO: better to move these fields to scriptable object
         [SerializeField, Space(15)]
         private Transform _patrolArea;
         [SerializeField]
         private float _idleTime;
         [SerializeField]
         private float _attackRadius;
+        [SerializeField]
+        private float _playerHeightDiffToJump;
+        [SerializeField]
+        private float _closeToPlayerDistance;
+        
+        private float _currentHealth;
+        private float _maxHealth;
 
         private EnemyMovement _movement;
         private Player _player;
         private PatrolPoint _currentPoint;
 
         private bool _inIdle;
-
         private bool _attackingPlayer = false;
 
         public event EventHandler Died;
 
-        public float CurrentHealth => throw new NotImplementedException();
+        protected class EnemyData : CharacterData
+        {
+            public bool AttackingPlayer;
+            public bool InIdle;
+            public PatrolPoint CurrentPoint;
+        }
+
+        public float CurrentHealth => _currentHealth;
 
         protected override void Start()
         {
+            _gameSystem.RegisterSaveableObject(this);
+
             _player = _gameSystem.GetPlayer();
             _movement = MovementController as EnemyMovement;
             MovementController.MovementEnabled = true;
@@ -71,18 +88,28 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Player player))
+            if (other.TryGetComponent(out Player _))
             {
+                _inIdle = false;
                 _attackingPlayer = true;
             }
         }
 
+        // TODO: fix OnTriggerExit call when character may being attacked with weapon
+
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out Player player))
+            if (other.TryGetComponent(out Player _))
             {
                 _attackingPlayer = false;
             }
+        }
+
+        protected override void SetDefaultParameters(DefaultCharacterStats stats)
+        {
+            base.SetDefaultParameters(stats);
+            _maxHealth = stats.MaxHealth;
+            _currentHealth = _maxHealth;
         }
 
         protected override void Update()
@@ -99,7 +126,19 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             else
             {
                 PursuitPlayer();
-                AttackPlayer();
+            }
+            UpdateVisual();
+        }
+
+        private void UpdateVisual()
+        {
+            if (_movement.MoveInput > 0f)
+            {
+                _visual.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
+            }
+            else if (_movement.MoveInput < 0f)
+            {
+                _visual.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
         }
 
@@ -114,16 +153,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
             var pointPos = _currentPoint.Position;
 
-            if (pointPos.x > transform.position.x)
-            {
-                _visual.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
-                _movement.MoveInput = 1f;
-            }
-            else
-            {
-                _visual.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-                _movement.MoveInput = -1f;
-            }
+            _movement.MoveInput = pointPos.x > transform.position.x ? 1f : -1f;
 
             if (Vector3.SqrMagnitude(transform.position - _currentPoint.Position) <= _currentPoint.ArriveRadius)
             {
@@ -134,24 +164,78 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         private void PursuitPlayer()
         {
-            // TODO: pursuit behaviour
+            Vector3 playerPosition = _player.transform.position;
+            Vector3 selfPosition = transform.position;
+            if (playerPosition.x > selfPosition.x)
+            {
+                _movement.MoveInput = 1f;
+            }
+            else if (playerPosition.x < selfPosition.x)
+            {
+                _movement.MoveInput = -1f;
+            }
+
+            bool closeToPlayer = Mathf.Abs(playerPosition.x - selfPosition.x) <= _closeToPlayerDistance;
+
+            if (closeToPlayer)
+            {
+                bool needToJump = playerPosition.y - selfPosition.y >= _playerHeightDiffToJump;
+                if (needToJump)
+                {
+                    _movement.JumpInput = 1f;
+                }
+                else
+                {
+                    _movement.JumpInput = 0f;
+                }
+            }
+            else
+            {
+                _movement.JumpInput = 0f;
+            }
             // TODO: kill enemy ability
-            // TODO: reset on player died
         }
 
-        private void AttackPlayer()
-        {
-
-        }
+        // TODO: many of the methods here was copypasted from player class. It's not good and better to move them to base class to avoid breaking "Don't repeat yourself" rule.
 
         public void SetDamage(float damage, Vector3 pushVector)
         {
-            
+            MovementController.Velocity = pushVector;
+            _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+            if (_currentHealth < 0.01f)
+            {
+                // TODO: hide on died
+            }
         }
 
-        public void Heal(float value)
+        public void Heal(float value) =>
+            _currentHealth = Mathf.Clamp(_currentHealth + value, 0, _maxHealth);
+
+        public object GetData() => new EnemyData()
         {
-            
+            Name = gameObject.name,
+            Side = Side,
+            Position = transform.position,
+            CurrentHealth = CurrentHealth,
+            AttackingPlayer = _attackingPlayer,
+            InIdle = _inIdle,
+            CurrentPoint = _currentPoint
+        };
+
+        public void SetData(object data)
+        {
+            EnemyData dataToSet = data as EnemyData;
+            if (!ValidateData(dataToSet))
+            {
+                return;
+            }
+
+            Side = dataToSet.Side;
+            transform.position = dataToSet.Position;
+            _currentHealth = dataToSet.CurrentHealth;
+            _attackingPlayer = dataToSet.AttackingPlayer;
+            _inIdle = dataToSet.InIdle;
+            _currentPoint = dataToSet.CurrentPoint;
         }
 
         private IEnumerator IdleCoroutine(float idleTime)

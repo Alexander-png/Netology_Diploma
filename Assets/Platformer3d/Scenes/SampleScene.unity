@@ -7562,6 +7562,8 @@ MonoBehaviour:
   _patrolArea: {fileID: 2130044155}
   _idleTime: 3
   _attackRadius: 1.45
+  _playerHeightDiffToJump: 2
+  _closeToPlayerDistance: 10
 --- !u!65 &840112543
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7573,7 +7575,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 20, y: 7.3, z: 1}
+  m_Size: {x: 25, y: 7.3, z: 1}
   m_Center: {x: 0, y: 2.51, z: 0}
 --- !u!136 &840112544
 CapsuleCollider:

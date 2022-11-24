@@ -1,6 +1,7 @@
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
+using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Characters;
 using UnityEngine;
 
@@ -10,6 +11,13 @@ namespace Platformer3d.CharacterSystem.Base
     {
         [SerializeField]
         private DefaultCharacterStats _stats;
+
+        protected class CharacterData : SaveData
+        {
+            public SideTypes Side;
+            public Vector3 Position;
+            public float CurrentHealth;
+        }
 
         public SideTypes Side { get; protected set; }
         public string Name { get; protected set; }
@@ -50,5 +58,20 @@ namespace Platformer3d.CharacterSystem.Base
             Name = Name,
             Position = transform.position,
         };
+
+        protected virtual bool ValidateData(CharacterData data)
+        {
+            if (data == null)
+            {
+                GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                return false;
+            }
+            if (data.Name != gameObject.name)
+            {
+                GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                return false;
+            }
+            return true;
+        }
     }
 }
