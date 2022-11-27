@@ -9,6 +9,19 @@ using Platformer3d.Scriptable.Skills.Containers;
 using System;
 using UnityEngine;
 
+// TODO:
+// change hit direction on change move direction
+// fix enemy
+// 2-3 kinds of enemies
+// find assets for all objects
+// More player abilities
+// UI
+// TODO: exit dialog if player exited trigger while in dialog
+// TODO: improve player moving, there are some bugs
+// TODO: kill player anyway if he got fatal damage
+// TODO: non movement skills
+// TODO: move inputs into base class of movement
+
 namespace Platformer3d.GameCore
 {
     public class GameSystem : MonoBehaviour
@@ -43,11 +56,7 @@ namespace Platformer3d.GameCore
             }
         }
 
-        // TODO: exit dialog if player exited trigger while in dialog
-        // TODO: improve player moving, there are some bugs
-        // TODO: kill player anyway if he got fatal damage
-        // TODO: non movement skills
-        // TODO: move inputs into base class of movement
+
 
         private void Start()
         {

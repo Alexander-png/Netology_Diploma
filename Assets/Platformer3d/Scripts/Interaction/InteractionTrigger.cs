@@ -24,7 +24,7 @@ namespace Platformer3d.Interaction
 
         protected virtual void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out SwitchTriggerInteractor interactor))
+            if (other.TryGetComponent(out Interactor interactor))
             {
                 interactor.CurrentTrigger = this;
             }
@@ -32,7 +32,7 @@ namespace Platformer3d.Interaction
 
         protected virtual void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out SwitchTriggerInteractor interactor))
+            if (other.TryGetComponent(out Interactor interactor))
             {
                 if (interactor.CurrentTrigger == this)
                 {

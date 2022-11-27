@@ -25,17 +25,17 @@ namespace Platformer3d.CharacterSystem.Movement
             }
         }
 
-        private void OnRun(InputValue input)
+        public void OnRunPerformed(InputValue input)
         {
             _moveInput = input.Get<float>();
         }
 
-        private void OnDash(InputValue input)
+        public void OnDashPerformed(InputValue input)
         {
             _isDashPerformed = input.Get<float>() >= 0.01f && CheckCanDash();
         }
 
-		private void OnJump(InputValue input)
+		public void OnJumpPerformed(InputValue input)
         {
             _isJumpPerformed = input.Get<float>() >= 0.01f;
         }

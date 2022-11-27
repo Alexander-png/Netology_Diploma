@@ -204,6 +204,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
             if (_currentHealth < 0.01f)
             {
+                throw new Exception($"{gameObject.name} was killed");
                 // TODO: hide on died
             }
         }

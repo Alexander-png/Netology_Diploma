@@ -7,9 +7,9 @@ namespace Platformer3d.Weapons
 	public class BasicWeapon : MonoBehaviour
 	{
         [SerializeField]
-        private DamageStats _damageStats;
+        protected DamageStats _damageStats;
 
-		private Character _owner;
+		protected Character _owner;
 
 		protected virtual void Start()
         {

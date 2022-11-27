@@ -3,6 +3,7 @@ using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
 using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Characters;
+using System;
 using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.Base
@@ -11,6 +12,8 @@ namespace Platformer3d.CharacterSystem.Base
     {
         [SerializeField]
         private DefaultCharacterStats _stats;
+
+        public event EventHandler Respawning;
 
         protected class CharacterData : SaveData
         {
@@ -43,7 +46,7 @@ namespace Platformer3d.CharacterSystem.Base
             Side = stats.Side;
         }
 
-        public virtual void OnRespawn() { }
+        public virtual void NotifyRespawn() => Respawning?.Invoke(this, EventArgs.Empty); 
 
         public virtual void SetDataFromContainer(CharacterDataContainer data)
         {

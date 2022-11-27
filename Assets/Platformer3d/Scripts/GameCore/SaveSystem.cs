@@ -86,7 +86,7 @@ namespace Platformer3d.GameCore
         private void RespawnPlayer()
         {
             RevertRegisteredObjects();
-            _player.OnRespawn();
+            _player.NotifyRespawn();
             _player.gameObject.SetActive(true);
             _gameSystem.OnPlayerRespawned();
         }
