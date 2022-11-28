@@ -33,10 +33,10 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         private float _currentHealth;
         private float _maxHealth;
 
-        
         private Player _player;
         private PatrolPoint _currentPoint;
 
+        private bool _behaviourEnabled;
         private bool _inIdle;
         private bool _attackingPlayer = false;
 
@@ -58,7 +58,11 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _player = _gameSystem.GetPlayer();
             MovementController.MovementEnabled = true;
             FillPatrolPointList();
+            SetBehaviourEnabled(true);
         }
+
+        public bool SetBehaviourEnabled(bool value) => 
+            _behaviourEnabled = value;
 
         private void FillPatrolPointList()
         {
@@ -116,6 +120,13 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         private void UpdateBehaviour()
         {
+            if (!_behaviourEnabled)
+            {
+                MovementController.MoveInput = 0f;
+                _attackingPlayer = false;
+                return;
+            }
+
             if (!_attackingPlayer)
             {
                 PatrolArea();
@@ -177,7 +188,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             {
                 MovementController.JumpInput = 0f;
             }
-            // TODO: kill enemy ability
         }
 
         public void SetDamage(float damage, Vector3 pushVector)
@@ -186,8 +196,9 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
             if (_currentHealth < 0.01f)
             {
-                throw new Exception($"{gameObject.name} was killed");
-                // TODO: hide on died
+                SetBehaviourEnabled(false);
+                EditorExtentions.GameLogger.AddMessage($"Enemy with name {gameObject.name} was. Killed. You can implement spawn system");
+                gameObject.SetActive(false);
             }
         }
 
