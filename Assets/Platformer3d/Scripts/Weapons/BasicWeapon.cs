@@ -8,13 +8,8 @@ namespace Platformer3d.Weapons
 	{
         [SerializeField]
         protected DamageStats _damageStats;
-
-		protected Character _owner;
-
-		protected virtual void Start()
-        {
-			_owner = transform.parent.GetComponent<Character>();
-        }
+        [SerializeField]
+        protected Character _owner;
 
         protected virtual void OnTriggerStay(Collider other)
         {

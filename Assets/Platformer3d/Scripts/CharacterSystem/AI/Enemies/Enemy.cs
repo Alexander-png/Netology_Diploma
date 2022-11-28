@@ -1,6 +1,5 @@
 using Platformer3d.CharacterSystem.AI.Patroling;
 using Platformer3d.CharacterSystem.Base;
-using Platformer3d.CharacterSystem.Movement;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
 using Platformer3d.Scriptable.Characters;
@@ -18,8 +17,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         [SerializeField]
         private BoxCollider _agressionTrigger;
-        [SerializeField]
-        private Transform _visual;
 
         // TODO: better to move these fields to scriptable object
         [SerializeField, Space(15)]
@@ -36,7 +33,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         private float _currentHealth;
         private float _maxHealth;
 
-        private EnemyMovement _movement;
+        
         private Player _player;
         private PatrolPoint _currentPoint;
 
@@ -59,7 +56,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _gameSystem.RegisterSaveableObject(this);
 
             _player = _gameSystem.GetPlayer();
-            _movement = MovementController as EnemyMovement;
             MovementController.MovementEnabled = true;
             FillPatrolPointList();
         }
@@ -114,6 +110,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         protected override void Update()
         {
+            base.Update();
             UpdateBehaviour();
         }
 
@@ -127,33 +124,20 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             {
                 PursuitPlayer();
             }
-            UpdateVisual();
-        }
-
-        private void UpdateVisual()
-        {
-            if (_movement.MoveInput > 0f)
-            {
-                _visual.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
-            }
-            else if (_movement.MoveInput < 0f)
-            {
-                _visual.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            }
         }
 
         private void PatrolArea()
         {
             if (_inIdle)
             {
-                _movement.MoveInput = 0f;
-                _movement.Velocity = Vector3.zero;
+                MovementController.MoveInput = 0f;
+                MovementController.Velocity = Vector3.zero;
                 return;
             }
 
             var pointPos = _currentPoint.Position;
 
-            _movement.MoveInput = pointPos.x > transform.position.x ? 1f : -1f;
+            MovementController.MoveInput = pointPos.x > transform.position.x ? 1f : -1f;
 
             if (Vector3.SqrMagnitude(transform.position - _currentPoint.Position) <= _currentPoint.ArriveRadius)
             {
@@ -168,11 +152,11 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             Vector3 selfPosition = transform.position;
             if (playerPosition.x > selfPosition.x)
             {
-                _movement.MoveInput = 1f;
+                MovementController.MoveInput = 1f;
             }
             else if (playerPosition.x < selfPosition.x)
             {
-                _movement.MoveInput = -1f;
+                MovementController.MoveInput = -1f;
             }
 
             bool closeToPlayer = Mathf.Abs(playerPosition.x - selfPosition.x) <= _closeToPlayerDistance;
@@ -182,21 +166,19 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
                 bool needToJump = playerPosition.y - selfPosition.y >= _playerHeightDiffToJump;
                 if (needToJump)
                 {
-                    _movement.JumpInput = 1f;
+                    MovementController.JumpInput = 1f;
                 }
                 else
                 {
-                    _movement.JumpInput = 0f;
+                    MovementController.JumpInput = 0f;
                 }
             }
             else
             {
-                _movement.JumpInput = 0f;
+                MovementController.JumpInput = 0f;
             }
             // TODO: kill enemy ability
         }
-
-        // TODO: many of the methods here was copypasted from player class. It's not good and better to move them to base class to avoid breaking "Don't repeat yourself" rule.
 
         public void SetDamage(float damage, Vector3 pushVector)
         {

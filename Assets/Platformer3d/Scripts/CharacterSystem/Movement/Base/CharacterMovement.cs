@@ -14,6 +14,12 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         private MovementStatsInfo _movementStats;
         private Vector3 _currentCollisionNormal;
 
+        private float _moveInput;
+        private float _jumpInput;
+        private float _dashInput;
+        public bool IsJumpPerformed { get; set; }
+        public bool IsDashPerformed { get; set; }
+
         protected int JumpsLeft { get; set; }
 
         public bool CanJump => JumpsLeft > 0;
@@ -31,6 +37,38 @@ namespace Platformer3d.CharacterSystem.Movement.Base
         public bool OnWall { get; protected set; }
         public bool InAir => _currentCollisionNormal == Vector3.zero;
         public bool MovementEnabled { get; set; }
+
+        public float MoveInput
+        {
+            get => _moveInput;
+            set => _moveInput = value;
+        }
+
+        public float JumpInput
+        {
+            get => _jumpInput;
+            set
+            {
+                _jumpInput = value;
+                IsJumpPerformed = JumpInput >= 0.01f;
+            }
+        }
+
+        public float DashInput
+        {
+            get => _dashInput;
+            set
+            {
+                _dashInput = value;
+                IsDashPerformed = _dashInput >= 0.01f && CheckCanDash();
+            }
+        }
+
+        public virtual Vector3 Velocity
+        {
+            get => _body.velocity;
+            set => _body.velocity = value;
+        }
 
         protected virtual void Awake()
         {
@@ -81,10 +119,13 @@ namespace Platformer3d.CharacterSystem.Movement.Base
             }
         }
 
-        public virtual Vector3 Velocity
+        private bool CheckCanDash()
         {
-            get => _body.velocity;
-            set => _body.velocity = value;
+            if (MoveInput == 0)
+            {
+                return false;
+            }
+            return DashForce != 0 && DashDuration != 0;
         }
 
         public virtual void AddStats(MovementStatsInfo stats)
