@@ -18,6 +18,11 @@ namespace Platformer3d.Weapons
         private void OnDisable() =>
             _owner.Respawning -= OnPlayerRespawning;
 
+        private void Start()
+        {
+            ResetValues();
+        }
+
         public void OnAttackPerformed(InputValue input) =>
             MakeHit();
 
@@ -38,7 +43,16 @@ namespace Platformer3d.Weapons
         public void OnHitEnd() =>
             ResetValues();
 
-        private void OnPlayerRespawning(object sender, System.EventArgs e) =>
+        private void OnPlayerRespawning(object sender, System.EventArgs e)
+        {
+            ResetAnimator();
             ResetValues();
+        }
+
+        private void ResetAnimator()
+        {
+            _animator.enabled = false;
+            _animator.enabled = true;
+        }
     }
 }

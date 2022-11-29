@@ -1,17 +1,13 @@
 using Platformer3d.CharacterSystem.Base;
-using Platformer3d.Scriptable.LevelElements;
 using UnityEngine;
 
 namespace Platformer3d.Weapons
 {
-	public class BasicWeapon : MonoBehaviour
-	{
-        [SerializeField]
-        protected DamageStats _damageStats;
-        [SerializeField]
-        protected Character _owner;
+	public class EnemyWeapon : BasicWeapon
+    {
+        protected override void OnTriggerEnter(Collider other) { }
 
-        protected virtual void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerStay(Collider other)
         {
             if (other.TryGetComponent(out IDamagableCharacter target))
             {

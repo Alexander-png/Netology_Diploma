@@ -9,7 +9,6 @@ using Platformer3d.Scriptable.Skills.Containers;
 using System;
 using UnityEngine;
 
-// TODO: fix enemy colliders
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
 // TODO: More player abilities
@@ -18,7 +17,6 @@ using UnityEngine;
 // TODO: improve player moving, there are some bugs
 // TODO: kill player anyway if he got fatal damage
 // TODO: non movement skills
-// TODO: move inputs into base class of movement
 
 namespace Platformer3d.GameCore
 {

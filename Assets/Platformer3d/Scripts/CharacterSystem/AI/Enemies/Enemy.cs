@@ -15,9 +15,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 		[Inject]
 		private GameSystem _gameSystem;
 
-        [SerializeField]
-        private BoxCollider _agressionTrigger;
-
         // TODO: better to move these fields to scriptable object
         [SerializeField, Space(15)]
         private Transform _patrolArea;
@@ -61,6 +58,22 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             SetBehaviourEnabled(true);
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            UpdateBehaviour();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.transform.TryGetComponent(out MoveableCharacter _))
+            {
+                Vector3 newVelocity = (-MovementController.Velocity + transform.up).normalized;
+                newVelocity *= MovementController.MaxJumpForce;
+                MovementController.Velocity = newVelocity;
+            }
+        }
+
         public bool SetBehaviourEnabled(bool value) => 
             _behaviourEnabled = value;
 
@@ -76,46 +89,11 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.transform.TryGetComponent(out MoveableCharacter _))
-            {
-                Vector3 newVelocity = (-MovementController.Velocity + transform.up).normalized;
-                newVelocity *= MovementController.MaxJumpForce;
-                MovementController.Velocity = newVelocity;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.TryGetComponent(out Player _))
-            {
-                _inIdle = false;
-                _attackingPlayer = true;
-            }
-        }
-
-        // TODO: fix OnTriggerExit call when character may being attacked with weapon
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.TryGetComponent(out Player _))
-            {
-                _attackingPlayer = false;
-            }
-        }
-
         protected override void SetDefaultParameters(DefaultCharacterStats stats)
         {
             base.SetDefaultParameters(stats);
             _maxHealth = stats.MaxHealth;
             _currentHealth = _maxHealth;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            UpdateBehaviour();
         }
 
         private void UpdateBehaviour()
@@ -196,6 +174,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
             if (_currentHealth < 0.01f)
             {
+                Died?.Invoke(this, EventArgs.Empty);
                 SetBehaviourEnabled(false);
                 EditorExtentions.GameLogger.AddMessage($"Enemy with name {gameObject.name} was. Killed. You can implement spawn system");
                 gameObject.SetActive(false);
@@ -232,26 +211,20 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentPoint = dataToSet.CurrentPoint;
         }
 
+        public void OnPlayerNearby()
+        {
+            _inIdle = false;
+            _attackingPlayer = true;
+        }
+
+        public void OnPlayerRanAway() =>
+            _attackingPlayer = false;
+
         private IEnumerator IdleCoroutine(float idleTime)
         {
             _inIdle = true;
             yield return new WaitForSeconds(idleTime);
             _inIdle = false;
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            Color c = Color.gray;
-            c.a = 0.3f;
-            Gizmos.color = c;
-
-            if (_agressionTrigger != null)
-            {
-                Vector3 rangeVisualSize = _agressionTrigger.size;
-                Gizmos.DrawCube(transform.position + _agressionTrigger.center, rangeVisualSize);
-            }
-        }
-#endif
     }
 }
