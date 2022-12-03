@@ -3070,7 +3070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326075734}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75.45, y: 1.83, z: 0}
+  m_LocalPosition: {x: 100.22, y: 1.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9104,6 +9104,7 @@ MonoBehaviour:
   _isOneOff: 1
   _hazard: {fileID: 2020787026}
   _hazardCameraFocusPoint: {fileID: 1025182506}
+  _startActivityTrigger: {fileID: 1010675826}
   _stages:
   - {fileID: 1305300375}
   - {fileID: 1027199287}
@@ -18607,7 +18608,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2020787021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff90acc516272884e894810b1a890358, type: 3}
+  m_Script: {fileID: 11500000, guid: aadf40dfc9ff21942afc5f7fb5ffe8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _climbable: 0
@@ -20275,6 +20276,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 650901420}
     m_Modifications:
+    - target: {fileID: 7982186481413667088, guid: 0c9897c64fb72aa47922504e57c1e7c0, type: 3}
+      propertyPath: _needStop
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7982186481413667098, guid: 0c9897c64fb72aa47922504e57c1e7c0, type: 3}
       propertyPath: m_RootOrder
       value: -1

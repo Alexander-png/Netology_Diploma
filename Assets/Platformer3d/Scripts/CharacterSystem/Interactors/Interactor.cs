@@ -1,5 +1,6 @@
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
+using Platformer3d.PlayerSystem;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +14,12 @@ namespace Platformer3d.CharacterSystem.Interactors
         private GameSystem _gameSystem;
         
         private bool _canInteract;
+        private Player _player;
+
+        protected virtual void Start()
+        {
+            _player = _gameSystem.GetPlayer();
+        }
 
         public InteractionTrigger CurrentTrigger
         {
@@ -40,6 +47,10 @@ namespace Platformer3d.CharacterSystem.Interactors
         {
             if (_canInteract && HandlingEnabled)
             {
+                if (CurrentTrigger.NeedStop)
+                {
+                    _player.MovementController.Velocity = Vector3.zero;
+                }
                 _gameSystem.PerformTrigger();
             }
         }

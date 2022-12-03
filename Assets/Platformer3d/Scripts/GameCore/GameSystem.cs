@@ -13,7 +13,6 @@ using UnityEngine;
 // TODO: find assets for all objects
 // TODO: More player abilities
 // TODO: UI
-// TODO: exit dialog if player exited trigger while in dialog
 // TODO: improve player moving, there are some bugs
 // TODO: non movement skills
 
