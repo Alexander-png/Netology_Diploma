@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 5238227634203623523}
   - component: {fileID: 5238227634203623550}
   - component: {fileID: 5238227634203623521}
-  - component: {fileID: 5238227634203623549}
+  - component: {fileID: 4507167122682150298}
   m_Layer: 0
   m_Name: LavaLake
   m_TagString: Untagged
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uvAnimationRate: {x: 0.03, y: 0}
   textureName: _LavaTex
---- !u!114 &5238227634203623549
+--- !u!114 &4507167122682150298
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5238227634203623527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff90acc516272884e894810b1a890358, type: 3}
+  m_Script: {fileID: 11500000, guid: aadf40dfc9ff21942afc5f7fb5ffe8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _climbable: 0

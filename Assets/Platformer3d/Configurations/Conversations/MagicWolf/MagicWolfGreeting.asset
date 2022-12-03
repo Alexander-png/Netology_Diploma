@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1698f3cfe028d447b8f5b671ab849f3, type: 3}
+  m_Name: MagicWolfGreeting
+  m_EditorClassIdentifier: 
+  _conversationId: conversation_firstNPCGreeting
+  _phrases:
+  - PhraseType: 0
+    Data: Don't worry, little one, i can't eat spirits.
+  - PhraseType: 0
+    Data: Can you find golden ore for me??
+  - PhraseType: 1
+    Data: quest_findGoldenOre$1$1
+  - PhraseType: 0
+    Data: I will be glad if you will bring it to me.
+  - PhraseType: 4
+    Data: conversation_firstNPCNoGoldenOre
+  _isLoop: 0

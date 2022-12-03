@@ -11,6 +11,7 @@ using UnityEngine;
 
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
+// TODO: level design
 // TODO: More player abilities
 // TODO: UI
 // TODO: improve player moving, there are some bugs

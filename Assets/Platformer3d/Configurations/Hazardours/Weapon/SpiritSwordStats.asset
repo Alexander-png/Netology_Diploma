@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043af9ca3d241da4bb497b654f7a2d10, type: 3}
   m_Name: SpiritSwordStats
   m_EditorClassIdentifier: 
-  _damage: 2
+  _damage: 4
   _pushForce: 10
   _isFatalDamage: 0
