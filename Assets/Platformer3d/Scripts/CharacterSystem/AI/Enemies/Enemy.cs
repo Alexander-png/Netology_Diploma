@@ -168,7 +168,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             }
         }
 
-        public void SetDamage(float damage, Vector3 pushVector)
+        public void SetDamage(float damage, Vector3 pushVector, bool forced = false)
         {
             MovementController.Velocity = pushVector;
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);

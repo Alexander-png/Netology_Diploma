@@ -15,7 +15,6 @@ using UnityEngine;
 // TODO: UI
 // TODO: exit dialog if player exited trigger while in dialog
 // TODO: improve player moving, there are some bugs
-// TODO: kill player anyway if he got fatal damage
 // TODO: non movement skills
 
 namespace Platformer3d.GameCore

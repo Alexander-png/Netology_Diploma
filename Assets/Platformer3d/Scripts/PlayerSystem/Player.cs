@@ -73,16 +73,21 @@ namespace Platformer3d.PlayerSystem
                 CurrentHealth = _currentHealth,
             };
 
-        public void SetDamage(float damage, Vector3 pushVector)
+        public void SetDamage(float damage, Vector3 pushVector, bool forced = false)
         {
-            if (_damageImmune)
+            if (_damageImmune && !forced)
             {
                 return;
             }
 
-            StartCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
+            StopCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
             MovementController.Velocity = pushVector;
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+            if (_currentHealth > 0)
+            {
+                StartCoroutine(DamageImmuneCoroutine(_damageImmuneTime));
+            }
+
             if (_currentHealth < 0.01f)
             {
                 Died?.Invoke(this, EventArgs.Empty);

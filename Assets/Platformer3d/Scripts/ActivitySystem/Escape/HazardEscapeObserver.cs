@@ -14,10 +14,11 @@ namespace Platformer3d.ActivitySystem.Escape
 		private HazardLevelElement _hazard;
         [SerializeField]
         private Transform _hazardCameraFocusPoint;
-
+        [SerializeField]
+        private BoxCollider _startActivityTrigger;
         [SerializeField]
         private List<EscapeActivityStage> _stages;
-
+        
         private Player _player;
         private int _pointIndex = -1;
         private Vector3 _hazardInitialPosition;
@@ -129,6 +130,15 @@ namespace Platformer3d.ActivitySystem.Escape
         }
 
 #if UNITY_EDITOR
+
+        private void OnDrawGizmos()
+        {
+            Color c = Color.red;
+            c.a = 0.6f;
+            Gizmos.color = c;
+            Gizmos.DrawCube(_startActivityTrigger.transform.position + _startActivityTrigger.center, _startActivityTrigger.size);
+        }
+
         [ContextMenu("Find activity stages")]
         private void FindCheckPoints()
         {

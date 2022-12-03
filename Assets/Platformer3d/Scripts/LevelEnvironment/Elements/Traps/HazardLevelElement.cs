@@ -9,9 +9,9 @@ namespace Platformer3d.Interactables.Elements.Traps
 	public class HazardLevelElement : Platform
 	{
 		[SerializeField]
-		private DamageStats _stats;
+		protected DamageStats _stats;
         [SerializeField]
-        private bool _trapEnabled = true;
+        protected bool _trapEnabled = true;
 
         public bool TrapEnabled
         {
@@ -29,7 +29,7 @@ namespace Platformer3d.Interactables.Elements.Traps
         // TODO: is bad solution or not?
         public bool DamageEnabled { get; protected set; } = true;
 
-        private List<IDamagableCharacter> _touchingCharacters = new List<IDamagableCharacter>();
+        protected List<IDamagableCharacter> _touchingCharacters = new List<IDamagableCharacter>();
 
         private void OnEnable()
         {
