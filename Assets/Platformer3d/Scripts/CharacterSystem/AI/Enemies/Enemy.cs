@@ -124,6 +124,11 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
                 return;
             }
 
+            if (_currentPoint == null)
+            {
+                _currentPoint = _patrolArea.GetChild(0).GetComponent<PatrolPoint>();
+            }
+
             var pointPos = _currentPoint.Position;
 
             MovementController.MoveInput = pointPos.x > transform.position.x ? 1f : -1f;
