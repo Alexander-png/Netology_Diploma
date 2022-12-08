@@ -18,7 +18,6 @@ namespace Platformer3d.LevelEnvironment.Elements.Common
             var collider = GetComponent<BoxCollider>();
             if (collider != null)
             {
-
                 Gizmos.DrawCube(transform.position, collider.size);
             }
         }
