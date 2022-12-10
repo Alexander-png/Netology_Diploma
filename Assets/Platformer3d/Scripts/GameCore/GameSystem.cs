@@ -11,7 +11,6 @@ using UnityEngine;
 
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
-// TODO: level design
 // TODO: More player abilities
 // TODO: UI
 // TODO: improve player moving, there are some bugs
@@ -73,7 +72,7 @@ namespace Platformer3d.GameCore
         public bool CheckQuestCompleted(IPerformer interactionTarget, string questId) =>
             _questHandler.IsQuestCompleted(interactionTarget as IQuestGiver, questId);
 
-        public void OnPlayerRespawned() =>
+        public void InvokePlayerRespawned() =>
             PlayerRespawned?.Invoke(this, EventArgs.Empty);
 
         private void OnAreaShowed(object sender, EventArgs e) =>

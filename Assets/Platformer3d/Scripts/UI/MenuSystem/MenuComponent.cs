@@ -48,6 +48,10 @@ namespace Platformer3d.UI.MenuSystem
                 {
                     MenuItem selectedMarker = _items.First(i => i.IsSelected);
                     _selectionIndex = Array.IndexOf(_items, selectedMarker);
+                    foreach(MenuItem item in _items)
+                    {
+                        item.SetParent(this);
+                    }
                 }
                 catch (InvalidOperationException exc)
                 {
@@ -55,6 +59,8 @@ namespace Platformer3d.UI.MenuSystem
                 }
             }
         }
+
+        
 
         private void FindAndSortMenuItems()
         {
@@ -92,15 +98,21 @@ namespace Platformer3d.UI.MenuSystem
             _items[_selectionIndex].IsSelected = true;
         }
 
-        public void OnItemPointerEntered(string actionName)
+        public void OnItemPointerEntered(string commandId)
         {
-            GameLogger.AddMessage("TODO: OnItemPointerEntered", GameLogger.LogType.Error);
+            var item = _items.First(i => i.CommandId == commandId);
+            _items[_selectionIndex].IsSelected = false;
+            _selectionIndex = item.SelectionIndex;
+            _items[_selectionIndex].IsSelected = true;
         }
 
         public void OnPerform(InputValue value)
         {
             _commandBindings[_items[_selectionIndex].CommandId].Execute();
         }
+
+        public void OnItemPointerClicked()
+            => OnPerform(null);
 
 #if UNITY_EDITOR
         [ContextMenu("Find menu items")]

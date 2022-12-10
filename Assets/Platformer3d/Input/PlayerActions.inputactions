@@ -130,6 +130,96 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "MenuActions",
+            "id": "2d7bcf5e-1e1a-48b0-837f-393ba03870fd",
+            "actions": [
+                {
+                    "name": "PauseSwitch",
+                    "type": "Button",
+                    "id": "a318c5cc-4bfe-420c-97e6-25d047616783",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectionChanging",
+                    "type": "Button",
+                    "id": "9ff74f09-5c38-438f-8f48-e41abb6191ec",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Perform",
+                    "type": "Button",
+                    "id": "c3f1658a-35ef-41c9-8465-ecfb43904aa4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "47f90fb5-8927-47c6-8b0d-f66237bb6f56",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "UpDown",
+                    "id": "0bbe3354-e606-4a41-b590-6860ce9c7648",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectionChanging",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "86460949-dc97-49d3-8bb6-ac9e69dd3130",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectionChanging",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "0afc7da3-52e9-4714-8688-649f3aaa2b92",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectionChanging",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1308dddf-305c-49a4-b604-2bd6025b9856",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Perform",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

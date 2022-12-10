@@ -88,7 +88,7 @@ namespace Platformer3d.GameCore
             RevertRegisteredObjects();
             _player.NotifyRespawn();
             _player.gameObject.SetActive(true);
-            _gameSystem.OnPlayerRespawned();
+            _gameSystem.InvokePlayerRespawned();
         }
 
         private IEnumerator PlayerRespawnCoroutine(float time)
