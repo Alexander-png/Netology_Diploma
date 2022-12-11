@@ -1,8 +1,8 @@
 using Platformer3d.UI.MenuSystem.Commands.Base;
 
-namespace Platformer3d.UI.MenuSystem.Commands
+namespace Platformer3d.UI.MenuSystem.Commands.MainMenu
 {
-	public class ExitGame : MenuCommand
+	public class QuitGame : MenuCommand
 	{
         public override void Execute()
         {

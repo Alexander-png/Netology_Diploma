@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Platformer3d.CharacterSystem.AI.Patroling;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.GameCore;
@@ -43,6 +44,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         {
             public bool AttackingPlayer;
             public bool InIdle;
+            [JsonIgnore]
             public PatrolPoint CurrentPoint;
         }
 
@@ -193,7 +195,12 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         {
             Name = gameObject.name,
             Side = Side,
-            Position = transform.position,
+            RawPosition = new CharacterData.Position3
+            {
+                x = transform.position.x,
+                y = transform.position.y,
+                z = transform.position.z,
+            },
             CurrentHealth = CurrentHealth,
             AttackingPlayer = _attackingPlayer,
             InIdle = _inIdle,
@@ -209,7 +216,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             }
 
             Side = dataToSet.Side;
-            transform.position = dataToSet.Position;
+            transform.position = dataToSet.GetPositionAsVector3();
             _currentHealth = dataToSet.CurrentHealth;
             _attackingPlayer = dataToSet.AttackingPlayer;
             _inIdle = dataToSet.InIdle;

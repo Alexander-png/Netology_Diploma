@@ -75,7 +75,7 @@ namespace Platformer3d.PlayerSystem
 
         public void SetDamage(float damage, Vector3 pushVector, bool forced = false)
         {
-            if (_damageImmune && !forced)
+            if (_damageImmune && !forced || _currentHealth <= 0f)
             {
                 return;
             }
@@ -108,7 +108,12 @@ namespace Platformer3d.PlayerSystem
         {
             Name = gameObject.name,
             Side = Side,
-            Position = transform.position,
+            RawPosition = new CharacterData.Position3
+            {
+                x = transform.position.x,
+                y = transform.position.y,
+                z = transform.position.z,
+            },
             CurrentHealth = CurrentHealth
         };
 
@@ -121,7 +126,7 @@ namespace Platformer3d.PlayerSystem
             }
 
             Side = dataToSet.Side;
-            transform.position = dataToSet.Position;
+            transform.position = dataToSet.GetPositionAsVector3();
             _currentHealth = dataToSet.CurrentHealth;
         }
     }

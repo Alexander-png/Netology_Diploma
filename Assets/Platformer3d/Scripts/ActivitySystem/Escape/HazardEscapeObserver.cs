@@ -58,7 +58,7 @@ namespace Platformer3d.ActivitySystem.Escape
                     GameSystem.ShowAreaUntilActionEnd(_hazardCameraFocusPoint, new Action(() =>
                     {
                         StartActivity();
-                        GameSystem.PerformAutoSave(_player.transform.position);
+                        GameSystem.PerformAutoSave();
                     }), 0.5f);
                 }
             }

@@ -1,4 +1,4 @@
-using Platformer3d.CharacterSystem.DataContainers;
+using Newtonsoft.Json;
 using Platformer3d.PlayerSystem;
 using System;
 using System.Collections;
@@ -21,6 +21,8 @@ namespace Platformer3d.GameCore
 
     public class SaveSystem : MonoBehaviour
 	{
+        private string SaveFileName = "Save01";
+
         [Inject]
         private GameSystem _gameSystem;
 
@@ -28,13 +30,16 @@ namespace Platformer3d.GameCore
 		private float _respawnTime;
 
         private Player _player;
-        private List<SaveDataItem> _saveableData;
+        private List<SaveDataItem> _saveData;
 
         private class SaveDataItem
         {
+            [JsonIgnore]
             private ISaveable _saveableObject;
+
             private object _data;
 
+            [JsonIgnore]
             public ISaveable SaveableObject => _saveableObject;
             public object Data => _data;
 
@@ -55,12 +60,13 @@ namespace Platformer3d.GameCore
 
         private void Awake()
         {
-            _saveableData = new List<SaveDataItem>();
+            _saveData = new List<SaveDataItem>();
         }
 
         private void OnEnable()
         {
             InitializeInternals();
+            _gameSystem.GameLoaded += OnGameLoaded;
         }
 
         private void OnDisable()
@@ -69,6 +75,7 @@ namespace Platformer3d.GameCore
             {
                 _player.Died -= OnPlayerDiedInternal;
             }
+            _gameSystem.GameLoaded -= OnGameLoaded;
         }
 
         private void InitializeInternals()
@@ -77,13 +84,38 @@ namespace Platformer3d.GameCore
             _player.Died += OnPlayerDiedInternal;
         }
 
+        private void OnGameLoaded(object sender, EventArgs e)
+        {
+            if (!GameObserver.NewGameFlag)
+            {
+                LoadSavedData();
+            }
+        }
+
+        private void LoadSavedData()
+        {
+            string data = PlayerPrefs.GetString(SaveFileName, string.Empty);
+            if (data == string.Empty)
+            {
+                return;
+            }
+            try
+            {
+                var dataList = JsonConvert.DeserializeObject<List<SaveDataItem>>(data);
+            }
+            catch (Exception exc)
+            {
+                EditorExtentions.GameLogger.AddMessage($"TODO: fix problem with savefile load. Error: {exc.Message}");
+            }
+        }
+
         private void OnPlayerDiedInternal(object sender, EventArgs e)
         {
             _player.gameObject.SetActive(false);
-            StartCoroutine(PlayerRespawnCoroutine(_respawnTime));
+            StartCoroutine(ResetGameStateCoroutine(_respawnTime));
         }
 
-        private void RespawnPlayer()
+        private void LoadLastState()
         {
             RevertRegisteredObjects();
             _player.NotifyRespawn();
@@ -91,20 +123,31 @@ namespace Platformer3d.GameCore
             _gameSystem.InvokePlayerRespawned();
         }
 
-        private IEnumerator PlayerRespawnCoroutine(float time)
+        private IEnumerator ResetGameStateCoroutine(float time)
         {
             yield return new WaitForSeconds(time);
-            RespawnPlayer();
+            LoadLastState();
         }
 
-        public void PerformAutoSave(Vector3 checkpointPosition)
+        public void PerformSave(bool writeSave = false)
         {
             SaveRegisteredObjects();
+            if (writeSave)
+            {
+                WriteSaveFile();
+            }
         }
 
-        private void SaveRegisteredObjects() => _saveableData.ForEach(s => s.UpdateData());
-        private void RevertRegisteredObjects() => _saveableData.ForEach(s => s.RevertData());
-        private bool IsObjectRegistered(ISaveable obj) => _saveableData.Find(data => data.SaveableObject.Equals(obj)) != null;
+        private void WriteSaveFile()
+        {
+            PlayerPrefs.SetString(SaveFileName, JsonConvert.SerializeObject(_saveData));
+            PlayerPrefs.Save();
+        }
+
+        public void LoadLastAutoSave() => LoadLastState();
+        private void SaveRegisteredObjects() => _saveData.ForEach(s => s.UpdateData());
+        private void RevertRegisteredObjects() => _saveData.ForEach(s => s.RevertData());
+        private bool IsObjectRegistered(ISaveable obj) => _saveData.Find(data => data.SaveableObject.Equals(obj)) != null;
 
         public void RegisterSaveableObject(ISaveable saveableObject)
         {
@@ -113,9 +156,7 @@ namespace Platformer3d.GameCore
                 EditorExtentions.GameLogger.AddMessage("", EditorExtentions.GameLogger.LogType.Warning);
                 return;
             }
-            _saveableData.Add(new SaveDataItem(saveableObject));
+            _saveData.Add(new SaveDataItem(saveableObject));
         }
-
-        // TODO: think about saving game object id's instead of names
     }
 }

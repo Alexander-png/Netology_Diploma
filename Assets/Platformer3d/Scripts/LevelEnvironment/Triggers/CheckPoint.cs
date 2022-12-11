@@ -14,7 +14,7 @@ namespace Platformer3d.LevelEnvironment.Triggers
         {
             if (other.gameObject.TryGetComponent(out Player _))
             {
-                _gameSystem.PerformAutoSave(transform.position);
+                _gameSystem.PerformAutoSave();
             }
         }
     

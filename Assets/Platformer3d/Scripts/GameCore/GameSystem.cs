@@ -7,6 +7,7 @@ using Platformer3d.PlayerSystem;
 using Platformer3d.QuestSystem;
 using Platformer3d.Scriptable.Skills.Containers;
 using System;
+using System.Collections;
 using UnityEngine;
 
 // TODO: 2-3 kinds of enemies
@@ -15,11 +16,15 @@ using UnityEngine;
 // TODO: UI
 // TODO: improve player moving, there are some bugs
 // TODO: non movement skills
+// TODO: think about saving game object id's instead of names
 
 namespace Platformer3d.GameCore
 {
     public class GameSystem : MonoBehaviour
     {
+        [SerializeField]
+        private bool _gamePaused;
+
         [SerializeField]
         private Player _playerCharacter;
         [SerializeField]
@@ -35,12 +40,24 @@ namespace Platformer3d.GameCore
         [SerializeField, Space(15)]
         private MovementSkillContainer _playerMovementSkillContainer;
 
+        public bool GamePaused
+        {
+            get => _gamePaused;
+            set
+            {
+                _gamePaused = value;
+                PauseStateChanged?.Invoke(this, value);
+            }
+        }
+
         public InteractionTrigger CurrentTrigger { get; private set; }
         public ConversationHandler ConversationHandler => _conversationHandler;
         public QuestHandler QuestHandler => _questHandler;
-        public SaveSystem TimelineSystem => _saveSystem;
+        public SaveSystem SaveSystem => _saveSystem;
 
         public event EventHandler PlayerRespawned;
+        public event EventHandler<bool> PauseStateChanged;
+        public event EventHandler GameLoaded;
 
         private void Awake()
         {
@@ -53,16 +70,31 @@ namespace Platformer3d.GameCore
         private void Start()
         {
             SetPlayerHandlingEnabled(true);
+            GamePaused = GamePaused;
+            StartCoroutine(LoadedNotifier());
+        }
+
+        private IEnumerator LoadedNotifier()
+        {
+            yield return null;
+            GameLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnPauseStateChanged(object sender, bool e)
+        {
+            Time.timeScale = _gamePaused ? 0f : 1f;
         }
 
         private void OnEnable()
         {
             _cameraAligner.ShowAreaExecuted += OnAreaShowed;
+            PauseStateChanged += OnPauseStateChanged;
         }
 
         private void OnDisable()
         {
             _cameraAligner.ShowAreaExecuted -= OnAreaShowed;
+            PauseStateChanged -= OnPauseStateChanged;
             StopAllCoroutines();
         }
 
@@ -86,11 +118,12 @@ namespace Platformer3d.GameCore
             GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
-        public void PerformAutoSave(Vector3 checkpointPosition) =>
-            _saveSystem.PerformAutoSave(checkpointPosition);
+        public void PerformAutoSave() =>
+            _saveSystem.PerformSave();
 
         public void ShowAreaUntilActionEnd(Transform position, Action action, float waitTime)
         {
+            // TODO: notify player about beginning of cutscene instead of manipulating him directly
             _playerCharacter.MovementController.Velocity = Vector3.zero;
             SetPlayerHandlingEnabled(false);
             _cameraAligner.SetFocusPositionUntilActionEnd(position, action, waitTime);
@@ -131,16 +164,16 @@ namespace Platformer3d.GameCore
         public void RemoveItemFromPlayer(string itemId, int count = 1) =>
             _playerCharacter.Inventory.RemoveItem(itemId, count);
 
-        public bool CheckItemInInventory(string itemId, int count = 1) => 
+        public bool CheckItemInInventory(string itemId, int count = 1) =>
             _playerCharacter.Inventory.ContainsItem(itemId, count);
 
         public Player GetPlayer() => _playerCharacter;
 
 #if UNITY_EDITOR
         [ContextMenu("Fill fields")]
-		private void FindPlayerOnScene()
+        private void FindPlayerOnScene()
         {
-			_playerCharacter = FindObjectOfType<Player>();
+            _playerCharacter = FindObjectOfType<Player>();
             _cameraAligner = FindObjectOfType<CameraAligner>();
             _conversationHandler = GetComponent<ConversationHandler>();
             _saveSystem = GetComponent<SaveSystem>();

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
@@ -19,9 +20,17 @@ namespace Platformer3d.CharacterSystem.Base
 
         protected class CharacterData : SaveData
         {
+            public struct Position3
+            {
+                public float x;
+                public float y;
+                public float z;
+            }
+            public Position3 RawPosition;
             public SideTypes Side;
-            public Vector3 Position;
             public float CurrentHealth;
+
+            public Vector3 GetPositionAsVector3() => new Vector3(RawPosition.x, RawPosition.y, RawPosition.z);
         }
 
         public SideTypes Side { get; protected set; }
