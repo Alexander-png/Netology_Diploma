@@ -17,7 +17,7 @@ MonoBehaviour:
   - PhraseType: 0
     Data: Don't worry, little one, i can't eat spirits.
   - PhraseType: 0
-    Data: Can you find golden ore for me??
+    Data: Can you find golden ore for me?
   - PhraseType: 1
     Data: quest_findGoldenOre$1$1
   - PhraseType: 0

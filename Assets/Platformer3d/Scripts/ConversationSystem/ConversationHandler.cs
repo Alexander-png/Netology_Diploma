@@ -28,8 +28,8 @@ namespace Platformer3d.ConversationSystem
 
 		public void StartConversation(string id)
         {
-			EditorExtentions.GameLogger.AddMessage($"Started conversation with id {id}");
 			_phrases = _conversationContainer.GetPhrases(id);
+			_gameSystem.SetConversationUIEnabled(true);
 			_gameSystem.SetPlayerHandlingEnabled(false);
 			_phraseIndex = NonInPhrase;
 			ShowNextPhrase();
@@ -43,14 +43,14 @@ namespace Platformer3d.ConversationSystem
 				_phrases = null;
 				_phraseIndex = NonInPhrase;
 				_gameSystem.SetPlayerHandlingEnabled(true);
-				EditorExtentions.GameLogger.AddMessage("Conversation ended.");
+				_gameSystem.SetConversationUIEnabled(false);
 				return;
             }
 
             switch (CurrentPhrase.PhraseType)
             {
                 case PhraseType.Common:
-					EditorExtentions.GameLogger.AddMessage($"TODO: UI, data: {CurrentPhrase.Data}");
+					_gameSystem.ShowConversationPhrase(CurrentPhrase.Data);
 					break;
                 case PhraseType.QuestStart:
 					_gameSystem.StartQuest(CurrentPhrase.Data);

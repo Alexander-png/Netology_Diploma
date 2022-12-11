@@ -32,6 +32,9 @@ namespace Platformer3d.GameCore
 
         [SerializeField, Space(15)]
         private ConversationHandler _conversationHandler;
+
+        
+
         [SerializeField]
         private QuestHandler _questHandler;
         [SerializeField]
@@ -58,6 +61,8 @@ namespace Platformer3d.GameCore
         public event EventHandler PlayerRespawned;
         public event EventHandler<bool> PauseStateChanged;
         public event EventHandler GameLoaded;
+        public event EventHandler<bool> ConversationUIEnabledChanged;
+        public event EventHandler<string> ConversationPhraseChanged;
 
         private void Awake()
         {
@@ -93,9 +98,9 @@ namespace Platformer3d.GameCore
 
         private void OnDisable()
         {
+            StopAllCoroutines();
             _cameraAligner.ShowAreaExecuted -= OnAreaShowed;
             PauseStateChanged -= OnPauseStateChanged;
-            StopAllCoroutines();
         }
 
         public void RegisterSaveableObject(ISaveable saveableObject) =>
@@ -166,6 +171,12 @@ namespace Platformer3d.GameCore
 
         public bool CheckItemInInventory(string itemId, int count = 1) =>
             _playerCharacter.Inventory.ContainsItem(itemId, count);
+
+        public void SetConversationUIEnabled(bool value) =>
+            ConversationUIEnabledChanged?.Invoke(this, value);
+
+        public void ShowConversationPhrase(string phraseId) =>
+            ConversationPhraseChanged?.Invoke(this, phraseId);
 
         public Player GetPlayer() => _playerCharacter;
 
