@@ -13,7 +13,6 @@ using UnityEngine;
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
 // TODO: More player abilities
-// TODO: UI
 // TODO: improve player moving, there are some bugs
 // TODO: non movement skills
 // TODO: think about saving game object id's instead of names
@@ -33,7 +32,7 @@ namespace Platformer3d.GameCore
         [SerializeField, Space(15)]
         private ConversationHandler _conversationHandler;
 
-        
+
 
         [SerializeField]
         private QuestHandler _questHandler;
@@ -42,6 +41,7 @@ namespace Platformer3d.GameCore
 
         [SerializeField, Space(15)]
         private MovementSkillContainer _playerMovementSkillContainer;
+        private InteractionTrigger _currentTrigger;
 
         public bool GamePaused
         {
@@ -53,7 +53,17 @@ namespace Platformer3d.GameCore
             }
         }
 
-        public InteractionTrigger CurrentTrigger { get; private set; }
+        public InteractionTrigger CurrentTrigger
+        {
+            get => _currentTrigger;
+            private set
+            {
+                _currentTrigger = value;
+                CurrentTriggerChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public bool CanCurrentTriggerPerformed => CurrentTrigger != null && CurrentTrigger.CanPerform;
         public ConversationHandler ConversationHandler => _conversationHandler;
         public QuestHandler QuestHandler => _questHandler;
         public SaveSystem SaveSystem => _saveSystem;
@@ -63,6 +73,8 @@ namespace Platformer3d.GameCore
         public event EventHandler GameLoaded;
         public event EventHandler<bool> ConversationUIEnabledChanged;
         public event EventHandler<string> ConversationPhraseChanged;
+        public event EventHandler CurrentTriggerChanged;
+        public event EventHandler CurrentTriggerPerformed;
 
         private void Awake()
         {
@@ -148,6 +160,7 @@ namespace Platformer3d.GameCore
             else
             {
                 CurrentTrigger.Perform();
+                CurrentTriggerPerformed?.Invoke(this, EventArgs.Empty);
             }
         }
 

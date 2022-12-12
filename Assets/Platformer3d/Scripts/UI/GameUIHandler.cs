@@ -1,5 +1,6 @@
 using Platformer3d.GameCore;
 using Platformer3d.UI.MenuSystem;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -16,9 +17,11 @@ namespace Platformer3d.UI
 		[SerializeField]
 		private MenuComponent _pauseMenu;
 		[SerializeField]
-		private RectTransform _statsBar;
+		private RectTransform _healthBar;
 		[SerializeField]
 		private ConversationWidget _conversationWidget;
+		[SerializeField]
+		private RectTransform _interactionTooltip;
 
 		private bool _onConversation;
 
@@ -28,14 +31,20 @@ namespace Platformer3d.UI
 			set => _gameSystem.GamePaused = value;
 		}
 
-        private void Start() =>
+        private void Start()
+        {
 			_conversationWidget.gameObject.SetActive(_onConversation);
+			_interactionTooltip.gameObject.SetActive(_gameSystem.CurrentTrigger != null);
+			
+        }
 
         private void OnEnable() 
 		{
 			_gameSystem.PauseStateChanged += OnPauseStateChanged;
             _gameSystem.ConversationUIEnabledChanged += OnConversationUIEnabledChanged;
             _gameSystem.ConversationPhraseChanged += OnConversationPhraseChanged;
+            _gameSystem.CurrentTriggerChanged += OnCurrentInteractionTriggerChanged;
+            _gameSystem.CurrentTriggerPerformed += OnCurrentTriggerPerformed;
 		}
 
         private void OnDisable()
@@ -43,6 +52,8 @@ namespace Platformer3d.UI
 			_gameSystem.PauseStateChanged -= OnPauseStateChanged;
 			_gameSystem.ConversationUIEnabledChanged -= OnConversationUIEnabledChanged;
 			_gameSystem.ConversationPhraseChanged -= OnConversationPhraseChanged;
+			_gameSystem.CurrentTriggerChanged -= OnCurrentInteractionTriggerChanged;
+			_gameSystem.CurrentTriggerPerformed -= OnCurrentTriggerPerformed;
 		}
 
         private void OnPauseSwitch(InputValue input) =>
@@ -52,7 +63,7 @@ namespace Platformer3d.UI
         {
 			_menuBackground.gameObject.SetActive(value);
 			_pauseMenu.gameObject.SetActive(value);
-			_statsBar.gameObject.SetActive(!value);
+			_healthBar.gameObject.SetActive(!value);
 		}
 
         private void OnConversationPhraseChanged(object sender, string phraseId)
@@ -65,7 +76,14 @@ namespace Platformer3d.UI
         {
 			_onConversation = enabled;
 			_conversationWidget.gameObject.SetActive(_onConversation);
-			_statsBar.gameObject.SetActive(!_onConversation);
+			_healthBar.gameObject.SetActive(!_onConversation);
+			_interactionTooltip.gameObject.SetActive(_gameSystem.CanCurrentTriggerPerformed);
         }
+
+		private void OnCurrentInteractionTriggerChanged(object sender, EventArgs e) =>
+			_interactionTooltip.gameObject.SetActive(_gameSystem.CanCurrentTriggerPerformed);
+
+		private void OnCurrentTriggerPerformed(object sender, EventArgs e) =>
+			_interactionTooltip.gameObject.SetActive(false);
 	}
 }
