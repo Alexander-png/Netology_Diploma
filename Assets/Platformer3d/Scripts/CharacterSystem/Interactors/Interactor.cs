@@ -55,10 +55,11 @@ namespace Platformer3d.CharacterSystem.Interactors
             }
         }
 
+        // TODO: remove delay?
         private IEnumerator ShowTooltipDelay(float time)
         {
             yield return new WaitForSeconds(time);
-            EditorExtentions.GameLogger.AddMessage($"TODO: showing interaction tooltip, current interaction: {CurrentTrigger.ActionId}", EditorExtentions.GameLogger.LogType.Warning);
+            //_gameSystem.ShowInteractionTooltip();
             _canInteract = true;
         }
     }

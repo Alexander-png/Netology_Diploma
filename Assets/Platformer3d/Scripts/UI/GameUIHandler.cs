@@ -34,8 +34,7 @@ namespace Platformer3d.UI
         private void Start()
         {
 			_conversationWidget.gameObject.SetActive(_onConversation);
-			_interactionTooltip.gameObject.SetActive(_gameSystem.CurrentTrigger != null);
-			
+			_interactionTooltip.gameObject.SetActive(_gameSystem.CurrentTrigger != null);	
         }
 
         private void OnEnable() 
@@ -64,6 +63,7 @@ namespace Platformer3d.UI
 			_menuBackground.gameObject.SetActive(value);
 			_pauseMenu.gameObject.SetActive(value);
 			_healthBar.gameObject.SetActive(!value);
+			_interactionTooltip.gameObject.SetActive(!value && _gameSystem.CanCurrentTriggerPerformed);
 		}
 
         private void OnConversationPhraseChanged(object sender, string phraseId)

@@ -32,8 +32,6 @@ namespace Platformer3d.GameCore
         [SerializeField, Space(15)]
         private ConversationHandler _conversationHandler;
 
-
-
         [SerializeField]
         private QuestHandler _questHandler;
         [SerializeField]
@@ -135,6 +133,9 @@ namespace Platformer3d.GameCore
             GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
         }
 
+        public bool CheckSkillAdded(string skillId) =>
+            (_playerCharacter as ISkillObservable).SkillObserver.CheckSkillAdded(skillId);
+
         public void PerformAutoSave() =>
             _saveSystem.PerformSave();
 
@@ -162,7 +163,7 @@ namespace Platformer3d.GameCore
                 CurrentTrigger.Perform();
                 CurrentTriggerPerformed?.Invoke(this, EventArgs.Empty);
             }
-        }
+        }            
 
         public void StartQuest(string questId) =>
             _questHandler.StartQuest(CurrentTrigger.InteractionTarget as IQuestGiver, questId, _playerCharacter.Inventory.Items);
@@ -202,6 +203,8 @@ namespace Platformer3d.GameCore
             _conversationHandler = GetComponent<ConversationHandler>();
             _saveSystem = GetComponent<SaveSystem>();
         }
+
+        
 #endif
     }
 }

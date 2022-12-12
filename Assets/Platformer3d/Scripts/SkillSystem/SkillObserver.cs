@@ -59,6 +59,9 @@ namespace Platformer3d.SkillSystem
             }
         }
 
+        public bool CheckSkillAdded(string skillId) =>
+            FindSkill(skillId) != null;
+
         private void AddSkillToEntity(Skill skill)
         {
             if (skill is CharacterStatsSkill stats)
