@@ -12,6 +12,7 @@ using UnityEngine;
 
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
+
 // TODO: More player abilities
 // TODO: improve player moving, there are some bugs
 // TODO: non movement skills
@@ -39,6 +40,8 @@ namespace Platformer3d.GameCore
 
         [SerializeField, Space(15)]
         private MovementSkillContainer _playerMovementSkillContainer;
+
+        private bool _isGameCompleted;
         private InteractionTrigger _currentTrigger;
 
         public bool GamePaused
@@ -65,6 +68,7 @@ namespace Platformer3d.GameCore
         public ConversationHandler ConversationHandler => _conversationHandler;
         public QuestHandler QuestHandler => _questHandler;
         public SaveSystem SaveSystem => _saveSystem;
+        public bool IsGameCompleted => _isGameCompleted;
 
         public event EventHandler PlayerRespawned;
         public event EventHandler<bool> PauseStateChanged;
@@ -73,6 +77,8 @@ namespace Platformer3d.GameCore
         public event EventHandler<string> ConversationPhraseChanged;
         public event EventHandler CurrentTriggerChanged;
         public event EventHandler CurrentTriggerPerformed;
+        public event EventHandler GameCompleted;
+
 
         private void Awake()
         {
@@ -192,6 +198,14 @@ namespace Platformer3d.GameCore
         public void ShowConversationPhrase(string phraseId) =>
             ConversationPhraseChanged?.Invoke(this, phraseId);
 
+        public void NotifyGameCompleted()
+        {
+            _isGameCompleted = true;
+            SetPlayerHandlingEnabled(false);
+            _playerCharacter.MovementController.Velocity = Vector3.zero;
+            GameCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
         public Player GetPlayer() => _playerCharacter;
 
 #if UNITY_EDITOR
@@ -203,8 +217,6 @@ namespace Platformer3d.GameCore
             _conversationHandler = GetComponent<ConversationHandler>();
             _saveSystem = GetComponent<SaveSystem>();
         }
-
-        
 #endif
     }
 }

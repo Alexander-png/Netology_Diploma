@@ -15,13 +15,15 @@ namespace Platformer3d.UI
 		[SerializeField, Space(15f)]
 		private RectTransform _menuBackground;
 		[SerializeField]
-		private MenuComponent _pauseMenu;
-		[SerializeField]
 		private RectTransform _healthBar;
+		[SerializeField]
+		private RectTransform _interactionTooltip;
+		[SerializeField]
+		private MenuComponent _pauseMenu;
 		[SerializeField]
 		private ConversationWidget _conversationWidget;
 		[SerializeField]
-		private RectTransform _interactionTooltip;
+		private GameEndMessage _gameEndMessage;
 
 		private bool _onConversation;
 
@@ -33,8 +35,8 @@ namespace Platformer3d.UI
 
         private void Start()
         {
-			_conversationWidget.gameObject.SetActive(_onConversation);
-			_interactionTooltip.gameObject.SetActive(_gameSystem.CurrentTrigger != null);	
+			OnConversationUIEnabledChanged(null, _onConversation);
+			OnCurrentInteractionTriggerChanged(null, null);
         }
 
         private void OnEnable() 
@@ -44,6 +46,7 @@ namespace Platformer3d.UI
             _gameSystem.ConversationPhraseChanged += OnConversationPhraseChanged;
             _gameSystem.CurrentTriggerChanged += OnCurrentInteractionTriggerChanged;
             _gameSystem.CurrentTriggerPerformed += OnCurrentTriggerPerformed;
+            _gameSystem.GameCompleted += OnGameCompleted;
 		}
 
         private void OnDisable()
@@ -53,6 +56,7 @@ namespace Platformer3d.UI
 			_gameSystem.ConversationPhraseChanged -= OnConversationPhraseChanged;
 			_gameSystem.CurrentTriggerChanged -= OnCurrentInteractionTriggerChanged;
 			_gameSystem.CurrentTriggerPerformed -= OnCurrentTriggerPerformed;
+			_gameSystem.GameCompleted -= OnGameCompleted;
 		}
 
         private void OnPauseSwitch(InputValue input) =>
@@ -79,6 +83,12 @@ namespace Platformer3d.UI
 			_healthBar.gameObject.SetActive(!_onConversation);
 			_interactionTooltip.gameObject.SetActive(_gameSystem.CanCurrentTriggerPerformed);
         }
+
+		private void OnGameCompleted(object sender, EventArgs e)
+		{
+			_menuBackground.gameObject.SetActive(_gameSystem.IsGameCompleted);
+			_gameEndMessage.gameObject.SetActive(_gameSystem.IsGameCompleted);
+		}
 
 		private void OnCurrentInteractionTriggerChanged(object sender, EventArgs e) =>
 			_interactionTooltip.gameObject.SetActive(_gameSystem.CanCurrentTriggerPerformed);
