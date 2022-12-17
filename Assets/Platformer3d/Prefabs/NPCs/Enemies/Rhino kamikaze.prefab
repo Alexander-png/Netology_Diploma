@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 28018661774989455}
   - component: {fileID: 28018661774989452}
-  - component: {fileID: 8071311250126941346}
+  - component: {fileID: 4228040570645825806}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -46,7 +46,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8071311250126941346
+--- !u!114 &4228040570645825806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,10 +55,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 28018661774989454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36c2fb801696bd84184ddadd169e2256, type: 3}
+  m_Script: {fileID: 11500000, guid: 879055916b7dd9e458e9055d6cfda75d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageStats: {fileID: 11400000, guid: 800886c0fd62cd840997cfba0471fbdf, type: 2}
+  _damageStats: {fileID: 11400000, guid: 5facc10f1323e4841ac8bab0d4034ce8, type: 2}
   _owner: {fileID: 28018661801355740}
 --- !u!1 &28018661801355739
 GameObject:
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc5c9910da6e9d418edb009303ea849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultMovementStats: {fileID: 11400000, guid: 83d0a8ed49dccb347a4d2022eece3313, type: 2}
+  _defaultMovementStats: {fileID: 11400000, guid: b261a1544daa54e4ea7a8505715a5de6, type: 2}
   _body: {fileID: 28018661801355742}
 --- !u!114 &28018661801355740
 MonoBehaviour:
@@ -155,14 +155,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf95fe1ced1ae5345ad34ec13a6d5f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stats: {fileID: 11400000, guid: e5da21a953c98c647916068d1b5ffba8, type: 2}
+  _stats: {fileID: 11400000, guid: 9988ad99ca21cd34999ac77ba338c0c2, type: 2}
   _visual: {fileID: 28018662800904352}
   _movementController: {fileID: 28018661801355743}
-  _patrolArea: {fileID: 0}
   _idleTime: 3
   _attackRadius: 1.45
   _playerHeightDiffToJump: 2
   _closeToPlayerDistance: 10
+  _patrolArea: {fileID: 0}
 --- !u!1 &28018662800904355
 GameObject:
   m_ObjectHideFlags: 0

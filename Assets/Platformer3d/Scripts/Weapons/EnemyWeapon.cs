@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Platformer3d.Weapons
 {
-	public class EnemyWeapon : BasicWeapon
-    {
+	public abstract class EnemyWeapon : BasicWeapon
+	{
         protected override void OnTriggerEnter(Collider other) { }
 
         protected virtual void OnTriggerStay(Collider other)
