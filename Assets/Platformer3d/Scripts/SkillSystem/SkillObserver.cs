@@ -107,17 +107,18 @@ namespace Platformer3d.SkillSystem
             AppliedSkills = new List<Skill>(_appliedSkills)
         };
 
-        public void SetData(object data)
+        public bool SetData(object data)
         {
             Skilldata dataToSet = data as Skilldata;
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
 
             _appliedSkills.ForEach(s => RemoveSkill(s));
             _appliedSkills = new List<Skill>(_appliedSkills);
             _appliedSkills.ForEach(s => AddSkill(s));
+            return true;
         }
     }
 }

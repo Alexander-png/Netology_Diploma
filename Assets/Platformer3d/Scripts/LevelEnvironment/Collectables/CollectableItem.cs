@@ -57,16 +57,17 @@ namespace Platformer3d.LevelEnvironment.Collectables
             Collected = !gameObject.activeSelf,
         };
 
-        public void SetData(object data)
+        public bool SetData(object data)
         {
             CollectableItemData dataToSet = data as CollectableItemData;
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
 
             _itemId = dataToSet.ItemID;
             gameObject.SetActive(!dataToSet.Collected);
+            return true;
         }
     }
 }

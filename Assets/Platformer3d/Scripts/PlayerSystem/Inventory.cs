@@ -70,14 +70,15 @@ namespace Platformer3d.PlayerSystem
             Items = new List<IInventoryItem>(_items),
         };
 
-        public void SetData(object data)
+        public bool SetData(object data)
         {
             InventoryData dataToSet = data as InventoryData;
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
             _items = new List<IInventoryItem>(dataToSet.Items);
+            return true;
         }
     }
 }

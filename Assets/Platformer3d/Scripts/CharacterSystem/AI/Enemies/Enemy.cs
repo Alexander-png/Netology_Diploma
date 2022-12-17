@@ -1,42 +1,36 @@
-using Newtonsoft.Json;
-using Platformer3d.CharacterSystem.AI.Patroling;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
 using Platformer3d.Scriptable.Characters;
 using System;
-using System.Collections;
 using UnityEngine;
 using Zenject;
 
 namespace Platformer3d.CharacterSystem.AI.Enemies
 {
-	public class Enemy : MoveableCharacter, IDamagableCharacter, ISaveable
+	public abstract class Enemy : MoveableCharacter, IDamagableCharacter, ISaveable
     {
 		[Inject]
-		private GameSystem _gameSystem;
+		protected GameSystem _gameSystem;
 
         // TODO: better to move these fields to scriptable object
-        [SerializeField, Space(15)]
-        private Transform _patrolArea;
         [SerializeField]
-        private float _idleTime;
+        protected float _idleTime;
         [SerializeField]
-        private float _attackRadius;
+        protected float _attackRadius;
         [SerializeField]
-        private float _playerHeightDiffToJump;
+        protected float _playerHeightDiffToJump;
         [SerializeField]
-        private float _closeToPlayerDistance;
+        protected float _closeToPlayerDistance;
         
-        private float _currentHealth;
-        private float _maxHealth;
+        protected float _currentHealth;
+        protected float _maxHealth;
 
-        private Player _player;
-        private PatrolPoint _currentPoint;
+        protected Player _player;
 
-        private bool _behaviourEnabled;
-        private bool _inIdle;
-        private bool _attackingPlayer = false;
+        protected bool _behaviourEnabled;
+        protected bool _inIdle;
+        protected bool _attackingPlayer = false;
 
         public event EventHandler Died;
 
@@ -44,8 +38,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         {
             public bool AttackingPlayer;
             public bool InIdle;
-            [JsonIgnore]
-            public PatrolPoint CurrentPoint;
         }
 
         public float CurrentHealth => _currentHealth;
@@ -56,7 +48,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
             _player = _gameSystem.GetPlayer();
             MovementController.MovementEnabled = true;
-            FillPatrolPointList();
             SetBehaviourEnabled(true);
         }
 
@@ -66,31 +57,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             UpdateBehaviour();
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.transform.TryGetComponent(out MoveableCharacter _))
-            {
-                Vector3 newVelocity = (-MovementController.Velocity + transform.up).normalized;
-                newVelocity *= MovementController.MaxJumpForce;
-                MovementController.Velocity = newVelocity;
-            }
-        }
-
-        public bool SetBehaviourEnabled(bool value) => 
-            _behaviourEnabled = value;
-
-        private void FillPatrolPointList()
-        {
-            for (int i = 0; i < _patrolArea.childCount; i++)
-            {
-                if (_patrolArea.GetChild(i).TryGetComponent(out PatrolPoint point))
-                {
-                    _currentPoint = point;
-                    break;
-                }
-            }
-        }
-
         protected override void SetDefaultParameters(DefaultCharacterStats stats)
         {
             base.SetDefaultParameters(stats);
@@ -98,82 +64,13 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = _maxHealth;
         }
 
-        private void UpdateBehaviour()
-        {
-            if (!_behaviourEnabled)
-            {
-                MovementController.MoveInput = 0f;
-                _attackingPlayer = false;
-                return;
-            }
+        protected abstract void UpdateBehaviour();
 
-            if (!_attackingPlayer)
-            {
-                PatrolArea();
-            }
-            else
-            {
-                PursuitPlayer();
-            }
-        }
+        protected void InvokeDiedEvent() => 
+            Died?.Invoke(this, EventArgs.Empty);
 
-        private void PatrolArea()
-        {
-            if (_inIdle)
-            {
-                MovementController.MoveInput = 0f;
-                MovementController.Velocity = Vector3.zero;
-                return;
-            }
-
-            if (_currentPoint == null)
-            {
-                _currentPoint = _patrolArea.GetChild(0).GetComponent<PatrolPoint>();
-            }
-
-            var pointPos = _currentPoint.Position;
-
-            MovementController.MoveInput = pointPos.x > transform.position.x ? 1f : -1f;
-
-            if (Vector3.SqrMagnitude(transform.position - _currentPoint.Position) <= _currentPoint.ArriveRadius)
-            {
-                _currentPoint = _currentPoint.NextPoints[0];
-                StartCoroutine(IdleCoroutine(_idleTime));
-            }
-        }
-
-        private void PursuitPlayer()
-        {
-            Vector3 playerPosition = _player.transform.position;
-            Vector3 selfPosition = transform.position;
-            if (playerPosition.x > selfPosition.x)
-            {
-                MovementController.MoveInput = 1f;
-            }
-            else if (playerPosition.x < selfPosition.x)
-            {
-                MovementController.MoveInput = -1f;
-            }
-
-            bool closeToPlayer = Mathf.Abs(playerPosition.x - selfPosition.x) <= _closeToPlayerDistance;
-
-            if (closeToPlayer)
-            {
-                bool needToJump = playerPosition.y - selfPosition.y >= _playerHeightDiffToJump;
-                if (needToJump)
-                {
-                    MovementController.JumpInput = 1f;
-                }
-                else
-                {
-                    MovementController.JumpInput = 0f;
-                }
-            }
-            else
-            {
-                MovementController.JumpInput = 0f;
-            }
-        }
+        public bool SetBehaviourEnabled(bool value) =>
+            _behaviourEnabled = value;
 
         public void SetDamage(float damage, Vector3 pushVector, bool forced = false)
         {
@@ -181,9 +78,9 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
             if (_currentHealth < 0.01f)
             {
-                Died?.Invoke(this, EventArgs.Empty);
+                InvokeDiedEvent();
                 SetBehaviourEnabled(false);
-                EditorExtentions.GameLogger.AddMessage($"Enemy with name {gameObject.name} was. Killed. You can implement spawn system");
+                EditorExtentions.GameLogger.AddMessage($"Enemy with name {gameObject.name} was. Killed. You can implement respawn system");
                 gameObject.SetActive(false);
             }
         }
@@ -191,7 +88,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         public void Heal(float value) =>
             _currentHealth = Mathf.Clamp(_currentHealth + value, 0, _maxHealth);
 
-        public object GetData() => new EnemyData()
+        public virtual object GetData() => new EnemyData()
         {
             Name = gameObject.name,
             Side = Side,
@@ -204,15 +101,14 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             CurrentHealth = CurrentHealth,
             AttackingPlayer = _attackingPlayer,
             InIdle = _inIdle,
-            CurrentPoint = _currentPoint
         };
 
-        public void SetData(object data)
+        public virtual bool SetData(object data)
         {
             EnemyData dataToSet = data as EnemyData;
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
 
             Side = dataToSet.Side;
@@ -220,7 +116,8 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             _currentHealth = dataToSet.CurrentHealth;
             _attackingPlayer = dataToSet.AttackingPlayer;
             _inIdle = dataToSet.InIdle;
-            _currentPoint = dataToSet.CurrentPoint;
+            
+            return true;
         }
 
         public void OnPlayerNearby()
@@ -231,12 +128,5 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 
         public void OnPlayerRanAway() =>
             _attackingPlayer = false;
-
-        private IEnumerator IdleCoroutine(float idleTime)
-        {
-            _inIdle = true;
-            yield return new WaitForSeconds(idleTime);
-            _inIdle = false;
-        }
     }
 }

@@ -55,6 +55,6 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 
 		public abstract object GetData();
 
-		public abstract void SetData(object data);
+		public abstract bool SetData(object data);
     }
 }

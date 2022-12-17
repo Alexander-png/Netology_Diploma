@@ -66,14 +66,15 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			return true;
 		}
 
-        public virtual void SetData(object data)
+        public virtual bool SetData(object data)
         {
 			SwitcherData dataToSet = data as SwitcherData;
 			if (!ValidateData(dataToSet))
             {
-				return;
+				return false;
             }
 			Reset(dataToSet);
+			return true;
 		}
 
 		protected virtual void Reset(SwitcherData data)

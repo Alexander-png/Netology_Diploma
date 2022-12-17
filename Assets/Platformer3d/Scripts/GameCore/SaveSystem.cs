@@ -11,7 +11,7 @@ namespace Platformer3d.GameCore
     public interface ISaveable
     {
         public object GetData();
-        public void SetData(object data);
+        public bool SetData(object data);
     }
 
     public abstract class SaveData

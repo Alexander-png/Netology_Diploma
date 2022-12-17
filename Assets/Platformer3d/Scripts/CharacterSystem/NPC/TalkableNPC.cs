@@ -65,15 +65,16 @@ namespace Platformer3d.CharacterSystem.NPC
             ConversationId = _conversationId 
         };
 
-        public virtual void SetData(object data)
+        public virtual bool SetData(object data)
         {
             TalkableNPCData dataToSet = data as TalkableNPCData;
 
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
             Reset(dataToSet);
+            return true;
         }
 
         protected virtual void Reset(TalkableNPCData data)

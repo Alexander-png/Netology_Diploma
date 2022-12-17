@@ -117,17 +117,18 @@ namespace Platformer3d.PlayerSystem
             CurrentHealth = CurrentHealth
         };
 
-        public void SetData(object data)
+        public bool SetData(object data)
         {
             CharacterData dataToSet = data as CharacterData;
             if (!ValidateData(dataToSet))
             {
-                return;
+                return false;
             }
 
             Side = dataToSet.Side;
             transform.position = dataToSet.GetPositionAsVector3();
             _currentHealth = dataToSet.CurrentHealth;
+            return true;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
 	public class AgressionTrigger : MonoBehaviour
 	{
         [SerializeField]
-		private Enemy _owner;
+		private DarkBeetle _owner;
         [SerializeField]
         private BoxCollider _agressionTrigger;
 

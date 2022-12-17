@@ -49,15 +49,16 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			IsOpened = IsOpened
 		};
 
-        public override void SetData(object data)
+        public override bool SetData(object data)
 		{
 			GateData dataToSet = data as GateData;
 
 			if (!ValidateData(dataToSet))
 			{
-				return;
+				return false;
 			}
 			_animation.InitState(dataToSet.IsOpened);
+			return true;
 		}
 	}
 }
