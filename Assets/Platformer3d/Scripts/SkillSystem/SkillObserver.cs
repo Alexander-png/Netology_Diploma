@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.Movement.Base;
 using Platformer3d.GameCore;
@@ -25,15 +26,8 @@ namespace Platformer3d.SkillSystem
 
         private Skill FindSkill(string id) => _appliedSkills.Find(s => s.SkillId == id);
 
-        private class Skilldata : SaveData
-        {
-            public List<Skill> AppliedSkills;
-        }
-
-        private void Start()
-        {
+        private void Start() =>
             _gameSystem.RegisterSaveableObject(this);
-        }
 
         public void AddSkill(Skill skill)
         {
@@ -44,7 +38,6 @@ namespace Platformer3d.SkillSystem
                     return;
                 }
             }
-
             AddSkillToEntity(skill);
             _appliedSkills.Add(skill);
         }
@@ -86,14 +79,14 @@ namespace Platformer3d.SkillSystem
             }
         }
 
-        private bool ValidateData(Skilldata data)
+        private bool ValidateData(JObject data)
         {
             if (data == null)
             {
                 EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Value<string>("Name") != gameObject.name)
             {
                 EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
@@ -101,22 +94,22 @@ namespace Platformer3d.SkillSystem
             return true;
         }
 
-        public object GetData() => new Skilldata
+        public JObject GetData()
         {
-            Name = gameObject.name,
-            AppliedSkills = new List<Skill>(_appliedSkills)
-        };
+            var data = new JObject();
+            data["Name"] = gameObject.name;
+            data["AppliedSkills"] = JToken.FromObject(new List<Skill>(_appliedSkills));   
+            return data;
+        }
 
-        public bool SetData(object data)
+        public bool SetData(JObject data)
         {
-            Skilldata dataToSet = data as Skilldata;
-            if (!ValidateData(dataToSet))
+            if (!ValidateData(data))
             {
                 return false;
             }
-
             _appliedSkills.ForEach(s => RemoveSkill(s));
-            _appliedSkills = new List<Skill>(_appliedSkills);
+            _appliedSkills = new List<Skill>(data.Value<List<Skill>>("AppliedSkills"));
             _appliedSkills.ForEach(s => AddSkill(s));
             return true;
         }

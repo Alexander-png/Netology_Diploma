@@ -11,8 +11,6 @@ namespace Platformer3d.Interaction
     public abstract class InteractionTrigger : MonoBehaviour
 	{
         [SerializeField]
-        private float _interactionDelay;
-        [SerializeField]
         private bool _needStop;
 
         protected IPerformer _interactionTarget;
@@ -22,7 +20,6 @@ namespace Platformer3d.Interaction
 		public abstract void Perform();
 
         public IPerformer InteractionTarget => _interactionTarget;
-        public float InteractionDelay => _interactionDelay;
         public bool NeedStop => _needStop;
 
         protected virtual void OnTriggerEnter(Collider other)

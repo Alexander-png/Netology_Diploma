@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.EditorExtentions;
@@ -73,16 +74,16 @@ namespace Platformer3d.CharacterSystem.Base
             Position = transform.position,
         };
 
-        protected virtual bool ValidateData(CharacterData data)
+        protected virtual bool ValidateData(JObject data)
         {
             if (data == null)
             {
-                GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Value<string>("Name") != gameObject.name)
             {
-                GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Value<string>("Name")}", GameLogger.LogType.Error);
                 return false;
             }
             return true;

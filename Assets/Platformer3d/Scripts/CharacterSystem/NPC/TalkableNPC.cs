@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.NPC
 {
-	public class TalkableNPC : BaseNPC, ITalkable, IQuestGiver, IQuestTarget, ISaveable
+	public class TalkableNPC : BaseNPC, ITalkable, IQuestGiver, IQuestTarget//, ISaveable
     {
         [SerializeField]
         private string _conversationId;
@@ -20,15 +20,8 @@ namespace Platformer3d.CharacterSystem.NPC
             set => _conversationId = value;
         }
 
-        protected class TalkableNPCData : SaveData
-        {
-            public string ConversationId;
-        }
-
-        protected virtual void Start()
-        {
-            GameSystem.RegisterSaveableObject(this);
-        }
+        //protected virtual void Start() =>
+        //    GameSystem.RegisterSaveableObject(this);
 
         public void Talk()
         {

@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
+using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
 using Platformer3d.Scriptable.Characters;
@@ -33,12 +35,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         protected bool _attackingPlayer = false;
 
         public event EventHandler Died;
-
-        protected class EnemyData : CharacterData
-        {
-            public bool AttackingPlayer;
-            public bool InIdle;
-        }
 
         public float CurrentHealth => _currentHealth;
 
@@ -88,35 +84,39 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         public void Heal(float value) =>
             _currentHealth = Mathf.Clamp(_currentHealth + value, 0, _maxHealth);
 
-        public virtual object GetData() => new EnemyData()
+        public virtual JObject GetData()
         {
-            Name = gameObject.name,
-            Side = Side,
-            RawPosition = new CharacterData.Position3
-            {
-                x = transform.position.x,
-                y = transform.position.y,
-                z = transform.position.z,
-            },
-            CurrentHealth = CurrentHealth,
-            AttackingPlayer = _attackingPlayer,
-            InIdle = _inIdle,
-        };
+            var data = new JObject();
+            data["Name"] = gameObject.name;
+            data["Side"] = Convert.ToInt32(Side);
+            JObject position = new JObject();
+            position["x"] = transform.position.x;
+            position["y"] = transform.position.y;
+            position["z"] = transform.position.z;
+            data["Position"] = position;
+            data["CurrentHealth"] = CurrentHealth;
+            data["AttackingPlayer"] = _attackingPlayer;
+            data["InIdle"] = _inIdle;
+            return data;
+        }
 
-        public virtual bool SetData(object data)
+        public virtual bool SetData(JObject data)
         {
-            EnemyData dataToSet = data as EnemyData;
-            if (!ValidateData(dataToSet))
+            if (!ValidateData(data))
             {
                 return false;
             }
 
-            Side = dataToSet.Side;
-            transform.position = dataToSet.GetPositionAsVector3();
-            _currentHealth = dataToSet.CurrentHealth;
-            _attackingPlayer = dataToSet.AttackingPlayer;
-            _inIdle = dataToSet.InIdle;
-            
+            Side = (SideTypes)data.Value<byte>("Side");
+            JObject position = data.Value<JObject>("Position");
+            transform.position = new Vector3(
+                position.Value<float>("x"),
+                position.Value<float>("y"),
+                position.Value<float>("z")
+            );
+            _currentHealth = data.Value<float>("CurrentHealth");
+            _attackingPlayer = data.Value<bool>("AttackingPlayer");
+            _inIdle = data.Value<bool>("InIdle");
             return true;
         }
 

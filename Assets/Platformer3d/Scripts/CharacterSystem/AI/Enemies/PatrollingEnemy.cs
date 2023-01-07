@@ -44,24 +44,24 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             }
         }
 
-        public override object GetData()
-        {
-            PatrollingEnemyData data = new PatrollingEnemyData(base.GetData() as EnemyData)
-            {
-                CurrentPoint = _currentPoint
-            };
-            return data;
-        }
+        //public override object GetData()
+        //{
+        //    PatrollingEnemyData data = new PatrollingEnemyData(base.GetData() as EnemyData)
+        //    {
+        //        CurrentPoint = _currentPoint
+        //    };
+        //    return data;
+        //}
 
-        public override bool SetData(object data)
-        {
-            PatrollingEnemyData dataToSet = data as PatrollingEnemyData;
-            if (!base.SetData(dataToSet))
-            {
-                return false;
-            }
-            _currentPoint = dataToSet.CurrentPoint;
-            return true;
-        }
+        //public override bool SetData(object data)
+        //{
+        //    PatrollingEnemyData dataToSet = data as PatrollingEnemyData;
+        //    if (!base.SetData(dataToSet))
+        //    {
+        //        return false;
+        //    }
+        //    _currentPoint = dataToSet.CurrentPoint;
+        //    return true;
+        //}
     }
 }

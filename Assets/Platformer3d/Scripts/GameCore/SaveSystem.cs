@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Platformer3d.PlayerSystem;
 using System;
 using System.Collections;
@@ -10,13 +11,8 @@ namespace Platformer3d.GameCore
 {
     public interface ISaveable
     {
-        public object GetData();
-        public bool SetData(object data);
-    }
-
-    public abstract class SaveData
-    {
-        public string Name;
+        public JObject GetData();
+        public bool SetData(JObject data);
     }
 
     public class SaveSystem : MonoBehaviour
@@ -36,24 +32,27 @@ namespace Platformer3d.GameCore
         {
             [JsonIgnore]
             private ISaveable _saveableObject;
-
-            private object _data;
-
             [JsonIgnore]
             public ISaveable SaveableObject => _saveableObject;
-            public object Data => _data;
+
+            //private JObject _data;
+            public JObject Data;// => _data;
+
+            public SaveDataItem() { }
 
             public SaveDataItem(ISaveable saveableObject)
             {
                 _saveableObject = saveableObject;
-                _data = saveableObject.GetData();
+                Data = saveableObject.GetData();
             }
 
-            public void UpdateData() =>
-                _data = _saveableObject.GetData();
+            public void UpdateData()
+            {
+                Data = _saveableObject.GetData();
+            }
 
             public void RevertData() =>
-                _saveableObject.SetData(_data);
+                _saveableObject.SetData(Data);
 
             public bool IsTheSameObject(ISaveable obj) => obj == _saveableObject;
         }
@@ -102,6 +101,7 @@ namespace Platformer3d.GameCore
             try
             {
                 var dataList = JsonConvert.DeserializeObject<List<SaveDataItem>>(data);
+                EditorExtentions.GameLogger.AddMessage($"Game loaded successfully");
             }
             catch (Exception exc)
             {
@@ -117,7 +117,7 @@ namespace Platformer3d.GameCore
 
         private void LoadLastState()
         {
-            RevertRegisteredObjects();
+            RevertObjects();
             _player.NotifyRespawn();
             _player.gameObject.SetActive(true);
             _gameSystem.InvokePlayerRespawned();
@@ -131,10 +131,11 @@ namespace Platformer3d.GameCore
 
         public void PerformSave(bool writeSave = false)
         {
-            SaveRegisteredObjects();
+            SaveObjects();
             if (writeSave)
             {
                 WriteSaveFile();
+                EditorExtentions.GameLogger.AddMessage("Game was saved");
             }
         }
 
@@ -145,8 +146,8 @@ namespace Platformer3d.GameCore
         }
 
         public void LoadLastAutoSave() => LoadLastState();
-        private void SaveRegisteredObjects() => _saveData.ForEach(s => s.UpdateData());
-        private void RevertRegisteredObjects() => _saveData.ForEach(s => s.RevertData());
+        private void SaveObjects() => _saveData.ForEach(s => s.UpdateData());
+        private void RevertObjects() => _saveData.ForEach(s => s.RevertData());
         private bool IsObjectRegistered(ISaveable obj) => _saveData.Find(data => data.SaveableObject.Equals(obj)) != null;
 
         public void RegisterSaveableObject(ISaveable saveableObject)

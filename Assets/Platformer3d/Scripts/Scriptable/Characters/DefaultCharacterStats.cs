@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Platformer3d.Scriptable.Characters
 {
+	// TODO: split this class by character types
 	[CreateAssetMenu(fileName = "NewObj", menuName = "ScriptableObjects/Character stats")]
 	public class DefaultCharacterStats : ScriptableObject
 	{
-		// TODO: split this class by character types
 		[SerializeField]
 		private string _name;
 		[SerializeField]
