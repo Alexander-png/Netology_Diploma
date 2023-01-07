@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.LevelEnvironment.Mechanisms.Animations;
 using Platformer3d.LevelEnvironment.Switchers;
 using System;
@@ -72,7 +73,7 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			_switchAnimator.InitState(IsSwitchedOn);
         }
 
-        protected override void Reset(SwitcherData data)
+        protected override void Reset(JObject data)
         {
             base.Reset(data);
 			if (_switchAnimator != null)

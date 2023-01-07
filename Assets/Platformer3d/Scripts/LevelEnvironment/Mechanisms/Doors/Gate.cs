@@ -1,10 +1,11 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 {
-    public abstract class Gate : MonoBehaviour//, ISaveable
+    public abstract class Gate : MonoBehaviour, ISaveable
 	{
         [Inject]
 		private GameSystem _gameSystem;
@@ -20,11 +21,6 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 
 		public abstract bool IsOpened { get; set; }
 
-		protected class GateData : SaveData
-		{
-			public bool IsOpened;
-		}
-
 		protected virtual void OnDrawGizmos()
         {
 			if (CameraFocusPoint == null)
@@ -38,23 +34,22 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			Gizmos.DrawSphere(CameraFocusPoint.position, 1f);
 		}
 
-		protected virtual bool ValidateData(GateData data)
+		protected virtual bool ValidateData(JObject data)
 		{
 			if (data == null)
 			{
 				EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
 				return false;
 			}
-			if (data.Name != gameObject.name)
+			if (data.Value<string>("Name") != gameObject.name)
 			{
-				EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+				EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Value<string>("Name")}", EditorExtentions.GameLogger.LogType.Error);
 				return false;
 			}
 			return true;
 		}
 
-		public abstract object GetData();
-
-		public abstract bool SetData(object data);
+		public abstract JObject GetData();
+		public abstract bool SetData(JObject data);
     }
 }

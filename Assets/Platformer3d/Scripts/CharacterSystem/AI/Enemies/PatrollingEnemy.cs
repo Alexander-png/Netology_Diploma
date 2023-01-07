@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.AI.Patroling;
 using UnityEngine;
 
@@ -9,22 +10,6 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         [SerializeField, Space(15)]
         protected Transform _patrolArea;
         protected PatrolPoint _currentPoint;
-
-        protected class PatrollingEnemyData : EnemyData
-        {
-            [JsonIgnore]
-            public PatrolPoint CurrentPoint;
-
-            public PatrollingEnemyData(EnemyData enemyData)
-            {
-                Name = enemyData.Name;
-                Side = enemyData.Side;
-                RawPosition = enemyData.RawPosition;
-                CurrentHealth = enemyData.CurrentHealth;
-                AttackingPlayer = enemyData.AttackingPlayer;
-                InIdle = enemyData.InIdle;
-            }
-        }
 
         protected override void Start()
         {
@@ -42,6 +27,23 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
                     break;
                 }
             }
+        }
+
+        public override JObject GetData()
+        {
+            JObject data = base.GetData();
+            //data
+            return data;
+        }
+
+        public override bool SetData(JObject data)
+        {
+            if (!base.SetData(data))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         //public override object GetData()

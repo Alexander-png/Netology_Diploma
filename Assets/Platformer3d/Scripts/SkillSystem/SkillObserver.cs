@@ -88,7 +88,7 @@ namespace Platformer3d.SkillSystem
             }
             if (data.Value<string>("Name") != gameObject.name)
             {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Value<string>("Name")}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
             return true;

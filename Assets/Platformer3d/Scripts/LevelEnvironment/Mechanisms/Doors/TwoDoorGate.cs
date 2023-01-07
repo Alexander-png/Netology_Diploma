@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.LevelEnvironment.Mechanisms.Animations;
 using Platformer3d.LevelEnvironment.Switchers;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 
         private void Start()
         {
-			//GameSystem.RegisterSaveableObject(this);
+			GameSystem.RegisterSaveableObject(this);
 
 			if (_animation == null)
 			{
@@ -43,21 +44,21 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			_animation.InitState(_openedByDefault);
 		}
 
-		public override object GetData() => new GateData()
+		public override JObject GetData()
 		{
-			Name = gameObject.name,
-			IsOpened = IsOpened
-		};
+			var data = new JObject();
+			data["Name"] = gameObject.name;
+			data["IsOpened"] = IsOpened;
+			return data;
+		}
 
-        public override bool SetData(object data)
+		public override bool SetData(JObject data)
 		{
-			GateData dataToSet = data as GateData;
-
-			if (!ValidateData(dataToSet))
+			if (!ValidateData(data))
 			{
 				return false;
 			}
-			_animation.InitState(dataToSet.IsOpened);
+			_animation.InitState(data.Value<bool>("IsOpened"));
 			return true;
 		}
 	}

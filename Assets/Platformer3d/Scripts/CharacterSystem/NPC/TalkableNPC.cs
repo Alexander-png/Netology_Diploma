@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Linq;
+using Platformer3d.EditorExtentions;
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
 using Platformer3d.QuestSystem;
@@ -5,7 +7,7 @@ using UnityEngine;
 
 namespace Platformer3d.CharacterSystem.NPC
 {
-	public class TalkableNPC : BaseNPC, ITalkable, IQuestGiver, IQuestTarget//, ISaveable
+	public class TalkableNPC : BaseNPC, ITalkable, IQuestGiver, IQuestTarget, ISaveable
     {
         [SerializeField]
         private string _conversationId;
@@ -20,8 +22,8 @@ namespace Platformer3d.CharacterSystem.NPC
             set => _conversationId = value;
         }
 
-        //protected virtual void Start() =>
-        //    GameSystem.RegisterSaveableObject(this);
+        protected virtual void Start() =>
+            GameSystem.RegisterSaveableObject(this);
 
         public void Talk()
         {
@@ -37,42 +39,42 @@ namespace Platformer3d.CharacterSystem.NPC
             }
         }
 
-        protected virtual bool ValidateData(TalkableNPCData data)
+        protected virtual bool ValidateData(JObject data)
         {
             if (data == null)
             {
-                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Value<string>("Name") != gameObject.name)
             {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Value<string>("Name")}", GameLogger.LogType.Error);
                 return false;
             }
             return true;
         }
 
-        public virtual object GetData() => new TalkableNPCData() 
+        public virtual JObject GetData()
         {
-            Name = gameObject.name, 
-            ConversationId = _conversationId 
-        };
+            var data = new JObject();
+            data["Name"] = gameObject.name;
+            data["ConversationId"] = ConversationId;
+            return data;
+        }
 
-        public virtual bool SetData(object data)
+        public virtual bool SetData(JObject data)
         {
-            TalkableNPCData dataToSet = data as TalkableNPCData;
-
-            if (!ValidateData(dataToSet))
+            if (!ValidateData(data))
             {
                 return false;
             }
-            Reset(dataToSet);
+            Reset(data);
             return true;
         }
 
-        protected virtual void Reset(TalkableNPCData data)
+        protected virtual void Reset(JObject data)
         {
-            _conversationId = data.ConversationId;
+            _conversationId = data.Value<string>("ConversationId");
         }
     }
 }

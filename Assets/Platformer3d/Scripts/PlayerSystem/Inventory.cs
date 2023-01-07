@@ -45,16 +45,16 @@ namespace Platformer3d.PlayerSystem
         public bool ContainsItem(string itemId, int count) => 
             _items.FindAll(i => i.ItemId == itemId).Count >= count;
 
-        private bool ValidateData(InventoryData data)
+        private bool ValidateData(JObject data)
         {
             if (data == null)
             {
                 EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Value<string>("Name") != gameObject.name)
             {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Value<string>("Name")}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
             return true;
@@ -64,7 +64,7 @@ namespace Platformer3d.PlayerSystem
         {
             var data = new JObject();
             data["Name"] = gameObject.name;
-            data["Items"] = JToken.FromObject(new List<IInventoryItem>(_items));
+            data["Items"] = JToken.FromObject(Items);
             return data;
         }
 
@@ -74,27 +74,8 @@ namespace Platformer3d.PlayerSystem
             {
                 return false;
             }
-            _appliedSkills.ForEach(s => RemoveSkill(s));
-            _appliedSkills = new List<Skill>(data.Value<List<Skill>>("AppliedSkills"));
-            _appliedSkills.ForEach(s => AddSkill(s));
+            _items = new List<IInventoryItem>(data.Value<List<IInventoryItem>>("Items"));
             return true;
         }
-
-        //public object GetData() => new InventoryData()
-        //{
-        //    Name = gameObject.name,
-        //    Items = new List<IInventoryItem>(_items),
-        //};
-
-        //public bool SetData(object data)
-        //{
-        //    InventoryData dataToSet = data as InventoryData;
-        //    if (!ValidateData(dataToSet))
-        //    {
-        //        return false;
-        //    }
-        //    _items = new List<IInventoryItem>(dataToSet.Items);
-        //    return true;
-        //}
     }
 }
