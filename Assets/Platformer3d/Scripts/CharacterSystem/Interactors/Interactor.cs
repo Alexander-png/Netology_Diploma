@@ -1,6 +1,7 @@
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
 using Platformer3d.PlayerSystem;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -26,7 +27,17 @@ namespace Platformer3d.CharacterSystem.Interactors
             set
             {
                 _gameSystem.SetCurrentTrigger(value);
-                _canInteract = _gameSystem.CanCurrentTriggerPerformed;
+                if (value != null && value.CanPerform)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(ShowTooltipDelay(value.InteractionDelay));
+                }
+
+                if (value == null)
+                {
+                    _canInteract = false;
+                    StopAllCoroutines();
+                }
             }
         }
 
@@ -42,6 +53,14 @@ namespace Platformer3d.CharacterSystem.Interactors
                 }
                 _gameSystem.PerformTrigger();
             }
+        }
+
+        // TODO: remove delay?
+        private IEnumerator ShowTooltipDelay(float time)
+        {
+            yield return new WaitForSeconds(time);
+            //_gameSystem.ShowInteractionTooltip();
+            _canInteract = true;
         }
     }
 }

@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
 using Platformer3d.QuestSystem;
@@ -18,6 +17,12 @@ namespace Platformer3d.LevelEnvironment.Collectables
         public string QuestTargetId => _itemId;
         public string ItemId => _itemId;
 
+        private class CollectableItemData : SaveData
+        {
+            public string ItemID;
+            public bool Collected;
+        }
+
         private void Start() =>
             _gameSystem.RegisterSaveableObject(this);
 
@@ -30,14 +35,14 @@ namespace Platformer3d.LevelEnvironment.Collectables
             }
         }
 
-        private bool ValidateData(JObject data)
+        private bool ValidateData(CollectableItemData data)
         {
             if (data == null)
             {
                 EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Value<string>("Name") != gameObject.name)
+            if (data.Name != gameObject.name)
             {
                 EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
@@ -45,23 +50,23 @@ namespace Platformer3d.LevelEnvironment.Collectables
             return true;
         }
 
-        public JObject GetData()
+        public object GetData() => new CollectableItemData()
         {
-            var data = new JObject();
-            data["Name"] = gameObject.name;
-            data["ItemId"] = _itemId;
-            data["Collected"] = !gameObject.activeSelf;
-            return data;
-        }
+            Name = gameObject.name,
+            ItemID = _itemId,
+            Collected = !gameObject.activeSelf,
+        };
 
-        public bool SetData(JObject data)
+        public bool SetData(object data)
         {
-            if (!ValidateData(data))
+            CollectableItemData dataToSet = data as CollectableItemData;
+            if (!ValidateData(dataToSet))
             {
                 return false;
             }
-            _itemId = data.Value<string>("ItemId");
-            gameObject.SetActive(!data.Value<bool>("Collected"));
+
+            _itemId = dataToSet.ItemID;
+            gameObject.SetActive(!dataToSet.Collected);
             return true;
         }
     }

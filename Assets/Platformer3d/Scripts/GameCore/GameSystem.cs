@@ -10,12 +10,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+// TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
+
+// TODO: More player abilities
+// TODO: improve player moving, there are some bugs
 // TODO: non movement skills
 // TODO: think about saving game object id's instead of names
-// TODO: rework level layout
-// TODO: improve player moving, there are some bugs
-// TODO: think about making interactable triggers one off instead of levers
 
 namespace Platformer3d.GameCore
 {

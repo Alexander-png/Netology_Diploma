@@ -5,7 +5,6 @@ using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Triggers
 {
-    [RequireComponent(typeof(BoxCollider))]
 	public class CheckPoint : MonoBehaviour
 	{
         [Inject]
@@ -18,15 +17,11 @@ namespace Platformer3d.LevelEnvironment.Triggers
                 _gameSystem.PerformAutoSave();
             }
         }
-
-#if UNITY_EDITOR
+    
         private void OnDrawGizmos()
         {
-            BoxCollider boxCollider = GetComponent<BoxCollider>();
-
             Gizmos.color = new Color(0f, 0f, 1f, 0.6f);
-            Gizmos.DrawCube(transform.position, boxCollider.size);
+            Gizmos.DrawCube(transform.position, new Vector3(1, 2, 1));
         }
-#endif
     }
 }

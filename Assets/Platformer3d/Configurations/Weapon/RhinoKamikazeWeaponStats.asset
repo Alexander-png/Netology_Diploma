@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RhinoKamikazeWeaponStats
   m_EditorClassIdentifier: 
   _damage: 3
-  _pushForce: 12
+  _pushForce: 15
   _isFatalDamage: 0

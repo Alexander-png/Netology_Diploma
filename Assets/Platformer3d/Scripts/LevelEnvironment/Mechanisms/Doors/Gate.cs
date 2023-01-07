@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 {
-    public abstract class Gate : MonoBehaviour//, ISaveable
+    public abstract class Gate : MonoBehaviour, ISaveable
 	{
         [Inject]
 		private GameSystem _gameSystem;

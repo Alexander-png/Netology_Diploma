@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 {
-    public abstract class Switcher : MonoBehaviour, ISwitcher//, ISaveable
+    public abstract class Switcher : MonoBehaviour, ISwitcher, ISaveable
 	{
 		[Inject]
 		private GameSystem _gameSystem;
@@ -39,7 +39,7 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 
 		protected virtual void Start()
         {
-			//GameSystem.RegisterSaveableObject(this);
+			GameSystem.RegisterSaveableObject(this);
 		}
 
 		public virtual object GetData() => new SwitcherData()

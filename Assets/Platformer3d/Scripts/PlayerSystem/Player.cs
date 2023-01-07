@@ -1,7 +1,5 @@
-using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
-using Platformer3d.CharacterSystem.Enums;
 using Platformer3d.GameCore;
 using Platformer3d.Scriptable.Characters;
 using Platformer3d.SkillSystem;
@@ -34,8 +32,10 @@ namespace Platformer3d.PlayerSystem
 
         public event EventHandler Died;
 
-        protected override void Start() =>
+        protected override void Start()
+        {
             _gameSystem.RegisterSaveableObject(this);
+        }
 
         protected override void OnEnable()
         {
@@ -104,35 +104,30 @@ namespace Platformer3d.PlayerSystem
             _damageImmune = false;
         }
 
-        public JObject GetData()
+        public object GetData() => new CharacterData()
         {
-            var data = new JObject();
-            data["Name"] = gameObject.name;
-            data["Side"] = Convert.ToInt32(Side);
-            JObject position = new JObject();
-            position["x"] = transform.position.x;
-            position["y"] = transform.position.y;
-            position["z"] = transform.position.z;
-            data["Position"] = position;
-            data["CurrentHealth"] = CurrentHealth;
-            return data;
-        }
+            Name = gameObject.name,
+            Side = Side,
+            RawPosition = new CharacterData.Position3
+            {
+                x = transform.position.x,
+                y = transform.position.y,
+                z = transform.position.z,
+            },
+            CurrentHealth = CurrentHealth
+        };
 
-        public bool SetData(JObject data)
+        public bool SetData(object data)
         {
-            if (!ValidateData(data))
+            CharacterData dataToSet = data as CharacterData;
+            if (!ValidateData(dataToSet))
             {
                 return false;
             }
 
-            Side = (SideTypes)data.Value<byte>("Side");
-            JObject position = data.Value<JObject>("Position");
-            transform.position = new Vector3(
-                position.Value<float>("x"),
-                position.Value<float>("y"),
-                position.Value<float>("z")
-            );
-            _currentHealth = data.Value<float>("CurrentHealth");
+            Side = dataToSet.Side;
+            transform.position = dataToSet.GetPositionAsVector3();
+            _currentHealth = dataToSet.CurrentHealth;
             return true;
         }
     }

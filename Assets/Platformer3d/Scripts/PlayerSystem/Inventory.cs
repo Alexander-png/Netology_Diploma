@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +18,11 @@ namespace Platformer3d.PlayerSystem
         private List<IInventoryItem> _items;
 
         public IEnumerable<IInventoryItem> Items => new List<IInventoryItem>(_items);
+
+        private class InventoryData : SaveData
+        {
+            public List<IInventoryItem> Items;
+        }
 
         private void Awake() =>
             _items = new List<IInventoryItem>();
@@ -60,41 +64,21 @@ namespace Platformer3d.PlayerSystem
             return true;
         }
 
-        public JObject GetData()
+        public object GetData() => new InventoryData()
         {
-            var data = new JObject();
-            data["Name"] = gameObject.name;
-            data["Items"] = JToken.FromObject(new List<IInventoryItem>(_items));
-            return data;
-        }
+            Name = gameObject.name,
+            Items = new List<IInventoryItem>(_items),
+        };
 
-        public bool SetData(JObject data)
+        public bool SetData(object data)
         {
-            if (!ValidateData(data))
+            InventoryData dataToSet = data as InventoryData;
+            if (!ValidateData(dataToSet))
             {
                 return false;
             }
-            _appliedSkills.ForEach(s => RemoveSkill(s));
-            _appliedSkills = new List<Skill>(data.Value<List<Skill>>("AppliedSkills"));
-            _appliedSkills.ForEach(s => AddSkill(s));
+            _items = new List<IInventoryItem>(dataToSet.Items);
             return true;
         }
-
-        //public object GetData() => new InventoryData()
-        //{
-        //    Name = gameObject.name,
-        //    Items = new List<IInventoryItem>(_items),
-        //};
-
-        //public bool SetData(object data)
-        //{
-        //    InventoryData dataToSet = data as InventoryData;
-        //    if (!ValidateData(dataToSet))
-        //    {
-        //        return false;
-        //    }
-        //    _items = new List<IInventoryItem>(dataToSet.Items);
-        //    return true;
-        //}
     }
 }

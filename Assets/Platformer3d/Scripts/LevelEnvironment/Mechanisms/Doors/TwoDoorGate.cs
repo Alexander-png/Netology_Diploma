@@ -33,7 +33,7 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 
         private void Start()
         {
-			//GameSystem.RegisterSaveableObject(this);
+			GameSystem.RegisterSaveableObject(this);
 
 			if (_animation == null)
 			{

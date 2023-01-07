@@ -59,12 +59,10 @@ namespace Platformer3d.UI
 			_gameSystem.GameCompleted -= OnGameCompleted;
 		}
 
-        #region Input handlers
         private void OnPauseSwitch(InputValue input) =>
 			GamePaused = !GamePaused;
-        #endregion
 
-        private void OnPauseStateChanged(object sender, bool value)
+		private void OnPauseStateChanged(object sender, bool value)
         {
 			_menuBackground.gameObject.SetActive(value);
 			_pauseMenu.gameObject.SetActive(value);
