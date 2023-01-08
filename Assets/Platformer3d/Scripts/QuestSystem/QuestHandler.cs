@@ -19,14 +19,14 @@ namespace Platformer3d.QuestSystem
             _currentQuests = new List<ItemQuest>();
         }
 
-        public void StartQuest(IQuestGiver questGiver, string questId, IEnumerable<IInventoryItem> itemsInInventory)
+        public void StartQuest(IQuestGiver questGiver, string questId, IEnumerable<string> itemsInInventory)
         {
             EditorExtentions.GameLogger.AddMessage($"TODO: quest start, data: {questId}");
             var newQuest = _questContainer.BuildQuest(questGiver, questId);
             _currentQuests.Add(newQuest);
             foreach (var item in itemsInInventory)
             {
-                newQuest.OnItemAdded(item.ItemId);
+                newQuest.OnItemAdded(item);
             }
         }
 

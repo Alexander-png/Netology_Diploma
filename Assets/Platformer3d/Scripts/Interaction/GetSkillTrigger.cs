@@ -18,7 +18,7 @@ namespace Platformer3d.Interaction
         public override bool CanPerform => !_gameSystem.CheckSkillAdded(_skillId);
 
         public override void Perform() =>
-            _gameSystem.GiveSkillToPlayer(_skillId);
+            _gameSystem.AddSkillToPlayer(_skillId);
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()

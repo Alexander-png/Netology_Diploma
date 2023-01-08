@@ -1,8 +1,10 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.Movement.Base;
 using Platformer3d.GameCore;
 using Platformer3d.SkillSystem.Skills;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +12,8 @@ namespace Platformer3d.SkillSystem
 {
 	public class SkillObserver : MonoBehaviour, ISaveable
 	{
+        private const string SaveableEntityId = "player_Skills";
+
         [Inject]
         private GameSystem _gameSystem;
 
@@ -27,7 +31,7 @@ namespace Platformer3d.SkillSystem
 
         private class Skilldata : SaveData
         {
-            public List<Skill> AppliedSkills;
+            public List<string> AppliedSkillIds;
         }
 
         private void Start()
@@ -35,8 +39,9 @@ namespace Platformer3d.SkillSystem
             _gameSystem.RegisterSaveableObject(this);
         }
 
-        public void AddSkill(Skill skill)
+        public void AddSkill(string skillId)
         {
+            var skill = _gameSystem.PlayerMovementSkillContainer.CreateSkill(skillId);
             if (_distinctSkillsOnly)
             {
                 if (FindSkill(skill.SkillId) != null)
@@ -44,7 +49,6 @@ namespace Platformer3d.SkillSystem
                     return;
                 }
             }
-
             AddSkillToEntity(skill);
             _appliedSkills.Add(skill);
         }
@@ -90,12 +94,12 @@ namespace Platformer3d.SkillSystem
         {
             if (data == null)
             {
-                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {SaveableEntityId}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Name != SaveableEntityId)
             {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {SaveableEntityId}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
             return true;
@@ -103,8 +107,8 @@ namespace Platformer3d.SkillSystem
 
         public object GetData() => new Skilldata
         {
-            Name = gameObject.name,
-            AppliedSkills = new List<Skill>(_appliedSkills)
+            Name = SaveableEntityId,
+            AppliedSkillIds = new List<string>(_appliedSkills.Select(s => s.SkillId).ToList()),
         };
 
         public bool SetData(object data)
@@ -116,9 +120,12 @@ namespace Platformer3d.SkillSystem
             }
 
             _appliedSkills.ForEach(s => RemoveSkill(s));
-            _appliedSkills = new List<Skill>(_appliedSkills);
-            _appliedSkills.ForEach(s => AddSkill(s));
+            _appliedSkills = new List<Skill>();
+            dataToSet.AppliedSkillIds.ForEach(skillId => AddSkill(skillId));
             return true;
         }
+
+        public bool SetData(JObject data) => 
+            SetData(data.ToObject<Skilldata>());
     }
 }

@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.AI.Patroling;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
         {
             [JsonIgnore]
             public PatrolPoint CurrentPoint;
+
+            public PatrollingEnemyData() { }
 
             public PatrollingEnemyData(EnemyData enemyData)
             {
@@ -60,8 +63,14 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             {
                 return false;
             }
-            _currentPoint = dataToSet.CurrentPoint;
+            if (dataToSet.CurrentPoint != null)
+            {
+                _currentPoint = dataToSet.CurrentPoint;
+            }
             return true;
         }
+
+        public override bool SetData(JObject data) => 
+            SetData(data.ToObject<PatrollingEnemyData>());
     }
 }

@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
 using Platformer3d.QuestSystem;
@@ -6,13 +7,13 @@ using Zenject;
 
 namespace Platformer3d.LevelEnvironment.Collectables
 {
-	public class CollectableItem : MonoBehaviour, IInventoryItem, IQuestTarget, ISaveable
+    public class CollectableItem : MonoBehaviour, IInventoryItem, IQuestTarget, ISaveable
     {
-		[Inject]
-		private GameSystem _gameSystem;
+        [Inject]
+        private GameSystem _gameSystem;
 
-		[SerializeField]
-		private string _itemId;
+        [SerializeField]
+        private string _itemId;
 
         public string QuestTargetId => _itemId;
         public string ItemId => _itemId;
@@ -69,5 +70,8 @@ namespace Platformer3d.LevelEnvironment.Collectables
             gameObject.SetActive(!dataToSet.Collected);
             return true;
         }
+
+        public bool SetData(JObject data) => 
+            SetData(data.ToObject<CollectableItemData>());
     }
 }

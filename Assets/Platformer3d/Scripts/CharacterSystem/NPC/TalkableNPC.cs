@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
 using Platformer3d.QuestSystem;
@@ -76,6 +77,9 @@ namespace Platformer3d.CharacterSystem.NPC
             Reset(dataToSet);
             return true;
         }
+
+        public virtual bool SetData(JObject data) => 
+            SetData(data.ToObject<TalkableNPCData>());
 
         protected virtual void Reset(TalkableNPCData data)
         {

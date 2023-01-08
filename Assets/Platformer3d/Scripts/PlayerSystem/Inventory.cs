@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,33 +13,32 @@ namespace Platformer3d.PlayerSystem
 
     public class Inventory : MonoBehaviour, ISaveable
     {
+        private const string SaveableEntityId = "player_Inventory";
+
         [Inject]
         private GameSystem _gameSystem;
 
-        private List<IInventoryItem> _items;
+        private List<string> _items;
 
-        public IEnumerable<IInventoryItem> Items => new List<IInventoryItem>(_items);
+        public IEnumerable<string> Items => new List<string>(_items);
 
         private class InventoryData : SaveData
         {
-            public List<IInventoryItem> Items;
+            public List<string> Items;
         }
 
         private void Awake() =>
-            _items = new List<IInventoryItem>();
+            _items = new List<string>();
 
         private void Start() =>
             _gameSystem.RegisterSaveableObject(this);
 
-        public void AddItem(IInventoryItem toAdd) =>
-            _items.Add(toAdd);
-
-        public bool RemoveItem(IInventoryItem toRemove, int count = 1) =>
-            RemoveItem(toRemove.ItemId, count);
+        public void AddItem(string itemId) =>
+            _items.Add(itemId);
 
         public bool RemoveItem(string itemToRemoveId, int count = 1)
         {
-            List<IInventoryItem> itemsToRemove = _items.FindAll(i => i.ItemId == itemToRemoveId);
+            List<string> itemsToRemove = _items.FindAll(i => i == itemToRemoveId);
             for (int i = 0; i < count; i++)
             {
                 _items.Remove(itemsToRemove[i]);
@@ -47,18 +47,18 @@ namespace Platformer3d.PlayerSystem
         }
 
         public bool ContainsItem(string itemId, int count) => 
-            _items.FindAll(i => i.ItemId == itemId).Count >= count;
+            _items.FindAll(i => i == itemId).Count >= count;
 
         private bool ValidateData(InventoryData data)
         {
             if (data == null)
             {
-                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {gameObject.name}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Failed to cast data. Instance name: {SaveableEntityId}, data type: {data}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
-            if (data.Name != gameObject.name)
+            if (data.Name != SaveableEntityId)
             {
-                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {gameObject.name}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
+                EditorExtentions.GameLogger.AddMessage($"Attempted to set data from another game object. Instance name: {SaveableEntityId}, data name: {data.Name}", EditorExtentions.GameLogger.LogType.Error);
                 return false;
             }
             return true;
@@ -66,8 +66,8 @@ namespace Platformer3d.PlayerSystem
 
         public object GetData() => new InventoryData()
         {
-            Name = gameObject.name,
-            Items = new List<IInventoryItem>(_items),
+            Name = SaveableEntityId,
+            Items = new List<string>(_items),
         };
 
         public bool SetData(object data)
@@ -77,8 +77,11 @@ namespace Platformer3d.PlayerSystem
             {
                 return false;
             }
-            _items = new List<IInventoryItem>(dataToSet.Items);
+            _items = new List<string>(dataToSet.Items);
             return true;
         }
+
+        public bool SetData(JObject data) => 
+            SetData(data.ToObject<InventoryData>());
     }
 }

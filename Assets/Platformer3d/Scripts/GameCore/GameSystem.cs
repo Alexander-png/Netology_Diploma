@@ -12,11 +12,11 @@ using UnityEngine;
 
 // TODO: 2-3 kinds of enemies
 // TODO: find assets for all objects
-
 // TODO: More player abilities
 // TODO: improve player moving, there are some bugs
 // TODO: non movement skills
 // TODO: think about saving game object id's instead of names
+// TODO: save quest state
 
 namespace Platformer3d.GameCore
 {
@@ -63,6 +63,8 @@ namespace Platformer3d.GameCore
                 CurrentTriggerChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        public MovementSkillContainer PlayerMovementSkillContainer => _playerMovementSkillContainer;
 
         public bool CanCurrentTriggerPerformed => CurrentTrigger != null && CurrentTrigger.CanPerform;
         public ConversationHandler ConversationHandler => _conversationHandler;
@@ -133,10 +135,10 @@ namespace Platformer3d.GameCore
 
         public void SetPlayerHandlingEnabled(bool value) => _playerCharacter.HandlingEnabled = value;
 
-        public void GiveSkillToPlayer(string abilityId)
+        public void AddSkillToPlayer(string skillId)
         {
-            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(_playerMovementSkillContainer.CreateSkill(abilityId));
-            GameLogger.AddMessage($"Given ability with id {abilityId} to player.");
+            (_playerCharacter as ISkillObservable).SkillObserver.AddSkill(skillId);
+            GameLogger.AddMessage($"Given skill with id {skillId} to player.");
         }
 
         public bool CheckSkillAdded(string skillId) =>
@@ -180,11 +182,11 @@ namespace Platformer3d.GameCore
         public void OnCollectalbeCollected(IInventoryItem item)
         {
             _questHandler.OnItemAdded(item as IQuestTarget);
-            _playerCharacter.Inventory.AddItem(item);
+            _playerCharacter.Inventory.AddItem(item.ItemId);
         }
 
         public void AddItemToPlayer(IInventoryItem item) =>
-            _playerCharacter.Inventory.AddItem(item);
+            _playerCharacter.Inventory.AddItem(item.ItemId);
 
         public void RemoveItemFromPlayer(string itemId, int count = 1) =>
             _playerCharacter.Inventory.RemoveItem(itemId, count);

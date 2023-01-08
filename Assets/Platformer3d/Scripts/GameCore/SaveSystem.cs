@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Platformer3d.PlayerSystem;
 using System;
 using System.Collections;
@@ -12,6 +13,7 @@ namespace Platformer3d.GameCore
     {
         public object GetData();
         public bool SetData(object data);
+        public bool SetData(JObject data);
     }
 
     public abstract class SaveData
@@ -37,23 +39,35 @@ namespace Platformer3d.GameCore
             [JsonIgnore]
             private ISaveable _saveableObject;
 
-            private object _data;
-
             [JsonIgnore]
             public ISaveable SaveableObject => _saveableObject;
-            public object Data => _data;
+
+            public object Data;
+
+            public SaveDataItem() { }
 
             public SaveDataItem(ISaveable saveableObject)
             {
                 _saveableObject = saveableObject;
-                _data = saveableObject.GetData();
+                Data = saveableObject.GetData();
+            }
+
+            public bool SetData(JObject data)
+            {
+                bool res = _saveableObject.SetData(data);
+                if (res)
+                {
+                    UpdateData();
+                }
+                return res;
             }
 
             public void UpdateData() =>
-                _data = _saveableObject.GetData();
+                Data = _saveableObject.GetData();
 
             public void RevertData() =>
-                _saveableObject.SetData(_data);
+                _saveableObject.SetData(Data);
+
 
             public bool IsTheSameObject(ISaveable obj) => obj == _saveableObject;
         }
@@ -94,18 +108,36 @@ namespace Platformer3d.GameCore
 
         private void LoadSavedData()
         {
-            string data = PlayerPrefs.GetString(SaveFileName, string.Empty);
-            if (data == string.Empty)
+            string dataSource = PlayerPrefs.GetString(SaveFileName, string.Empty);
+            if (dataSource == string.Empty)
             {
                 return;
             }
             try
             {
-                var dataList = JsonConvert.DeserializeObject<List<SaveDataItem>>(data);
+                var loadedData = JsonConvert.DeserializeObject<List<SaveDataItem>>(dataSource);
+
+                foreach (var saveItem in _saveData)
+                {
+                    var item = saveItem.Data as SaveData;
+                    if (item == null)
+                    {
+                        EditorExtentions.GameLogger.AddMessage($"Got wrong save data format on loading save file.", EditorExtentions.GameLogger.LogType.Error);
+                        continue;
+                    }
+                    foreach (var loadedItem in loadedData)
+                    {
+                        var data = loadedItem.Data as JObject;
+                        if (item.Name == data.Value<string>("Name"))
+                        {
+                            saveItem.SetData(data);
+                        }
+                    }
+                }
             }
             catch (Exception exc)
             {
-                EditorExtentions.GameLogger.AddMessage($"TODO: fix problem with savefile load. Error: {exc.Message}");
+                EditorExtentions.GameLogger.AddMessage($"Error during loading save file. Message: {exc.Message}", EditorExtentions.GameLogger.LogType.Error);
             }
         }
 

@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.LevelEnvironment.Mechanisms.Animations;
 using Platformer3d.LevelEnvironment.Switchers;
 using UnityEngine;
@@ -60,5 +61,8 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 			_animation.InitState(dataToSet.IsOpened);
 			return true;
 		}
-	}
+
+		public override bool SetData(JObject data) => 
+			SetData(data.ToObject<GateData>());
+    }
 }

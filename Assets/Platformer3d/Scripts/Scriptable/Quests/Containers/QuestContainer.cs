@@ -27,7 +27,7 @@ namespace Platformer3d.Scriptable.Quests.Containers
 				additionalData[i] = splittedData[i + 1].Value;
             }
 
-			toReturn.QuestID = splittedData[0].Value;
+			toReturn.QuestID = questData;// splittedData[0].Value;
 			toReturn.FillQuestSteps(FindQuest(splittedData[0].Value).QuestSteps, additionalData);
 			return toReturn;
 		}

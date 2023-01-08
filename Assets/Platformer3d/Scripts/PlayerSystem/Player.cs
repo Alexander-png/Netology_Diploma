@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.CharacterSystem.DataContainers;
 using Platformer3d.GameCore;
@@ -130,5 +131,8 @@ namespace Platformer3d.PlayerSystem
             _currentHealth = dataToSet.CurrentHealth;
             return true;
         }
+
+        public bool SetData(JObject data) => 
+            SetData(data.ToObject<CharacterData>());
     }
 }

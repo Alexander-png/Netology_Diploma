@@ -4,6 +4,7 @@ using Platformer3d.Scriptable.Conversations.Configurations.Phrases;
 using Platformer3d.Scriptable.Conversations.Containers;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +12,7 @@ namespace Platformer3d.ConversationSystem
 {
 	public class ConversationHandler : MonoBehaviour
 	{
-		private const int NonInPhrase = -1;
+		private const int NotInPhrase = -1;
 
 		[Inject]
 		private GameSystem _gameSystem;
@@ -20,18 +21,18 @@ namespace Platformer3d.ConversationSystem
 		private ConversationContainer _conversationContainer;
 
 		private List<Phrase> _phrases;
-		private int _phraseIndex = NonInPhrase;
+		private int _phraseIndex = NotInPhrase;
 
 		private Phrase CurrentPhrase => _phrases[_phraseIndex];
 
-		public bool InConversation => _phraseIndex != NonInPhrase;
+		public bool InConversation => _phraseIndex != NotInPhrase;
 
 		public void StartConversation(string id)
         {
 			_phrases = _conversationContainer.GetPhrases(id);
 			_gameSystem.SetConversationUIEnabled(true);
 			_gameSystem.SetPlayerHandlingEnabled(false);
-			_phraseIndex = NonInPhrase;
+			_phraseIndex = NotInPhrase;
 			ShowNextPhrase();
 		}
 
@@ -41,7 +42,7 @@ namespace Platformer3d.ConversationSystem
 			if (_phraseIndex > _phrases.Count - 1)
             {
 				_phrases = null;
-				_phraseIndex = NonInPhrase;
+				_phraseIndex = NotInPhrase;
 				_gameSystem.SetPlayerHandlingEnabled(true);
 				_gameSystem.SetConversationUIEnabled(false);
 				return;
@@ -83,21 +84,26 @@ namespace Platformer3d.ConversationSystem
 					}
 				case PhraseType.CheckQuestCompleted:
 					{
-						string[] data = CurrentPhrase.Data.Split('$');
-						if (_gameSystem.CheckQuestCompleted(_gameSystem.CurrentTrigger.InteractionTarget, data[0]))
-						{
-							SwitchConversationOnTarget(data[1], true);
-						}
-						else
-						{
-							ShowNextPhrase();
-						}
-						break;
+                        Regex regex = new Regex(@"\((\b.+)\)[$](.+)");
+
+						Match match = regex.Match(CurrentPhrase.Data);
+
+						string[] data = new string[] { match.Groups[1].Value, match.Groups[2].Value };
+
+                        if (_gameSystem.CheckQuestCompleted(_gameSystem.CurrentTrigger.InteractionTarget, data[0]))
+                        {
+                            SwitchConversationOnTarget(data[1], true);
+                        }
+                        else
+                        {
+                            ShowNextPhrase();
+                        }
+                        break;
 					}
             }
         }
 
-		private void SwitchConversationOnTarget(string conversationId, bool reload = false)
-			=> (_gameSystem.CurrentTrigger.InteractionTarget as ITalkable).SetConversation(conversationId, reload);
+		private void SwitchConversationOnTarget(string conversationId, bool reload = false) =>
+			 (_gameSystem.CurrentTrigger.InteractionTarget as ITalkable).SetConversation(conversationId, reload);
     }
 }

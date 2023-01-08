@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.CharacterSystem.Base;
 using Platformer3d.GameCore;
 using Platformer3d.PlayerSystem;
@@ -119,6 +120,9 @@ namespace Platformer3d.CharacterSystem.AI.Enemies
             
             return true;
         }
+
+        public virtual bool SetData(JObject data) => 
+            SetData(data.ToObject<EnemyData>());
 
         public void OnPlayerNearby()
         {

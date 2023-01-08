@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using Platformer3d.Interaction;
 using UnityEngine;
@@ -76,6 +77,9 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Switchers
 			Reset(dataToSet);
 			return true;
 		}
+
+		public bool SetData(JObject data) => 
+			SetData(data.ToObject<SwitcherData>());
 
 		protected virtual void Reset(SwitcherData data)
 		{

@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Platformer3d.GameCore;
 using UnityEngine;
 using Zenject;
@@ -54,7 +55,7 @@ namespace Platformer3d.LevelEnvironment.Mechanisms.Doors
 		}
 
 		public abstract object GetData();
-
 		public abstract bool SetData(object data);
+		public abstract bool SetData(JObject data);
     }
 }
